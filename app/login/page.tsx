@@ -5,11 +5,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { loginFormSchema } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { login } from "./actions"
 
 export default function LoginPage() {
+  const [loading, setLoading] = useState(false)
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -18,8 +20,10 @@ export default function LoginPage() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    login(values)
+  async function onSubmit(values: z.infer<typeof loginFormSchema>) {
+    setLoading(true)
+    await login(values)
+    setLoading(false)
   }
 
   return (
@@ -51,7 +55,7 @@ export default function LoginPage() {
             </FormItem>
           )}
         />
-        <Button className="font-semibold uppercase" type="submit">
+        <Button disabled={loading} className="font-semibold uppercase" type="submit">
           Log in
         </Button>
       </form>
