@@ -1,16 +1,19 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/actionts"
+import { loginFormSchema } from "@/types"
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
+import { z } from "zod"
 
-export async function login(formData: FormData) {
+type Inputs = z.infer<typeof loginFormSchema>
+
+export async function login(values: Inputs) {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
-  const email = formData.get("email")
-  const password = formData.get("password")
+  const { email, password } = values
 
   if (typeof email !== "string" || typeof password !== "string") {
     redirect("/error")
