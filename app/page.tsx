@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import CourtCanvas from "@/components/CourtCanvas"
 import { createClient } from "@/lib/supabase/server"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
@@ -13,8 +13,7 @@ export default async function Home() {
   }
   return (
     <div>
-      <p>Hello BTE GPS!</p>
-      <Button>Hello BTE GPS!</Button>
+      <CourtCanvas />
     </div>
   )
 }
