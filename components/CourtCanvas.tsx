@@ -1,4 +1,6 @@
 "use client"
+
+import useBteStore from "@/stores/bteDataStore"
 import * as d3 from "d3"
 import { useEffect, useRef, useState } from "react"
 import CourtDropdown from "./CourtDropdown"
@@ -6,7 +8,10 @@ import CourtDropdown from "./CourtDropdown"
 const CourtCanvas = () => {
   const svgRef = useRef<SVGSVGElement | null>(null)
   const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [dropdownCoordinates, setDropdownCoordinates] = useState({ x: 0, y: 0 })
+  const [markerCoordinates, setMarkerCoordinates] = useState({ x: 0, y: 0 })
+  const { activeSequence, addMoveToActiveSequence } = useBteStore()
+
+  console.log({ activeSequence })
 
   const removeMarker = () => {
     d3.select(svgRef.current).selectAll(".marker-group")?.remove()
@@ -14,14 +19,17 @@ const CourtCanvas = () => {
 
   const closeDropdown = () => {
     setDropdownOpen(false)
-    removeMarker() // Remove the marker when dropdown is closed
+    removeMarker()
+  }
+
+  const onSubmit = (id: number) => {
+    addMoveToActiveSequence({ ...markerCoordinates, id })
   }
 
   useEffect(() => {
     const svg = d3.select(svgRef.current)
     svg.attr("width", 850).attr("height", 458)
 
-    // Load and display the image as SVG background
     svg
       .append("image")
       .attr("href", "court.webp")
@@ -61,21 +69,23 @@ const CourtCanvas = () => {
       const x = event.clientX - rect.left
       const y = event.clientY - rect.top
       setDropdownOpen(true)
-      setDropdownCoordinates({ x, y: y + 20 })
+      setMarkerCoordinates({ x, y })
       drawMarker(x, y)
     }
 
     svg.on("click", handleSvgClick)
 
     return () => {
-      svg.on("click", null) // Cleanup: remove event listener
+      svg.on("click", null)
     }
   }, [])
+
+  const dropdownCoordinates = { x: markerCoordinates.x, y: (markerCoordinates.y || 0) + 20 }
 
   return (
     <div className="relative w-max">
       <svg ref={svgRef}></svg>
-      {dropdownOpen && <CourtDropdown onClose={closeDropdown} coordinates={dropdownCoordinates} />}
+      {dropdownOpen && <CourtDropdown onClose={closeDropdown} coordinates={dropdownCoordinates} onSubmit={onSubmit} />}
     </div>
   )
 }
