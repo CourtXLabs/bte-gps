@@ -1,61 +1,83 @@
 "use client"
-
-import { useEffect, useRef } from "react"
-
-const drawMarker = (x: number, y: number, ctx: CanvasRenderingContext2D | null) => {
-  if (ctx) {
-    const lineLength = 10 // Length of each half line of the 'X'
-    ctx.beginPath()
-    // First line (\)
-    ctx.moveTo(x - lineLength, y - lineLength)
-    ctx.lineTo(x + lineLength, y + lineLength)
-    // Second line (/)
-    ctx.moveTo(x + lineLength, y - lineLength)
-    ctx.lineTo(x - lineLength, y + lineLength)
-
-    ctx.strokeStyle = "black"
-    ctx.lineWidth = 2
-    ctx.stroke()
-    ctx.closePath()
-  }
-}
+import * as d3 from "d3"
+import { useEffect, useRef, useState } from "react"
+import CourtDropdown from "./CourtDropdown"
 
 const CourtCanvas = () => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const svgRef = useRef<SVGSVGElement | null>(null)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [dropdownCoordinates, setDropdownCoordinates] = useState({ x: 0, y: 0 })
+
+  const removeMarker = () => {
+    d3.select(svgRef.current).selectAll(".marker-group")?.remove()
+  }
+
+  const closeDropdown = () => {
+    setDropdownOpen(false)
+    removeMarker() // Remove the marker when dropdown is closed
+  }
 
   useEffect(() => {
-    if (!canvasRef.current) return () => {}
-    const canvas = canvasRef.current
-    const ctx = canvas.getContext("2d")
+    const svg = d3.select(svgRef.current)
+    svg.attr("width", 850).attr("height", 458)
 
-    canvas.width = 850
-    canvas.height = 458
+    // Load and display the image as SVG background
+    svg
+      .append("image")
+      .attr("href", "court.webp")
+      .attr("width", 850)
+      .attr("height", 458)
+      .attr("class", "background-image")
 
-    const image = new Image()
-    image.src = "court.webp"
-    image.onload = () => {
-      const scaleWidth = canvas.width
-      const scaleHeight = canvas.height
+    const drawMarker = (x: number, y: number) => {
+      removeMarker()
 
-      ctx?.drawImage(image, 0, 0, scaleWidth, scaleHeight)
+      const lineLength = 10
+
+      const markerGroup = svg.append("g").attr("class", "marker-group")
+
+      markerGroup
+        .append("line")
+        .attr("x1", x - lineLength)
+        .attr("y1", y - lineLength)
+        .attr("x2", x + lineLength)
+        .attr("y2", y + lineLength)
+        .attr("stroke", "black")
+        .attr("stroke-width", 2)
+
+      markerGroup
+        .append("line")
+        .attr("x1", x + lineLength)
+        .attr("y1", y - lineLength)
+        .attr("x2", x - lineLength)
+        .attr("y2", y + lineLength)
+        .attr("stroke", "black")
+        .attr("stroke-width", 2)
     }
 
-    const handleCanvasClick = (event: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect()
+    const handleSvgClick = (event: MouseEvent) => {
+      if (!svgRef.current) return
+      const rect = svgRef.current.getBoundingClientRect()
       const x = event.clientX - rect.left
       const y = event.clientY - rect.top
-
-      drawMarker(x, y, ctx)
+      setDropdownOpen(true)
+      setDropdownCoordinates({ x, y: y + 20 })
+      drawMarker(x, y)
     }
 
-    canvas.addEventListener("click", handleCanvasClick)
+    svg.on("click", handleSvgClick)
 
     return () => {
-      canvas.removeEventListener("click", handleCanvasClick)
+      svg.on("click", null) // Cleanup: remove event listener
     }
   }, [])
 
-  return <canvas ref={canvasRef} />
+  return (
+    <div className="relative w-max">
+      <svg ref={svgRef}></svg>
+      {dropdownOpen && <CourtDropdown onClose={closeDropdown} coordinates={dropdownCoordinates} />}
+    </div>
+  )
 }
 
 export default CourtCanvas
