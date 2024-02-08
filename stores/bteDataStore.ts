@@ -4,6 +4,7 @@ interface MovesSequence {
   id: number
   x: number
   y: number
+  color?: string
 }
 
 interface BteDataStore {

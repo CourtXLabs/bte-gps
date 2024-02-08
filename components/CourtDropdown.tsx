@@ -1,10 +1,11 @@
+import { Coordinates, Option } from "@/types"
 import Image from "next/image"
 import { useEffect, useRef } from "react"
 
 interface Props {
   onClose: () => void
   onSubmit: (args: any) => void
-  coordinates: { x: number; y: number }
+  coordinates: Coordinates
 }
 
 const options = [
@@ -13,36 +14,42 @@ const options = [
     image: "/DribbleTree1.png",
     keyShortcut: "1",
     name: "Pound",
+    color: "#E52127",
   },
   {
     id: 2,
     image: "/DribbleTree2.png",
     keyShortcut: "2",
     name: "Cross",
+    color: "#1E4695",
   },
   {
     id: 3,
     image: "/DribbleTree3.png",
     keyShortcut: "3",
     name: "In + Out",
+    color: "#186D38",
   },
   {
     id: 4,
     image: "/DribbleTree4.png",
     keyShortcut: "4",
     name: "Between The Legs",
+    color: "#814198",
   },
   {
     id: 5,
     image: "/DribbleTree5.png",
     keyShortcut: "5",
     name: "Behind The Back",
+    color: "#FCD407",
   },
   {
     id: 6,
     image: "/DribbleTree6.png",
     keyShortcut: "6",
     name: "Spin",
+    color: "#FF9E1F",
   },
   {
     id: 7,
@@ -60,8 +67,8 @@ export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props)
   const dropdownRef = useRef<HTMLDivElement>(null) // Ref for the dropdown div
 
   const positionStyle = { left: `${coordinates.x}px`, top: `${coordinates.y}px` }
-  const onSelectOption = (id: number) => () => {
-    onSubmit(id)
+  const onSelectOption = (option: Option) => () => {
+    onSubmit(option)
     onClose()
   }
 
@@ -75,7 +82,7 @@ export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props)
     const key = event.key
     const option = options.find((option) => option.keyShortcut.toUpperCase() === key.toUpperCase())
     if (option) {
-      onSubmit(option.id)
+      onSubmit(option)
       onClose()
     }
   }
@@ -104,13 +111,13 @@ export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props)
             width={100}
             height={129}
             className="cursor-pointer"
-            onClick={onSelectOption(option.id)}
+            onClick={onSelectOption(option)}
           />
         ) : (
           <p
             key={option.id}
             className="m-0 flex w-[100px] cursor-pointer flex-col items-center gap-1 text-center text-2xl font-semibold"
-            onClick={onSelectOption(option.id)}
+            onClick={onSelectOption(option)}
           >
             <span>{option.keyShortcut} </span>
             <span>{option.name}</span>
