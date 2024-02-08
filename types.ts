@@ -5,6 +5,14 @@ export const loginFormSchema = z.object({
   password: z.string(),
 })
 
+export const gameFormSchema = z.object({
+  playerName: z.string().email(),
+  teamName: z.string().email(),
+  opponentName: z.string().email(),
+  jersey: z.number(),
+  date: z.date(),
+})
+
 export interface Coordinates {
   x: number
   y: number
