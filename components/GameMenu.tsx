@@ -1,20 +1,50 @@
 import { cn } from "@/lib/utils"
+import { GameTypes } from "@/types"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { useFormContext } from "react-hook-form"
 import SequencesListSection from "./sections/SequencesListSection"
 import { Button } from "./ui/button"
 import { Calendar } from "./ui/calendar"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
 import { Input } from "./ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 
 export default function GameMenu() {
   const form = useFormContext()
+  const gameType = form.watch("gameType")
+
+  const onChangeGameType = (value: string) => {
+    form.setValue("gameType", value)
+  }
 
   return (
-    <div className="space-y-4 bg-background-dark p-6 xl:w-72">
-      <p className="text-xl font-bold underline">College Game</p>
+    <div className="space-y-4 overflow-y-auto bg-background-dark p-6 lg:max-h-[780px] xl:w-72">
+      <p className="text-xl font-bold underline">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">{gameType}</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuLabel>Game Type</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuRadioGroup value={gameType} onValueChange={onChangeGameType}>
+              <DropdownMenuRadioItem value={GameTypes.COLLEGE}>{GameTypes.COLLEGE}</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value={GameTypes.HIGH_SCHOOL}>{GameTypes.HIGH_SCHOOL}</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value={GameTypes.PROFESSIONAL}>{GameTypes.PROFESSIONAL}</DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </p>
       <FormField
         control={form.control}
         name="playerName"

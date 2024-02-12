@@ -1,18 +1,5 @@
 import { z } from "zod"
 
-export const loginFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-})
-
-export const gameFormSchema = z.object({
-  playerName: z.string().email(),
-  teamName: z.string().email(),
-  opponentName: z.string().email(),
-  jersey: z.number(),
-  date: z.date(),
-})
-
 export interface Coordinates {
   x: number
   y: number
@@ -25,3 +12,23 @@ export interface Option {
   name: string
   color?: string
 }
+
+export enum GameTypes {
+  COLLEGE = "College Game",
+  HIGH_SCHOOL = "High School Game",
+  PROFESSIONAL = "Professional Game",
+}
+
+export const loginFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+})
+
+export const gameFormSchema = z.object({
+  gameType: z.nativeEnum(GameTypes),
+  playerName: z.string().email(),
+  teamName: z.string().email(),
+  opponentName: z.string().email(),
+  jersey: z.number(),
+  date: z.date(),
+})
