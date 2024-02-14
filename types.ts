@@ -32,3 +32,14 @@ export const gameFormSchema = z.object({
   jersey: z.number(),
   date: z.date(),
 })
+
+export const sequenceFormSchema = z.object({
+  playCode: z.string(),
+  initialDirection: z.string(),
+  counterDirection: z.string(),
+  lastDribbleType: z.string(),
+  typeOfShot: z.string(),
+  pickAndRoll: z.string(),
+  defenderPickAndRoll: z.string().optional(),
+  ballHandlerPickAndRoll: z.string().optional(),
+})

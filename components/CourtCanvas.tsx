@@ -17,6 +17,8 @@ const CourtCanvas = () => {
   const [isSequenceOptionsDialogOpen, setIsSequenceOptionsDialogOpen] = useState(false)
   const { activeSequenceMoves, addMoveToActiveSequence } = useBteStore()
 
+  const dropdownCoordinates = { x: COURT_WIDTH / 2, y: markerCoordinates.y + 20 }
+
   const removeMarker = () => {
     d3.select(svgRef.current).selectAll(".marker-group")?.remove()
   }
@@ -69,7 +71,9 @@ const CourtCanvas = () => {
     drawPermanentMarker({ ...markerCoordinates, color: option.color })
   }
 
-  const dropdownCoordinates = { x: COURT_WIDTH / 2, y: markerCoordinates.y + 20 }
+  const toggleSequenceOptionsDialog = () => {
+    setIsSequenceOptionsDialogOpen(!isSequenceOptionsDialogOpen)
+  }
 
   useEffect(() => {
     const svg = d3.select(svgRef.current)
@@ -129,7 +133,7 @@ const CourtCanvas = () => {
     <div className="relative w-max">
       <svg ref={svgRef}></svg>
       {dropdownOpen && <CourtDropdown onClose={closeDropdown} coordinates={dropdownCoordinates} onSubmit={onSubmit} />}
-      {isSequenceOptionsDialogOpen && <SequenceOptionsDialog />}
+      <SequenceOptionsDialog open={isSequenceOptionsDialogOpen} onOpenChange={toggleSequenceOptionsDialog} />
     </div>
   )
 }
