@@ -5,12 +5,17 @@ import { Coordinates, Option } from "@/types"
 import * as d3 from "d3"
 import { useEffect, useRef, useState } from "react"
 import CourtDropdown from "./CourtDropdown"
+import SequenceOptionsDialog from "./dialogs/SequenceOptionsDialog"
+
+const COURT_WIDTH = 850
+// const COURT_HEIGHT = 458
 
 const CourtCanvas = () => {
   const svgRef = useRef<SVGSVGElement | null>(null)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [markerCoordinates, setMarkerCoordinates] = useState({ x: 0, y: 0 })
-  const { activeSequence, addMoveToActiveSequence } = useBteStore()
+  const [isSequenceOptionsDialogOpen, setIsSequenceOptionsDialogOpen] = useState(false)
+  const { activeSequenceMoves, addMoveToActiveSequence } = useBteStore()
 
   const removeMarker = () => {
     d3.select(svgRef.current).selectAll(".marker-group")?.remove()
@@ -48,14 +53,23 @@ const CourtCanvas = () => {
   const onSubmit = (option: Option) => {
     addMoveToActiveSequence({ ...markerCoordinates, id: option.id, color: option.color })
 
-    const lastMove = activeSequence[activeSequence.length - 1]
+    const lastMove = activeSequenceMoves[activeSequenceMoves.length - 1]
     if (lastMove) {
       drawLineBetweenMarkers(lastMove, markerCoordinates)
       drawPermanentMarker(lastMove) // needs to be redrawn so that the marker stays on top of the line
     }
 
+    if (option.id === 7) {
+      setIsSequenceOptionsDialogOpen(true)
+    }
+    if (option.id === 8) {
+      setIsSequenceOptionsDialogOpen(true)
+    }
+
     drawPermanentMarker({ ...markerCoordinates, color: option.color })
   }
+
+  const dropdownCoordinates = { x: COURT_WIDTH / 2, y: markerCoordinates.y + 20 }
 
   useEffect(() => {
     const svg = d3.select(svgRef.current)
@@ -111,12 +125,11 @@ const CourtCanvas = () => {
     }
   }, [])
 
-  const dropdownCoordinates = { x: markerCoordinates.x, y: (markerCoordinates.y || 0) + 20 }
-
   return (
     <div className="relative w-max">
       <svg ref={svgRef}></svg>
       {dropdownOpen && <CourtDropdown onClose={closeDropdown} coordinates={dropdownCoordinates} onSubmit={onSubmit} />}
+      {isSequenceOptionsDialogOpen && <SequenceOptionsDialog />}
     </div>
   )
 }

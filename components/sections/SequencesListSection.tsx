@@ -1,8 +1,15 @@
 import { cn } from "@/lib/utils"
+import { GameTypes } from "@/types"
 
 enum Periods {
-  HALF = "HALF",
-  QUARTER = "QUARTER",
+  HALF = "Half",
+  QUARTER = "Quarter",
+}
+
+const gameTypePeriods = {
+  [GameTypes.HIGH_SCHOOL]: Periods.QUARTER,
+  [GameTypes.PROFESSIONAL]: Periods.QUARTER,
+  [GameTypes.COLLEGE]: Periods.HALF,
 }
 
 const periodType = Periods.HALF
