@@ -33,13 +33,14 @@ export const gameFormSchema = z.object({
   date: z.date(),
 })
 
+const errorMessage = "This field is required"
 export const sequenceFormSchema = z.object({
-  playCode: z.string(),
-  initialDirection: z.string(),
-  counterDirection: z.string(),
-  lastDribbleType: z.string(),
-  typeOfShot: z.string(),
-  pickAndRoll: z.string(),
+  playCode: z.string().min(1, { message: errorMessage }),
+  initialDirection: z.string().min(1, { message: errorMessage }),
+  counterDirection: z.string().min(1, { message: errorMessage }),
+  lastDribbleType: z.string().min(1, { message: errorMessage }),
+  typeOfShot: z.string().min(1, { message: errorMessage }),
+  pickAndRoll: z.string().min(1, { message: errorMessage }),
   defenderPickAndRoll: z.string().optional(),
   ballHandlerPickAndRoll: z.string().optional(),
 })

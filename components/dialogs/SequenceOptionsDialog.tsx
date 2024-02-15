@@ -1,11 +1,23 @@
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { sequenceFormSchema } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "../ui/button"
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form"
+
+const options = [
+  { name: "playCode", label: "Play Code", options: [{ value: "test", label: "test" }] },
+  { name: "initialDirection", label: "Initial Direction", options: [{ value: "test", label: "test" }] },
+  { name: "counterDirection", label: "Counter Direction", options: [{ value: "test", label: "test" }] },
+  { name: "lastDribbleType", label: "Last Dribble Type", options: [{ value: "test", label: "test" }] },
+  { name: "typeOfShot", label: "Type of Shot", options: [{ value: "test", label: "test" }] },
+  { name: "pickAndRoll", label: "Pick & Roll", options: [{ value: "test", label: "test" }] },
+  // Optional:
+  { name: "defenderPickAndRoll", label: "Defender Pick & Roll", options: [{ value: "test", label: "test" }] },
+  { name: "ballHandlerPickAndRoll", label: "Ball Handler Pick & Roll", options: [{ value: "test", label: "test" }] },
+] as Option[]
 
 interface Props {
   open: boolean
@@ -39,23 +51,15 @@ export default function SequenceOptionsDialog({ open, onOpenChange }: Props) {
     },
   })
 
-  const options = [
-    { name: "playCode", label: "Play Code", options: [{ value: "test", label: "test" }] },
-    { name: "initialDirection", label: "Initial Direction", options: [{ value: "test", label: "test" }] },
-    { name: "counterDirection", label: "Counter Direction", options: [{ value: "test", label: "test" }] },
-    { name: "lastDribbleType", label: "Last Dribble Type", options: [{ value: "test", label: "test" }] },
-    { name: "typeOfShot", label: "Type of Shot", options: [{ value: "test", label: "test" }] },
-    { name: "pickAndRoll", label: "Pick & Roll", options: [{ value: "test", label: "test" }] },
-    // Optional:
-    { name: "defenderPickAndRoll", label: "Defender Pick & Roll", options: [{ value: "test", label: "test" }] },
-    { name: "ballHandlerPickAndRoll", label: "Ball Handler Pick & Roll", options: [{ value: "test", label: "test" }] },
-  ] as Option[]
+  const onSubmit = (values: z.infer<typeof sequenceFormSchema>) => {
+    console.log({ values })
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <Form {...form}>
-        <form>
-          <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-3xl">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
               <DialogTitle className="border-b-2 border-accent pb-6">Sequence Details</DialogTitle>
             </DialogHeader>
@@ -71,7 +75,7 @@ export default function SequenceOptionsDialog({ open, onOpenChange }: Props) {
                       <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a verified email to display" />
+                            <SelectValue placeholder={option.label} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -82,6 +86,7 @@ export default function SequenceOptionsDialog({ open, onOpenChange }: Props) {
                           ))}
                         </SelectContent>
                       </Select>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -95,9 +100,9 @@ export default function SequenceOptionsDialog({ open, onOpenChange }: Props) {
                 </Button>
               </DialogClose>
             </DialogFooter>
-          </DialogContent>
-        </form>
-      </Form>
+          </form>
+        </Form>
+      </DialogContent>
     </Dialog>
   )
 }

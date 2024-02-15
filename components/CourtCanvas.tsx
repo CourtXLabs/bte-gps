@@ -30,12 +30,16 @@ const CourtCanvas = () => {
 
   const drawPermanentMarker = ({ x, y, color }: { x: number; y: number; color?: string }) => {
     const svg = d3.select(svgRef.current)
-    svg
+    return svg
       .append("circle")
       .attr("cx", x)
       .attr("cy", y)
       .attr("r", 6)
-      .attr("fill", color || "red")
+      .attr("fill", color || "transparent")
+  }
+
+  const drawOutline = (svg: any) => {
+    svg.attr("stroke", "black").attr("stroke-width", 2)
   }
 
   const drawLineBetweenMarkers = (fromCoords: Coordinates, toCoords: Coordinates) => {
@@ -61,14 +65,14 @@ const CourtCanvas = () => {
       drawPermanentMarker(lastMove) // needs to be redrawn so that the marker stays on top of the line
     }
 
+    const marker = drawPermanentMarker({ ...markerCoordinates, color: option.color })
     if (option.id === 7) {
       setIsSequenceOptionsDialogOpen(true)
+      drawOutline(marker)
     }
     if (option.id === 8) {
       setIsSequenceOptionsDialogOpen(true)
     }
-
-    drawPermanentMarker({ ...markerCoordinates, color: option.color })
   }
 
   const toggleSequenceOptionsDialog = () => {
