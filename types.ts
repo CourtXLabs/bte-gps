@@ -11,6 +11,7 @@ export interface Option {
   keyShortcut: string
   name: string
   color?: string
+  isFinalMove?: boolean
 }
 
 export interface SequenceInput {

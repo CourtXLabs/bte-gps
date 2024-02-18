@@ -54,14 +54,17 @@ const options = [
   {
     id: 7,
     keyShortcut: "A",
-    name: "Missed Shot",
+    name: "Made Shot",
+    color: "#000",
+    isFinalMove: true,
   },
   {
     id: 8,
     keyShortcut: "B",
-    name: "Made Shot",
+    name: "Missed Shot",
+    isFinalMove: true,
   },
-]
+] as Option[]
 
 export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props) {
   const dropdownRef = useRef<HTMLDivElement>(null) // Ref for the dropdown div

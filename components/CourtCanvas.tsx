@@ -36,10 +36,8 @@ const CourtCanvas = () => {
       .attr("cy", y)
       .attr("r", 6)
       .attr("fill", color || "transparent")
-  }
-
-  const drawOutline = (svg: any) => {
-    svg.attr("stroke", "black").attr("stroke-width", 2)
+      .attr("stroke", "black")
+      .attr("stroke-width", 2)
   }
 
   const drawLineBetweenMarkers = (fromCoords: Coordinates, toCoords: Coordinates) => {
@@ -64,14 +62,10 @@ const CourtCanvas = () => {
       drawLineBetweenMarkers(lastMove, markerCoordinates)
       drawPermanentMarker(lastMove) // needs to be redrawn so that the marker stays on top of the line
     }
+    drawPermanentMarker({ ...markerCoordinates, color: option.color })
 
-    const marker = drawPermanentMarker({ ...markerCoordinates, color: option.color })
-    if (option.id === 7) {
-      setIsSequenceOptionsDialogOpen(true)
-      drawOutline(marker)
-    }
-    if (option.id === 8) {
-      setIsSequenceOptionsDialogOpen(true)
+    if (option.isFinalMove) {
+      toggleSequenceOptionsDialog()
     }
   }
 
