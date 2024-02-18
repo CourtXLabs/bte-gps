@@ -31,7 +31,7 @@ export default function SequenceOptionsDialog({ open, onOpenChange, onSubmit }: 
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form id="sequence-form" onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
               <DialogTitle className="border-b-2 border-accent pb-6">Sequence Details</DialogTitle>
             </DialogHeader>
@@ -65,7 +65,9 @@ export default function SequenceOptionsDialog({ open, onOpenChange, onSubmit }: 
               ))}
             </div>
             <DialogFooter className="pt-2 sm:justify-start">
-              <Button type="submit">Submit</Button>
+              <Button type="submit" form="sequence-form">
+                Submit
+              </Button>
               <DialogClose asChild>
                 <Button type="button" variant="outline">
                   Cancel

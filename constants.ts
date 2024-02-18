@@ -1,4 +1,4 @@
-import { SequenceInput } from "./types"
+import { GameTypes, SequenceInput } from "./types"
 
 export const sequenceOptions = [
   {
@@ -220,3 +220,11 @@ export const sequenceOptions = [
   { name: "defenderPickAndRoll", label: "Defender Pick & Roll", options: [{ value: "test", label: "test" }] },
   { name: "ballHandlerPickAndRoll", label: "Ball Handler Pick & Roll", options: [{ value: "test", label: "test" }] },
 ] as SequenceInput[]
+
+export const INITIAL_GAME_TYPE = GameTypes.COLLEGE
+
+export const gameTypesPeriods = {
+  [GameTypes.COLLEGE]: 3,
+  [GameTypes.HIGH_SCHOOL]: 5,
+  [GameTypes.PROFESSIONAL]: 5,
+}

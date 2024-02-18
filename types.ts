@@ -34,21 +34,52 @@ export enum GameTypes {
   PROFESSIONAL = "Professional Game",
 }
 
+export interface MoveSequence {
+  uid: string
+  moveId: number
+  x: number
+  y: number
+  color?: string
+}
+
+export interface Sequence {
+  moves: MoveSequence[]
+  playCode: string | null
+  initialDirection: string | null
+  counterDirection: string | null
+  lastDribbleType: string | null
+  typeOfShot: string | null
+  pickAndRoll: string | null
+  defenderPickAndRoll?: string | null
+  ballHandlerPickAndRoll?: string
+  period: number
+}
+
+export interface Game {
+  gameType: GameTypes
+  playerName: string
+  teamName: string
+  opponentName: string
+  jersey: number
+  date: string
+  sequences: Sequence[]
+}
+
 export const loginFormSchema = z.object({
   email: z.string().email(),
   password: z.string(),
 })
 
+const errorMessage = "This field is required"
 export const gameFormSchema = z.object({
   gameType: z.nativeEnum(GameTypes),
-  playerName: z.string().email(),
-  teamName: z.string().email(),
-  opponentName: z.string().email(),
-  jersey: z.number(),
+  playerName: z.string().min(1, { message: errorMessage }),
+  teamName: z.string().min(1, { message: errorMessage }),
+  opponentName: z.string().min(1, { message: errorMessage }),
+  jersey: z.string().min(1, { message: errorMessage }),
   date: z.date(),
 })
 
-const errorMessage = "This field is required"
 export const sequenceFormSchema = z.object({
   playCode: z.string().min(1, { message: errorMessage }),
   initialDirection: z.string().min(1, { message: errorMessage }),

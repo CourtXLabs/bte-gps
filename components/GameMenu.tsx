@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+import useBteStore from "@/stores/bteDataStore"
 import { GameTypes } from "@/types"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
@@ -20,11 +21,13 @@ import { Input } from "./ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 
 export default function GameMenu() {
+  const { changeGameType } = useBteStore()
   const form = useFormContext()
-  const gameType = form.watch("gameType")
+  const gameType = form.watch("gameType") as GameTypes
 
   const onChangeGameType = (value: string) => {
     form.setValue("gameType", value)
+    changeGameType(value as GameTypes)
   }
 
   return (

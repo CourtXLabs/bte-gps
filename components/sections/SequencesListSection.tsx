@@ -1,62 +1,69 @@
-import { cn } from "@/lib/utils"
-import { GameTypes } from "@/types"
+import useBteStore from "@/stores/bteDataStore"
+import { GameTypes, Sequence } from "@/types"
+import { useFormContext } from "react-hook-form"
 
-enum Periods {
+const OVERTIME = "Overtime"
+
+enum PeriodName {
   HALF = "Half",
   QUARTER = "Quarter",
 }
 
-const gameTypePeriods = {
-  [GameTypes.HIGH_SCHOOL]: Periods.QUARTER,
-  [GameTypes.PROFESSIONAL]: Periods.QUARTER,
-  [GameTypes.COLLEGE]: Periods.HALF,
+const gameTypePeriodName = {
+  [GameTypes.HIGH_SCHOOL]: PeriodName.QUARTER,
+  [GameTypes.PROFESSIONAL]: PeriodName.QUARTER,
+  [GameTypes.COLLEGE]: PeriodName.HALF,
 }
 
-const periodType = Periods.HALF
+interface PeriodToWord {
+  [key: number]: string
+}
 
-const periods = [
-  {
-    count: 1,
-    sequences: [
-      {
-        count: 1,
-      },
-      {
-        count: 2,
-      },
-      {
-        count: 3,
-      },
-      {
-        count: 4,
-      },
-    ],
-  },
-  {
-    count: 2,
-    sequences: [
-      {
-        count: 5,
-      },
-      {
-        count: 6,
-        isActive: true,
-      },
-    ],
-  },
-]
+const quartersPeriodNumberToWord = {
+  1: "First",
+  2: "Second",
+  3: "Third",
+  4: "Fourth",
+  5: OVERTIME,
+} as PeriodToWord
+
+const halvesPeriodNumberToWord = {
+  1: "First",
+  2: "Second",
+  3: OVERTIME,
+} as PeriodToWord
+
+const getSequencesContent = (sequnces: Sequence[], gameType: GameTypes) => {
+  const periodName = gameTypePeriodName[gameType]
+  const elements = []
+  let previousPeriod = 0
+
+  for (let sequnceIndex = 0; sequnceIndex < sequnces.length; sequnceIndex++) {
+    const period = sequnces[sequnceIndex].period as 1 | 2 | 3 | 4 | 5
+    const periodNumberToWord = periodName === PeriodName.QUARTER ? quartersPeriodNumberToWord : halvesPeriodNumberToWord
+    if (period !== previousPeriod) {
+      const periodWord = periodNumberToWord[period]
+      elements.push(
+        <p key={`${period}-${sequnceIndex}`} className="font-bold underline">
+          {periodWord} {periodWord !== OVERTIME && periodName}
+        </p>,
+      )
+      previousPeriod = period
+    }
+    elements.push(<p key={sequnceIndex}>Sequence {sequnceIndex + 1}</p>)
+  }
+  return elements
+}
 
 export default function SequencesListSection() {
+  const { sequences, activePeriod } = useBteStore()
+  const form = useFormContext()
+  const gameType = form.watch("gameType") as GameTypes
+
   return (
     <div className="space-y-3 pt-2">
-      <p className="font-bold underline">First Half</p>
-      <p>Sequence 1</p>
-      <p>Sequence 2</p>
-      <p>Sequence 3</p>
-      <p>Sequence 4</p>
-      <p className="font-bold underline">Second Half</p>
-      <p>Sequence 5</p>
-      <p className={cn({ "text-primary": true })}>Sequence 6</p>
+      <p className="font-semibold text-primary">Current Period: {activePeriod}</p>
+      {getSequencesContent(sequences, gameType)}
     </div>
   )
 }

@@ -158,7 +158,7 @@ const CourtCanvas = () => {
 
   return (
     <div className="relative w-max">
-      <svg ref={svgRef}></svg>
+      <svg ref={svgRef} className="h-[458px] w-[850px]"></svg>
       {dropdownOpen && (
         <CourtDropdown onClose={closeDropdown} coordinates={dropdownCoordinates} onSubmit={onSubmitMove} />
       )}

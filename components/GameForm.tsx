@@ -1,6 +1,7 @@
 "use client"
 
-import { GameTypes, gameFormSchema } from "@/types"
+import { INITIAL_GAME_TYPE } from "@/constants"
+import { gameFormSchema } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -12,19 +13,25 @@ export default function GameForm() {
   const form = useForm<z.infer<typeof gameFormSchema>>({
     resolver: zodResolver(gameFormSchema),
     defaultValues: {
-      gameType: GameTypes.COLLEGE,
+      gameType: INITIAL_GAME_TYPE,
       playerName: "",
       teamName: "",
       opponentName: "",
     },
   })
 
+  async function onSubmit(values: z.infer<typeof gameFormSchema>) {
+    console.log({ values })
+  }
+
   return (
-    <Form {...form}>
-      <div className="mx-auto flex w-max max-w-7xl flex-col gap-12 px-4 py-20 xl:flex-row xl:gap-32">
-        <GameMenu />
-        <CourtSection />
-      </div>
-    </Form>
+    <div className="mx-auto flex w-max max-w-7xl flex-col gap-12 px-4 py-20 xl:flex-row xl:gap-32">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} id="game-form">
+          <GameMenu />
+        </form>
+      </Form>
+      <CourtSection />
+    </div>
   )
 }
