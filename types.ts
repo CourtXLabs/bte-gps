@@ -60,8 +60,8 @@ export interface Game {
   playerName: string
   teamName: string
   opponentName: string
-  jersey: number
-  date: string
+  jersey: string
+  date: Date
   sequences: Sequence[]
 }
 

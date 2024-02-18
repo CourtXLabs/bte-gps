@@ -94,7 +94,7 @@ export default function GameMenu() {
           <FormItem>
             <FormLabel>Jersey</FormLabel>
             <FormControl>
-              <Input placeholder="Jersey" {...field} />
+              <Input placeholder="Jersey" type="number" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
