@@ -11,9 +11,10 @@ import { Button } from "../ui/button"
 interface Props {
   open: boolean
   onOpenChange: () => void
+  onSubmit: (values: z.infer<typeof sequenceFormSchema>) => void
 }
 
-export default function SequenceOptionsDialog({ open, onOpenChange }: Props) {
+export default function SequenceOptionsDialog({ open, onOpenChange, onSubmit }: Props) {
   const form = useForm<z.infer<typeof sequenceFormSchema>>({
     resolver: zodResolver(sequenceFormSchema),
     defaultValues: {
@@ -25,10 +26,6 @@ export default function SequenceOptionsDialog({ open, onOpenChange }: Props) {
       pickAndRoll: "",
     },
   })
-
-  const onSubmit = (values: z.infer<typeof sequenceFormSchema>) => {
-    console.log({ values })
-  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

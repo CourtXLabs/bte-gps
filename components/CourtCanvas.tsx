@@ -1,14 +1,16 @@
 "use client"
 
 import useBteStore from "@/stores/bteDataStore"
-import { Coordinates, Option } from "@/types"
+import { Coordinates, Option, sequenceFormSchema } from "@/types"
 import { generateRandomString } from "@/utils"
 import * as d3 from "d3"
 import { useEffect, useRef, useState } from "react"
+import { z } from "zod"
 import CourtDropdown from "./CourtDropdown"
 import SequenceOptionsDialog from "./dialogs/SequenceOptionsDialog"
 
 const TEMPORARY_SELECTION_MARKER_CLASS = "marker-group"
+const PERMANENT_MARKER_CLASS = "permanent-marker"
 const COURT_WIDTH = 850
 // const COURT_HEIGHT = 458
 
@@ -17,7 +19,14 @@ const CourtCanvas = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [markerCoordinates, setMarkerCoordinates] = useState({ x: 0, y: 0 })
   const [isSequenceOptionsDialogOpen, setIsSequenceOptionsDialogOpen] = useState(false)
-  const { activeSequenceMoves, addMoveToActiveSequence, undoLastMove } = useBteStore()
+  const {
+    activeSequenceMoves,
+    activePeriod,
+    addMoveToActiveSequence,
+    undoLastMove,
+    addNewSequence,
+    resetActiveSequence,
+  } = useBteStore()
 
   const dropdownCoordinates = { x: COURT_WIDTH / 2, y: markerCoordinates.y + 20 }
 
@@ -41,6 +50,7 @@ const CourtCanvas = () => {
       .attr("stroke", "black")
       .attr("stroke-width", 2)
       .attr("id", `marker-${uid}`)
+      .attr("class", PERMANENT_MARKER_CLASS)
   }
 
   const drawLineBetweenMarkers = (fromCoords: Coordinates, toCoords: Coordinates, uid: string) => {
@@ -55,10 +65,11 @@ const CourtCanvas = () => {
         .attr("y2", toCoords.y)
         .attr("stroke", "black")
         .attr("stroke-width", 2)
+        .attr("class", PERMANENT_MARKER_CLASS)
     }
   }
 
-  const onSubmit = (option: Option) => {
+  const onSubmitMove = (option: Option) => {
     const uid = generateRandomString()
     addMoveToActiveSequence({ ...markerCoordinates, uid, moveId: option.id, color: option.color })
 
@@ -72,6 +83,13 @@ const CourtCanvas = () => {
     if (option.isFinalMove) {
       toggleSequenceOptionsDialog()
     }
+  }
+
+  const onSubmitSequence = (values: z.infer<typeof sequenceFormSchema>) => {
+    setIsSequenceOptionsDialogOpen(false)
+    addNewSequence({ ...values, moves: activeSequenceMoves, period: activePeriod })
+    resetActiveSequence()
+    removeMarker(`.${PERMANENT_MARKER_CLASS}`)
   }
 
   const toggleSequenceOptionsDialog = () => {
@@ -141,8 +159,14 @@ const CourtCanvas = () => {
   return (
     <div className="relative w-max">
       <svg ref={svgRef}></svg>
-      {dropdownOpen && <CourtDropdown onClose={closeDropdown} coordinates={dropdownCoordinates} onSubmit={onSubmit} />}
-      <SequenceOptionsDialog open={isSequenceOptionsDialogOpen} onOpenChange={toggleSequenceOptionsDialog} />
+      {dropdownOpen && (
+        <CourtDropdown onClose={closeDropdown} coordinates={dropdownCoordinates} onSubmit={onSubmitMove} />
+      )}
+      <SequenceOptionsDialog
+        open={isSequenceOptionsDialogOpen}
+        onOpenChange={toggleSequenceOptionsDialog}
+        onSubmit={onSubmitSequence}
+      />
     </div>
   )
 }
