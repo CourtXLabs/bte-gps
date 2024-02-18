@@ -1,41 +1,16 @@
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { sequenceOptions } from "@/constants"
 import { sequenceFormSchema } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "../ui/button"
 
-const options = [
-  { name: "playCode", label: "Play Code", options: [{ value: "test", label: "test" }] },
-  { name: "initialDirection", label: "Initial Direction", options: [{ value: "test", label: "test" }] },
-  { name: "counterDirection", label: "Counter Direction", options: [{ value: "test", label: "test" }] },
-  { name: "lastDribbleType", label: "Last Dribble Type", options: [{ value: "test", label: "test" }] },
-  { name: "typeOfShot", label: "Type of Shot", options: [{ value: "test", label: "test" }] },
-  { name: "pickAndRoll", label: "Pick & Roll", options: [{ value: "test", label: "test" }] },
-  // Optional:
-  { name: "defenderPickAndRoll", label: "Defender Pick & Roll", options: [{ value: "test", label: "test" }] },
-  { name: "ballHandlerPickAndRoll", label: "Ball Handler Pick & Roll", options: [{ value: "test", label: "test" }] },
-] as Option[]
-
 interface Props {
   open: boolean
   onOpenChange: () => void
-}
-
-interface Option {
-  name:
-    | "playCode"
-    | "initialDirection"
-    | "counterDirection"
-    | "lastDribbleType"
-    | "typeOfShot"
-    | "pickAndRoll"
-    | "defenderPickAndRoll"
-    | "ballHandlerPickAndRoll"
-  label: string
-  options: { value: string; label: string }[]
 }
 
 export default function SequenceOptionsDialog({ open, onOpenChange }: Props) {
@@ -64,24 +39,24 @@ export default function SequenceOptionsDialog({ open, onOpenChange }: Props) {
               <DialogTitle className="border-b-2 border-accent pb-6">Sequence Details</DialogTitle>
             </DialogHeader>
             <div className="grid grid-cols-2 gap-x-8 gap-y-6 border-b-2 border-accent pb-6">
-              {options.map((option) => (
+              {sequenceOptions.map((sequenceInput) => (
                 <FormField
-                  key={option.name}
+                  key={sequenceInput.name}
                   control={form.control}
-                  name={option.name}
+                  name={sequenceInput.name}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{option.label}</FormLabel>
+                      <FormLabel>{sequenceInput.label}</FormLabel>
                       <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder={option.label} />
+                            <SelectValue placeholder={sequenceInput.label} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {option.options.map((option) => (
-                            <SelectItem key={option.value} value={option.value}>
-                              {option.label}
+                          {sequenceInput.options.map((sequence) => (
+                            <SelectItem key={sequence.value} value={sequence.value}>
+                              {sequence.label}
                             </SelectItem>
                           ))}
                         </SelectContent>

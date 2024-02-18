@@ -13,6 +13,20 @@ export interface Option {
   color?: string
 }
 
+export interface SequenceInput {
+  name:
+    | "playCode"
+    | "initialDirection"
+    | "counterDirection"
+    | "lastDribbleType"
+    | "typeOfShot"
+    | "pickAndRoll"
+    | "defenderPickAndRoll"
+    | "ballHandlerPickAndRoll"
+  label: string
+  options: { value: string; label: string }[]
+}
+
 export enum GameTypes {
   COLLEGE = "College Game",
   HIGH_SCHOOL = "High School Game",
