@@ -1,8 +1,9 @@
 "use client"
 
+import { PERMANENT_MARKER_CLASS } from "@/constants"
 import useBteStore from "@/stores/bteDataStore"
-import { Coordinates, Option, sequenceFormSchema } from "@/types"
-import { generateRandomString } from "@/utils"
+import { Option, sequenceFormSchema } from "@/types"
+import { drawLineBetweenMarkers, drawPermanentMarker, generateRandomString } from "@/utils"
 import * as d3 from "d3"
 import { useEffect, useRef, useState } from "react"
 import { z } from "zod"
@@ -10,7 +11,6 @@ import CourtDropdown from "./CourtDropdown"
 import SequenceOptionsDialog from "./dialogs/SequenceOptionsDialog"
 
 const TEMPORARY_SELECTION_MARKER_CLASS = "marker-group"
-const PERMANENT_MARKER_CLASS = "permanent-marker"
 const COURT_WIDTH = 850
 // const COURT_HEIGHT = 458
 
@@ -39,46 +39,16 @@ const CourtCanvas = () => {
     removeMarker(`.${TEMPORARY_SELECTION_MARKER_CLASS}`)
   }
 
-  const drawPermanentMarker = ({ x, y, uid, color }: { x: number; y: number; color?: string; uid: string }) => {
-    const svg = d3.select(svgRef.current)
-    return svg
-      .append("circle")
-      .attr("cx", x)
-      .attr("cy", y)
-      .attr("r", 6)
-      .attr("fill", color || "transparent")
-      .attr("stroke", "black")
-      .attr("stroke-width", 2)
-      .attr("id", `marker-${uid}`)
-      .attr("class", PERMANENT_MARKER_CLASS)
-  }
-
-  const drawLineBetweenMarkers = (fromCoords: Coordinates, toCoords: Coordinates, uid: string) => {
-    const svg = d3.select(svgRef.current)
-    if (fromCoords && toCoords) {
-      svg
-        .append("line")
-        .attr("id", `line-${uid}`)
-        .attr("x1", fromCoords.x)
-        .attr("y1", fromCoords.y)
-        .attr("x2", toCoords.x)
-        .attr("y2", toCoords.y)
-        .attr("stroke", "black")
-        .attr("stroke-width", 2)
-        .attr("class", PERMANENT_MARKER_CLASS)
-    }
-  }
-
   const onSubmitMove = (option: Option) => {
     const uid = generateRandomString()
     addMoveToActiveSequence({ ...markerCoordinates, uid, moveId: option.id, color: option.color })
 
     const lastMove = activeSequenceMoves[activeSequenceMoves.length - 1]
     if (lastMove) {
-      drawLineBetweenMarkers(lastMove, markerCoordinates, uid)
-      drawPermanentMarker(lastMove) // needs to be redrawn so that the marker stays on top of the line
+      drawLineBetweenMarkers({ fromCoords: lastMove, toCoords: markerCoordinates, uid, svgElement: svgRef.current })
+      drawPermanentMarker({ ...lastMove, svgElement: svgRef.current }) // needs to be redrawn so that the marker stays on top of the line
     }
-    drawPermanentMarker({ ...markerCoordinates, color: option.color, uid })
+    drawPermanentMarker({ ...markerCoordinates, color: option.color, uid, svgElement: svgRef.current })
 
     if (option.isFinalMove) {
       toggleSequenceOptionsDialog()
@@ -158,7 +128,13 @@ const CourtCanvas = () => {
 
   return (
     <div className="relative w-max">
-      <svg ref={svgRef} className="h-[458px] w-[850px]"></svg>
+      <svg
+        ref={svgRef}
+        id="court-svg"
+        className="h-[458px] w-[850px]"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      ></svg>
       {dropdownOpen && (
         <CourtDropdown onClose={closeDropdown} coordinates={dropdownCoordinates} onSubmit={onSubmitMove} />
       )}

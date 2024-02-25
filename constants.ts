@@ -228,3 +228,5 @@ export const gameTypesPeriods = {
   [GameTypes.HIGH_SCHOOL]: 5,
   [GameTypes.PROFESSIONAL]: 5,
 }
+
+export const PERMANENT_MARKER_CLASS = "permanent-marker"
