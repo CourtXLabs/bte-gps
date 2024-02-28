@@ -84,6 +84,14 @@ export default function GameForm() {
         const { moves, ...rest } = sequence
         return {
           report_id: addedReport.data?.[0].id,
+          full_combo: moves
+            .slice(0, moves.length - 1)
+            .map((move) => move.moveId)
+            .join(""), // because the last move is the shot, which is not part of the dribble combo
+          bte_combo: moves
+            .slice(0, Math.min(3, moves.length - 1))
+            .map((move) => move.moveId)
+            .join(""),
           ...rest,
         }
       })
