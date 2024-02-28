@@ -16,14 +16,14 @@ export interface Option {
 
 export interface SequenceInput {
   name:
-    | "playCode"
-    | "initialDirection"
-    | "counterDirection"
-    | "lastDribbleType"
-    | "typeOfShot"
-    | "pickAndRoll"
-    | "defenderPickAndRoll"
-    | "ballHandlerPickAndRoll"
+    | "play_code"
+    | "initial_direction"
+    | "counter_direction"
+    | "last_dribble_type"
+    | "type_of_shot"
+    | "pick_and_roll"
+    | "defender_pick_and_roll"
+    | "ball_handler_pick_and_roll"
   label: string
   options: { value: string; label: string }[]
 }
@@ -44,14 +44,14 @@ export interface MoveSequence {
 
 export interface Sequence {
   moves: MoveSequence[]
-  playCode: string | null
-  initialDirection: string | null
-  counterDirection: string | null
-  lastDribbleType: string | null
-  typeOfShot: string | null
-  pickAndRoll: string | null
-  defenderPickAndRoll?: string | null
-  ballHandlerPickAndRoll?: string
+  play_code: string | null
+  initial_direction: string | null
+  counter_direction: string | null
+  last_dribble_type: string | null
+  type_of_shot: string | null
+  pick_and_roll: string | null
+  defender_pick_and_roll?: string | null
+  ball_handler_pick_and_roll?: string
   period: number
 }
 
@@ -81,12 +81,12 @@ export const gameFormSchema = z.object({
 })
 
 export const sequenceFormSchema = z.object({
-  playCode: z.string().min(1, { message: errorMessage }),
-  initialDirection: z.string().min(1, { message: errorMessage }),
-  counterDirection: z.string().min(1, { message: errorMessage }),
-  lastDribbleType: z.string().min(1, { message: errorMessage }),
-  typeOfShot: z.string().min(1, { message: errorMessage }),
-  pickAndRoll: z.string().min(1, { message: errorMessage }),
-  defenderPickAndRoll: z.string().optional(),
-  ballHandlerPickAndRoll: z.string().optional(),
+  play_code: z.string().min(1, { message: errorMessage }),
+  initial_direction: z.string().min(1, { message: errorMessage }),
+  counter_direction: z.string().min(1, { message: errorMessage }),
+  last_dribble_type: z.string().min(1, { message: errorMessage }),
+  type_of_shot: z.string().min(1, { message: errorMessage }),
+  pick_and_roll: z.string().min(1, { message: errorMessage }),
+  defender_pick_and_roll: z.string().optional(),
+  ball_handler_pick_and_roll: z.string().optional(),
 })

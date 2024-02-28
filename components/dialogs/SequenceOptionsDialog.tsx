@@ -18,12 +18,12 @@ export default function SequenceOptionsDialog({ open, onOpenChange, onSubmit }: 
   const form = useForm<z.infer<typeof sequenceFormSchema>>({
     resolver: zodResolver(sequenceFormSchema),
     defaultValues: {
-      playCode: "",
-      initialDirection: "",
-      counterDirection: "",
-      lastDribbleType: "",
-      typeOfShot: "",
-      pickAndRoll: "",
+      play_code: "",
+      initial_direction: "",
+      counter_direction: "",
+      last_dribble_type: "",
+      type_of_shot: "",
+      pick_and_roll: "",
     },
   })
 

@@ -2,7 +2,7 @@ import { GameTypes, SequenceInput } from "./types"
 
 export const sequenceOptions = [
   {
-    name: "playCode",
+    name: "play_code",
     label: "Play Code",
     options: [
       { value: "DHO", label: "Dribble Handoff (DHO)" },
@@ -25,7 +25,7 @@ export const sequenceOptions = [
     ],
   },
   {
-    name: "initialDirection",
+    name: "initial_direction",
     label: "Initial Direction",
     options: [
       { value: "0", label: "No dribble (0)" },
@@ -53,7 +53,7 @@ export const sequenceOptions = [
     ],
   },
   {
-    name: "counterDirection",
+    name: "counter_direction",
     label: "Counter Direction",
     options: [
       { value: "0", label: "No counter direction dribble (0)" },
@@ -80,7 +80,7 @@ export const sequenceOptions = [
     ],
   },
   {
-    name: "lastDribbleType",
+    name: "last_dribble_type",
     label: "Last Dribble Type",
     options: [
       { value: "0", label: "No dribble (0)" },
@@ -107,7 +107,7 @@ export const sequenceOptions = [
     ],
   },
   {
-    name: "typeOfShot",
+    name: "type_of_shot",
     label: "Type of Shot",
     options: [
       { value: "BS", label: "Blocked Shot (BS) - The defender knocks this shot out of the air" },
@@ -180,7 +180,7 @@ export const sequenceOptions = [
     ],
   },
   {
-    name: "pickAndRoll",
+    name: "pick_and_roll",
     label: "Pick & Roll",
     options: [
       {
@@ -217,8 +217,12 @@ export const sequenceOptions = [
     ],
   },
   // Optional:
-  { name: "defenderPickAndRoll", label: "Defender Pick & Roll", options: [{ value: "test", label: "test" }] },
-  { name: "ballHandlerPickAndRoll", label: "Ball Handler Pick & Roll", options: [{ value: "test", label: "test" }] },
+  { name: "defender_pick_and_roll", label: "Defender Pick & Roll", options: [{ value: "test", label: "test" }] },
+  {
+    name: "ball_handler_pick_and_roll",
+    label: "Ball Handler Pick & Roll",
+    options: [{ value: "test", label: "test" }],
+  },
 ] as SequenceInput[]
 
 export const INITIAL_GAME_TYPE = GameTypes.COLLEGE

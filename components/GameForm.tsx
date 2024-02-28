@@ -26,22 +26,95 @@ export default function GameForm() {
   })
 
   async function onSubmit(values: z.infer<typeof gameFormSchema>) {
-    const date = values.date.toISOString()
-    const gameData = { ...values, date, sequences }
-    const sequencesImages = await constructSequencesSvg(sequences)
-    for (let imageIndex = 0; imageIndex < sequencesImages.length; imageIndex++) {
-      await supabase.storage
-        .from("BTE GPS")
-        .upload(
-          `${values.playerName}: ${values.teamName} vs ${values.opponentName}. ${values.date} - ${imageIndex}`,
-          sequencesImages[imageIndex],
-          {
-            contentType: "image/webp",
-          },
-        )
-    }
+    try {
+      const date = values.date.toISOString()
+      const { playerName, teamName, gameType, jersey, opponentName } = values
+      const sequencesImages = await constructSequencesSvg(sequences)
+      const imageNames = []
+      for (let imageIndex = 0; imageIndex < sequencesImages.length; imageIndex++) {
+        const imageName = `${playerName}: ${teamName} vs ${opponentName}. ${date} - ${imageIndex}`
+        await supabase.storage.from("BTE GPS").upload(imageName, sequencesImages[imageIndex], {
+          contentType: "image/webp",
+        })
+        imageNames.push(imageName)
+      }
 
-    // const data = await supabase.from("games").insert({})
+      const teamData = [
+        {
+          name: teamName,
+        },
+      ]
+      const oppoentTeamData = [
+        {
+          name: opponentName,
+        },
+      ]
+
+      const addedTeam = await supabase.from("team").insert(teamData).select("id")
+      const addedOppoentTeam = await supabase.from("team").insert(oppoentTeamData).select("id")
+
+      const gameData = [
+        {
+          type: gameType,
+          date,
+          home_team_id: addedTeam.data?.[0].id,
+          away_team_id: addedOppoentTeam.data?.[0].id,
+        },
+      ]
+      const addedGame = await supabase.from("game").insert(gameData).select("id")
+
+      const playerData = [
+        {
+          name: playerName,
+          jersey: jersey,
+          team_id: addedTeam.data?.[0].id,
+        },
+      ]
+      const addedPlayer = await supabase.from("player").insert(playerData).select("id")
+
+      const reportData = [
+        {
+          game_id: addedGame.data?.[0].id,
+          player_id: addedPlayer.data?.[0].id,
+        },
+      ]
+      const addedReport = await supabase.from("report").insert(reportData).select("id")
+
+      const sequencesData = sequences.map((sequence) => {
+        const { moves, ...rest } = sequence
+        return {
+          report_id: addedReport.data?.[0].id,
+          ...rest,
+        }
+      })
+      const addedSequences = await supabase.from("sequence").insert(sequencesData).select("id")
+
+      const movesData = [] as any
+      for (let i = 0; i < sequences.length; i++) {
+        const moves = sequences[i]?.moves
+        moves.forEach((move) => {
+          const { x, y } = move
+          movesData.push({
+            sequence_id: addedSequences.data?.[i].id,
+            x,
+            y,
+          })
+        })
+      }
+      await supabase.from("move").insert(movesData)
+
+      const imageSignedUrls = await supabase.storage.from("BTE GPS").createSignedUrls(imageNames, 3153600000)
+      const imageData = imageSignedUrls.data?.map((url, index) => {
+        return {
+          period: index + 1, // ASSUMING EXACTLY ONE GPS IMAGE PER PERIOD
+          url: url.signedUrl,
+          report_id: addedReport.data?.[0].id,
+        }
+      })
+      await supabase.from("gps").insert(imageData)
+    } catch (error) {
+      console.log({ error })
+    }
   }
 
   return (
