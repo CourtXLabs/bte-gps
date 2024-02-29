@@ -3,7 +3,7 @@ import useBteStore from "@/stores/bteDataStore"
 import { Button } from "../ui/button"
 
 const CourtOptionsSection = () => {
-  const { incrementPeriod, decrementPeriod, activePeriod, game } = useBteStore()
+  const { incrementPeriod, decrementPeriod, activePeriod, game, isLoading } = useBteStore()
 
   const onClickNextPeriod = () => {
     incrementPeriod()
@@ -21,7 +21,7 @@ const CourtOptionsSection = () => {
 
   return (
     <div className="flex justify-between">
-      <Button type="submit" form="game-form">
+      <Button type="submit" form="game-form" disabled={isLoading}>
         Save Game
       </Button>
       <div className="flex items-center gap-3">

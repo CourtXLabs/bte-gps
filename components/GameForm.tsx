@@ -11,10 +11,12 @@ import { z } from "zod"
 import GameMenu from "./GameMenu"
 import CourtSection from "./sections/CourtSection"
 import { Form } from "./ui/form"
+import { useToast } from "./ui/use-toast"
 
 export default function GameForm() {
+  const { toast } = useToast()
   const supabase = createClient()
-  const { sequences } = useBteStore()
+  const { sequences, toggleLoading } = useBteStore()
   const form = useForm<z.infer<typeof gameFormSchema>>({
     resolver: zodResolver(gameFormSchema),
     defaultValues: {
@@ -27,6 +29,7 @@ export default function GameForm() {
 
   async function onSubmit(values: z.infer<typeof gameFormSchema>) {
     try {
+      toggleLoading()
       const date = values.date.toISOString()
       const { playerName, teamName, gameType, jersey, opponentName } = values
       const sequencesImages = await constructSequencesSvg(sequences)
@@ -120,9 +123,12 @@ export default function GameForm() {
         }
       })
       await supabase.from("gps").insert(imageData)
+      toast({ title: "Game data saved successfully!" })
     } catch (error) {
+      toast({ variant: "destructive", title: "An error occured" })
       console.log({ error })
     }
+    toggleLoading()
   }
 
   return (

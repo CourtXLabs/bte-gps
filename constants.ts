@@ -217,11 +217,31 @@ export const sequenceOptions = [
     ],
   },
   // Optional:
-  { name: "defender_pick_and_roll", label: "Defender Pick & Roll", options: [{ value: "test", label: "test" }] },
+  {
+    name: "defender_pick_and_roll",
+    label: "Defender Pick & Roll",
+    options: [
+      { value: "over", label: "Over" },
+      { value: "under", label: "Under" },
+      { value: "hold_pick", label: "Hold Pick" },
+      { value: "show", label: "Show" },
+      { value: "blitz", label: "Blitz" },
+    ],
+  },
   {
     name: "ball_handler_pick_and_roll",
     label: "Ball Handler Pick & Roll",
-    options: [{ value: "test", label: "test" }],
+    options: [
+      { value: "turn_the_corner", label: "Turn the corner" },
+      { value: "drag", label: "Drag" },
+      { value: "behind", label: "Behind" },
+      { value: "dribble_hold", label: "Dribble Hold" },
+      { value: "split", label: "Split" },
+      { value: "snake", label: "Snake" },
+      { value: "twist", label: "Twist" },
+      { value: "reject", label: "Reject" },
+      { value: "re_screen", label: "Re-screen" },
+    ],
   },
 ] as SequenceInput[]
 

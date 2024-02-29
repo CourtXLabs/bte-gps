@@ -7,6 +7,8 @@ interface BteDataStore {
   activeSequenceMoves: MoveSequence[]
   sequences: Sequence[]
   game: Game
+  isLoading: boolean
+  toggleLoading: () => void
   addMoveToActiveSequence: (newSequence: MoveSequence) => void
   undoLastMove: () => void
   resetActiveSequence: () => void
@@ -24,6 +26,8 @@ const useBteStore = create<BteDataStore>()((set) => ({
   game: {
     gameType: INITIAL_GAME_TYPE,
   } as Game,
+  isLoading: false,
+  toggleLoading: () => set((state: BteDataStore) => ({ isLoading: !state.isLoading })),
   addMoveToActiveSequence: (newSequence: MoveSequence) =>
     set((state: BteDataStore) => ({ activeSequenceMoves: [...state.activeSequenceMoves, newSequence] })),
   undoLastMove: () =>
