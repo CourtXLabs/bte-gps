@@ -4,7 +4,7 @@ import { INITIAL_GAME_TYPE } from "@/constants"
 import { createClient } from "@/lib/supabase/client"
 import useBteStore from "@/stores/bteDataStore"
 import { gameFormSchema } from "@/types"
-import { constructSequencesSvg } from "@/utils"
+import { constructSequencesSvg, convertAllMoves, getSequenceData } from "@/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -83,32 +83,20 @@ export default function GameForm() {
       ]
       const addedReport = await supabase.from("report").insert(reportData).select("id")
 
-      const sequencesData = sequences.map((sequence) => {
-        const { moves, ...rest } = sequence
-        return {
-          report_id: addedReport.data?.[0].id,
-          full_combo: moves
-            .slice(0, moves.length - 1)
-            .map((move) => move.moveId)
-            .join(""), // because the last move is the shot, which is not part of the dribble combo
-          bte_combo: moves
-            .slice(0, Math.min(3, moves.length - 1))
-            .map((move) => move.moveId)
-            .join(""),
-          ...rest,
-        }
-      })
+      const sequencesWithConvertedCoordinates = convertAllMoves(sequences)
+      const sequencesData = getSequenceData(sequencesWithConvertedCoordinates, addedReport.data?.[0].id!)
       const addedSequences = await supabase.from("sequence").insert(sequencesData).select("id")
 
+      console.log({ sequencesWithConvertedCoordinates })
+
       const movesData = [] as any
-      for (let i = 0; i < sequences.length; i++) {
-        const moves = sequences[i]?.moves
+      for (let i = 0; i < sequencesWithConvertedCoordinates.length; i++) {
+        const moves = sequencesWithConvertedCoordinates[i]?.moves
         moves.forEach((move) => {
-          const { x, y } = move
           movesData.push({
             sequence_id: addedSequences.data?.[i].id,
-            x,
-            y,
+            x: move.x,
+            y: move.y,
           })
         })
       }

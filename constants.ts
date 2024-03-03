@@ -1,5 +1,11 @@
 import { GameTypes, SequenceInput } from "./types"
 
+export const COURT_WIDTH = 850
+export const COURT_HEIGHT = 458
+
+export const COURT_WIDTH_FEET = 50
+export const COURT_HEIGHT_FEET = 94
+
 export const sequenceOptions = [
   {
     name: "play_code",

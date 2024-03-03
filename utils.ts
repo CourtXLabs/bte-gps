@@ -1,5 +1,5 @@
 import * as d3 from "d3"
-import { PERMANENT_MARKER_CLASS } from "./constants"
+import { COURT_HEIGHT, COURT_HEIGHT_FEET, COURT_WIDTH, COURT_WIDTH_FEET, PERMANENT_MARKER_CLASS } from "./constants"
 import { MoveSequence, Sequence } from "./types"
 
 export const generateRandomString = () => {
@@ -202,4 +202,91 @@ export const constructSequencesSvg = async (sequences: Sequence[]) => {
   }
 
   return imageData
+}
+
+//////////////////////////////////
+interface ConvertCoordiantesInput {
+  x: number
+  y: number
+  pixelWidth?: number
+  pixelHeight?: number
+  courtWidth?: number
+  courtHeight?: number
+}
+export const convertPixelsToCoordinates = ({
+  x,
+  y,
+  pixelWidth = COURT_WIDTH,
+  pixelHeight = COURT_HEIGHT,
+  courtWidth = COURT_WIDTH_FEET,
+  courtHeight = COURT_HEIGHT_FEET,
+}: ConvertCoordiantesInput) => {
+  // Center of the court is 0, 0
+  const xRatio = x / pixelWidth
+  const yRatio = y / pixelHeight
+  const courtX = xRatio * courtWidth - courtWidth / 2
+  const courtY = courtHeight / 2 - yRatio * courtHeight
+  return { x: courtX, y: courtY }
+}
+
+export const convertAllMoves = (sequences: Sequence[]) => {
+  return sequences.map((sequence) => {
+    const moves = sequence.moves.map((move) => {
+      const { x, y } = convertPixelsToCoordinates({ x: move.x, y: move.y })
+      return { ...move, x, y }
+    })
+    return { ...sequence, moves }
+  })
+}
+
+export const getLanes = (sequence: Sequence) => {
+  const lastMove = sequence.moves[sequence.moves.length - 1]
+  const attackingHalf = lastMove.x > 0 ? "right" : "left"
+  const halfCourtLength = COURT_HEIGHT_FEET / 2
+
+  const getIsLeftLane = (y: number) => (attackingHalf === "left" ? y < -halfCourtLength / 3 : y > halfCourtLength / 3)
+  const getIsMiddleLane = (y: number) => y >= -halfCourtLength / 3 && y <= halfCourtLength / 3
+  const getIsRightLane = (y: number) => (attackingHalf === "left" ? y > halfCourtLength / 3 : y < -halfCourtLength / 3)
+
+  const leftLaneMoves: number[] = []
+  const middleLaneMoves: number[] = []
+  const rightLaneMoves: number[] = []
+
+  const moves = sequence.moves
+  moves.slice(0, moves.length - 1).forEach(({ y, moveId }) => {
+    if (getIsLeftLane(y)) {
+      leftLaneMoves.push(moveId)
+    } else if (getIsMiddleLane(y)) {
+      middleLaneMoves.push(moveId)
+    } else if (getIsRightLane(y)) {
+      rightLaneMoves.push(moveId)
+    }
+  })
+  return { leftLaneMoves, middleLaneMoves, rightLaneMoves }
+}
+
+export const getSequenceData = (sequences: Sequence[], addedReportId: number) => {
+  return sequences.map((sequence) => {
+    const { moves, ...rest } = sequence
+    const fullCombo = moves
+      .slice(0, moves.length - 1) // because the last move is the shot, which is not part of the dribble combo
+      .map((move) => move.moveId)
+      .join("")
+    const bteCombo = moves
+      .slice(0, Math.min(3, moves.length - 1))
+      .map((move) => move.moveId)
+      .join("")
+
+    const { leftLaneMoves, middleLaneMoves, rightLaneMoves } = getLanes(sequence)
+
+    return {
+      report_id: addedReportId,
+      full_combo: fullCombo,
+      bte_combo: bteCombo,
+      lanes_left: leftLaneMoves.join(""),
+      lanes_middle: middleLaneMoves.join(""),
+      lanes_right: rightLaneMoves.join(""),
+      ...rest,
+    }
+  })
 }

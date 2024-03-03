@@ -1,6 +1,6 @@
 "use client"
 
-import { PERMANENT_MARKER_CLASS } from "@/constants"
+import { COURT_WIDTH, PERMANENT_MARKER_CLASS } from "@/constants"
 import useBteStore from "@/stores/bteDataStore"
 import { Option, sequenceFormSchema } from "@/types"
 import { drawLineBetweenMarkers, drawPermanentMarker, generateRandomString } from "@/utils"
@@ -11,8 +11,6 @@ import CourtDropdown from "./CourtDropdown"
 import SequenceOptionsDialog from "./dialogs/SequenceOptionsDialog"
 
 const TEMPORARY_SELECTION_MARKER_CLASS = "marker-group"
-const COURT_WIDTH = 850
-// const COURT_HEIGHT = 458
 
 const CourtCanvas = () => {
   const svgRef = useRef<SVGSVGElement | null>(null)
