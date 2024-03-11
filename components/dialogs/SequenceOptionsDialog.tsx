@@ -24,6 +24,8 @@ export default function SequenceOptionsDialog({ open, onOpenChange, onSubmit }: 
       last_dribble_type: "",
       type_of_shot: "",
       pick_and_roll: "",
+      defender_pick_and_roll: "",
+      ball_handler_pick_and_roll: "",
     },
   })
 

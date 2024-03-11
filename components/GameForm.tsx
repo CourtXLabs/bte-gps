@@ -87,8 +87,6 @@ export default function GameForm() {
       const sequencesData = getSequenceData(sequencesWithConvertedCoordinates, addedReport.data?.[0].id!)
       const addedSequences = await supabase.from("sequence").insert(sequencesData).select("id")
 
-      console.log({ sequencesWithConvertedCoordinates })
-
       const movesData = [] as any
       for (let i = 0; i < sequencesWithConvertedCoordinates.length; i++) {
         const moves = sequencesWithConvertedCoordinates[i]?.moves

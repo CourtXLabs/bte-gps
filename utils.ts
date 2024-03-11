@@ -1,6 +1,6 @@
 import * as d3 from "d3"
 import { COURT_HEIGHT, COURT_HEIGHT_FEET, COURT_WIDTH, COURT_WIDTH_FEET, PERMANENT_MARKER_CLASS } from "./constants"
-import { MoveSequence, Sequence } from "./types"
+import { Coordinates, MoveSequence, Sequence } from "./types"
 
 export const generateRandomString = () => {
   return (Math.random() + 1).toString(36).substring(2)
@@ -222,10 +222,12 @@ export const convertPixelsToCoordinates = ({
   courtHeight = COURT_HEIGHT_FEET,
 }: ConvertCoordiantesInput) => {
   // Center of the court is 0, 0
-  const xRatio = x / pixelWidth
-  const yRatio = y / pixelHeight
-  const courtX = xRatio * courtWidth - courtWidth / 2
-  const courtY = courtHeight / 2 - yRatio * courtHeight
+  const xRatio = pixelWidth / courtWidth
+  const yRatio = pixelHeight / courtHeight
+  const xInFeet = x / xRatio
+  const yInFeet = y / yRatio
+  const courtX = xInFeet - courtWidth / 2
+  const courtY = -(yInFeet - courtHeight / 2) // Invert the y-axis
   return { x: courtX, y: courtY }
 }
 
@@ -264,7 +266,166 @@ export const getLanes = (sequence: Sequence) => {
   })
   return { leftLaneMoves, middleLaneMoves, rightLaneMoves }
 }
+//////////////////////////////////
 
+interface Rectangle {
+  topLeft: Coordinates
+  bottomRight: Coordinates
+}
+
+interface Circle {
+  center: Coordinates
+  radius: number
+}
+
+interface Line {
+  start: Coordinates
+  end: Coordinates
+}
+
+interface CircleSegment {
+  circle: Circle
+  top: Coordinates
+  bottom: Coordinates
+}
+
+const getIsInRectangle = ({ point, rectangle }: { point: Coordinates; rectangle: Rectangle }): boolean => {
+  // Assuming lines are parallel to the axes
+  const { topLeft, bottomRight } = rectangle
+  return point.x >= topLeft.x && point.x <= bottomRight.x && point.y >= bottomRight.y && point.y <= topLeft.y
+}
+
+const getIsInCircle = ({ point, circle }: { point: Coordinates; circle: Circle }): boolean => {
+  const { center, radius } = circle
+  const dx = point.x - center.x
+  const dy = point.y - center.y
+  const distance = Math.sqrt(dx * dx + dy * dy)
+  return distance <= radius
+}
+
+const getIsOnOppositeSideOfLine = ({
+  pointA,
+  pointB,
+  line,
+}: {
+  pointA: Coordinates
+  pointB: Coordinates
+  line: Line
+}): boolean => {
+  const { start, end } = line
+  const x1 = start.x
+  const y1 = start.y
+  const x2 = end.x
+  const y2 = end.y
+
+  // Compute expressions for each point relative to the line
+  const expressionA = (y1 - y2) * (pointA.x - x1) + (x2 - x1) * (pointA.y - y1)
+  const expressionB = (y1 - y2) * (pointB.x - x1) + (x2 - x1) * (pointB.y - y1)
+
+  const isOnOppositeSides = expressionA * expressionB < 0
+
+  return isOnOppositeSides
+}
+
+const getIsInCircleSegment = ({
+  point,
+  circleSegment,
+}: {
+  point: Coordinates
+  circleSegment: CircleSegment
+}): boolean => {
+  const { circle, top, bottom } = circleSegment
+  const isInCircle = getIsInCircle({ point, circle })
+  const isOppositeOfSegmentLine = getIsOnOppositeSideOfLine({
+    pointA: point,
+    pointB: circle.center,
+    line: { start: top, end: bottom },
+  })
+  return isInCircle && isOppositeOfSegmentLine
+}
+
+const getIsInRight3PointArea = (point: Coordinates): boolean => {
+  const bottomRightCorner = { x: 47, y: -22 } // 47, -25 + 3
+  const topLeftCorner = { x: 33, y: 22 } // 47 - 14, 25 - 3
+  const bottomLeftCorner = { x: 33, y: -22 } // 47 - 14, -25 + 3
+  const circleCenter = { x: 41.75, y: 0 } // 47 - 5.25, 0
+  const radius = 23.75
+
+  const rectangle: Rectangle = { topLeft: topLeftCorner, bottomRight: bottomRightCorner }
+  const circleSegment: CircleSegment = {
+    circle: { center: circleCenter, radius },
+    top: topLeftCorner,
+    bottom: bottomLeftCorner,
+  }
+
+  return getIsInRectangle({ point, rectangle }) || getIsInCircleSegment({ point, circleSegment })
+}
+
+const getIsInLeft3PointArea = (point: Coordinates): boolean => {
+  const bottomRightCorner = { x: -33, y: -22 } // -47 + 14, -25 + 3
+  const topLeftCorner = { x: -47, y: 22 } // -47, 25 - 3
+  const topRightCorner = { x: -33, y: 22 } // -47 + 14, 25 - 3
+  const circleCenter = { x: -41.75, y: 0 } // -47 + 5.25, 0
+  const radius = 23.75
+
+  const rectangle: Rectangle = { topLeft: topLeftCorner, bottomRight: bottomRightCorner }
+  const circleSegment: CircleSegment = {
+    circle: { center: circleCenter, radius },
+    top: topRightCorner,
+    bottom: bottomRightCorner,
+  }
+
+  return getIsInRectangle({ point, rectangle }) || getIsInCircleSegment({ point, circleSegment })
+}
+
+const getIsRightInShortrangeArea = (point: Coordinates): boolean => {
+  const bottomRightCorner = { x: 47, y: -8 } // 47, -16 / 2
+  const topLeftCorner = { x: 28, y: 8 } // 47 - 19, 16 / 2
+  const circleCenter = { x: 28, y: 0 } // 47 - 19, 0
+  const radius = 6
+
+  const rectangle: Rectangle = { topLeft: topLeftCorner, bottomRight: bottomRightCorner }
+  const circle: Circle = { center: circleCenter, radius }
+
+  return getIsInRectangle({ point, rectangle }) && !getIsInCircle({ point, circle })
+}
+
+const getIsLeftInShortrangeArea = (point: Coordinates): boolean => {
+  const bottomRightCorner = { x: -28, y: -8 } // -47 + 19, -16 / 2
+  const topLeftCorner = { x: -47, y: 8 } // -47, 16 / 2
+  const circleCenter = { x: -28, y: 0 } // -47 + 19, 0
+  const radius = 6
+
+  const rectangle: Rectangle = { topLeft: topLeftCorner, bottomRight: bottomRightCorner }
+  const circle: Circle = { center: circleCenter, radius }
+
+  return getIsInRectangle({ point, rectangle }) && !getIsInCircle({ point, circle })
+}
+
+const getBteValue = (move: MoveSequence, hasDribbles: boolean): number => {
+  const direction = move.x > 0 ? "right" : "left"
+
+  const isIn3PointArea = direction === "right" ? getIsInRight3PointArea(move) : getIsInLeft3PointArea(move)
+  if (!isIn3PointArea) return hasDribbles ? 20 : 3 // 3 point shot
+
+  const isInShortrangeArea = direction === "right" ? getIsRightInShortrangeArea(move) : getIsLeftInShortrangeArea(move)
+  if (!isInShortrangeArea) return hasDribbles ? 5 : 1 // midrange 2 point shot
+
+  return hasDribbles ? 10 : 2 // layup (near the basket)
+}
+
+const getBteScore = (bteValue: number, moves: MoveSequence[]) => {
+  const lastMove = moves[moves.length - 1]
+  const isMadeShot = lastMove.moveId === 7
+  if (!isMadeShot) return 0 // Missed shot -> view CourtDropdown.tsx options
+  const sumOfFirstThreeDribbles = moves.slice(0, moves.length - 1).reduce((currentScore, move, index) => {
+    if (index > 2 || index) return currentScore
+    return currentScore + move.moveId
+  }, 0)
+  return sumOfFirstThreeDribbles * bteValue
+}
+
+/////////////////////////////////
 export const getSequenceData = (sequences: Sequence[], addedReportId: number) => {
   return sequences.map((sequence) => {
     const { moves, ...rest } = sequence
@@ -278,6 +439,9 @@ export const getSequenceData = (sequences: Sequence[], addedReportId: number) =>
       .join("")
 
     const { leftLaneMoves, middleLaneMoves, rightLaneMoves } = getLanes(sequence)
+    const lastMove = moves[moves.length - 1]
+    const bteValue = getBteValue(lastMove, moves.length > 1)
+    const bteScore = getBteScore(bteValue, moves)
 
     return {
       report_id: addedReportId,
@@ -286,6 +450,8 @@ export const getSequenceData = (sequences: Sequence[], addedReportId: number) =>
       lanes_left: leftLaneMoves.join(""),
       lanes_middle: middleLaneMoves.join(""),
       lanes_right: rightLaneMoves.join(""),
+      bte_value: bteValue,
+      bte_score: bteScore,
       ...rest,
     }
   })
