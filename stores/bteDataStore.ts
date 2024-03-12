@@ -21,6 +21,7 @@ interface BteDataStore {
   resetSequences: () => void
   changeGameType: (gameType: GameTypes) => void
   setDatatoSave: (data: GameSaveData) => void
+  resetGame: () => void
 }
 
 const useBteStore = create<BteDataStore>()((set) => ({
@@ -77,6 +78,18 @@ const useBteStore = create<BteDataStore>()((set) => ({
       return { game: { ...state.game, gameType }, activePeriod }
     }),
   setDatatoSave: (data: GameSaveData) => set({ dataToSave: data }),
+  resetGame: () =>
+    set({
+      activePeriod: 1,
+      activeSequenceMoves: [] as MoveSequence[],
+      sequences: [] as Sequence[],
+      game: {
+        gameType: INITIAL_GAME_TYPE,
+      } as Game,
+      isSaved: false,
+      isLoading: false,
+      dataToSave: {} as GameSaveData,
+    }),
 }))
 
 export default useBteStore

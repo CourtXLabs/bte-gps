@@ -482,14 +482,12 @@ const getCsvData = (sequences: any[]) => {
     "bte_score",
   ]
 
-  console.log(sequences)
-
   const rows = sequences.map((sequence) => {
     return headers
       .map((header) => {
         const value = sequence[header]
         if (header === "moves") {
-          return value.map((move: MoveSequence) => move.moveId).join("")
+          return value.map((move: MoveSequence) => `${move.x},${move.y}`).join(" | ")
         }
         return value || ""
       })

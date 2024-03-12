@@ -4,7 +4,8 @@ import { downloadCsv } from "@/utils"
 import { Button } from "../ui/button"
 
 const CourtOptionsSection = () => {
-  const { incrementPeriod, decrementPeriod, activePeriod, game, dataToSave, isLoading, isSaved } = useBteStore()
+  const { incrementPeriod, decrementPeriod, resetGame, activePeriod, game, dataToSave, isLoading, isSaved } =
+    useBteStore()
 
   const onClickNextPeriod = () => {
     incrementPeriod()
@@ -29,6 +30,11 @@ const CourtOptionsSection = () => {
         {isSaved && (
           <Button type="button" form="game-form" onClick={() => downloadCsv(dataToSave)}>
             Download CSV
+          </Button>
+        )}
+        {isSaved && (
+          <Button type="button" form="game-form" onClick={resetGame}>
+            Add new Game
           </Button>
         )}
       </div>
