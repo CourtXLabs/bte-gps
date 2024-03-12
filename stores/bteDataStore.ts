@@ -1,5 +1,5 @@
 import { INITIAL_GAME_TYPE, gameTypesPeriods } from "@/constants"
-import { Game, GameTypes, MoveSequence, Sequence } from "@/types"
+import { Game, GameSaveData, GameTypes, MoveSequence, Sequence } from "@/types"
 import { create } from "zustand"
 
 interface BteDataStore {
@@ -8,7 +8,10 @@ interface BteDataStore {
   sequences: Sequence[]
   game: Game
   isLoading: boolean
+  isSaved: boolean
+  dataToSave: GameSaveData
   toggleLoading: () => void
+  toggleIsSaved: () => void
   addMoveToActiveSequence: (newSequence: MoveSequence) => void
   undoLastMove: () => void
   resetActiveSequence: () => void
@@ -17,6 +20,7 @@ interface BteDataStore {
   decrementPeriod: () => void
   resetSequences: () => void
   changeGameType: (gameType: GameTypes) => void
+  setDatatoSave: (data: GameSaveData) => void
 }
 
 const useBteStore = create<BteDataStore>()((set) => ({
@@ -26,8 +30,11 @@ const useBteStore = create<BteDataStore>()((set) => ({
   game: {
     gameType: INITIAL_GAME_TYPE,
   } as Game,
+  isSaved: false,
   isLoading: false,
+  dataToSave: {} as GameSaveData,
   toggleLoading: () => set((state: BteDataStore) => ({ isLoading: !state.isLoading })),
+  toggleIsSaved: () => set((state: BteDataStore) => ({ isSaved: !state.isSaved })),
   addMoveToActiveSequence: (newSequence: MoveSequence) =>
     set((state: BteDataStore) => ({ activeSequenceMoves: [...state.activeSequenceMoves, newSequence] })),
   undoLastMove: () =>
@@ -69,6 +76,7 @@ const useBteStore = create<BteDataStore>()((set) => ({
 
       return { game: { ...state.game, gameType }, activePeriod }
     }),
+  setDatatoSave: (data: GameSaveData) => set({ dataToSave: data }),
 }))
 
 export default useBteStore

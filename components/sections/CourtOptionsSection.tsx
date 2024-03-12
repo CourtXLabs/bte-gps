@@ -1,9 +1,10 @@
 import { gameTypesPeriods } from "@/constants"
 import useBteStore from "@/stores/bteDataStore"
+import { downloadCsv } from "@/utils"
 import { Button } from "../ui/button"
 
 const CourtOptionsSection = () => {
-  const { incrementPeriod, decrementPeriod, activePeriod, game, isLoading } = useBteStore()
+  const { incrementPeriod, decrementPeriod, activePeriod, game, dataToSave, isLoading, isSaved } = useBteStore()
 
   const onClickNextPeriod = () => {
     incrementPeriod()
@@ -21,9 +22,16 @@ const CourtOptionsSection = () => {
 
   return (
     <div className="flex justify-between">
-      <Button type="submit" form="game-form" disabled={isLoading}>
-        Save Game
-      </Button>
+      <div className="flex items-center gap-3">
+        <Button type="submit" form="game-form" disabled={isLoading}>
+          Save Game
+        </Button>
+        {isSaved && (
+          <Button type="button" form="game-form" onClick={() => downloadCsv(dataToSave)}>
+            Download CSV
+          </Button>
+        )}
+      </div>
       <div className="flex items-center gap-3">
         <Button disabled={!canHavePreviousPeriod} type="button" onClick={onClickPreviousPeriod}>
           Previous Period

@@ -16,7 +16,7 @@ import { useToast } from "./ui/use-toast"
 export default function GameForm() {
   const { toast } = useToast()
   const supabase = createClient()
-  const { sequences, toggleLoading } = useBteStore()
+  const { sequences, toggleLoading, toggleIsSaved, setDatatoSave } = useBteStore()
   const form = useForm<z.infer<typeof gameFormSchema>>({
     resolver: zodResolver(gameFormSchema),
     defaultValues: {
@@ -110,6 +110,14 @@ export default function GameForm() {
       })
       await supabase.from("gps").insert(imageData)
       toast({ title: "Game data saved successfully!" })
+      toggleIsSaved()
+      setDatatoSave({
+        sequences: sequencesData.map((sequence, index) => ({
+          ...sequence,
+          moves: sequencesWithConvertedCoordinates[index].moves,
+        })),
+        name: `${playerName} - ${values.date.toISOString().split("T")[0]}`,
+      })
     } catch (error) {
       toast({ variant: "destructive", title: "An error occured" })
       console.log({ error })

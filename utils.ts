@@ -1,6 +1,6 @@
 import * as d3 from "d3"
 import { COURT_HEIGHT, COURT_HEIGHT_FEET, COURT_WIDTH, COURT_WIDTH_FEET, PERMANENT_MARKER_CLASS } from "./constants"
-import { Coordinates, MoveSequence, Sequence } from "./types"
+import { Coordinates, GameSaveData, MoveSequence, Sequence } from "./types"
 
 export const generateRandomString = () => {
   return (Math.random() + 1).toString(36).substring(2)
@@ -455,4 +455,57 @@ export const getSequenceData = (sequences: Sequence[], addedReportId: number) =>
       ...rest,
     }
   })
+}
+
+const getCsvData = (sequences: any[]) => {
+  if (sequences.length === 0) {
+    return ""
+  }
+
+  // This assumes all objects have the same structure
+  const headers = [
+    "play_code",
+    "initial_direction",
+    "counter_direction",
+    "moves",
+    "last_dribble_type",
+    "lanes_left",
+    "lanes_middle",
+    "lanes_right",
+    "pick_and_roll",
+    "defender_pick_and_roll",
+    "ball_handler_pick_and_roll",
+    "type_of_shot",
+    "full_combo",
+    "bte_combo",
+    "bte_value",
+    "bte_score",
+  ]
+
+  console.log(sequences)
+
+  const rows = sequences.map((sequence) => {
+    return headers
+      .map((header) => {
+        const value = sequence[header]
+        if (header === "moves") {
+          return value.map((move: MoveSequence) => move.moveId).join("")
+        }
+        return value || ""
+      })
+      .join(",")
+  })
+
+  return [headers.join(","), ...rows].join("\n")
+}
+
+export const downloadCsv = (dataToSave: GameSaveData) => {
+  const { sequences, name } = dataToSave
+  const csvData = getCsvData(sequences)
+  const blob = new Blob([csvData], { type: "text/csv" })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement("a")
+  a.href = url
+  a.download = `${name}.csv`
+  a.click()
 }

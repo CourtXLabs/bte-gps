@@ -65,6 +65,11 @@ export interface Game {
   sequences: Sequence[]
 }
 
+export interface GameSaveData {
+  name: string
+  sequences: any[]
+}
+
 export const loginFormSchema = z.object({
   email: z.string().email(),
   password: z.string(),
