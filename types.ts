@@ -65,9 +65,17 @@ export interface Game {
   sequences: Sequence[]
 }
 
+export interface PlayerInfo {
+  name: string
+  points: number
+  game: string
+  date: string
+}
+
 export interface GameSaveData {
   name: string
   sequences: any[]
+  playerInfo: PlayerInfo
 }
 
 export const loginFormSchema = z.object({

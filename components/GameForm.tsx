@@ -4,7 +4,7 @@ import { INITIAL_GAME_TYPE } from "@/constants"
 import { createClient } from "@/lib/supabase/client"
 import useBteStore from "@/stores/bteDataStore"
 import { gameFormSchema } from "@/types"
-import { constructSequencesSvg, convertAllMoves, getSequenceData } from "@/utils"
+import { constructSequencesSvg, convertAllMoves, getSequenceData, getTotalPoints } from "@/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -117,6 +117,12 @@ export default function GameForm() {
           moves: sequencesWithConvertedCoordinates[index].moves,
         })),
         name: `${playerName} - ${values.date.toISOString().split("T")[0]}`,
+        playerInfo: {
+          name: playerName,
+          points: getTotalPoints(sequencesWithConvertedCoordinates),
+          game: `${teamName} @ ${opponentName}`,
+          date: values.date.toISOString().split("T")[0],
+        },
       })
     } catch (error) {
       toast({ variant: "destructive", title: "An error occured" })

@@ -1,6 +1,6 @@
 import * as d3 from "d3"
 import { COURT_HEIGHT, COURT_HEIGHT_FEET, COURT_WIDTH, COURT_WIDTH_FEET, PERMANENT_MARKER_CLASS } from "./constants"
-import { Coordinates, GameSaveData, MoveSequence, Sequence } from "./types"
+import { Coordinates, GameSaveData, MoveSequence, PlayerInfo, Sequence } from "./types"
 
 export const generateRandomString = () => {
   return (Math.random() + 1).toString(36).substring(2)
@@ -425,6 +425,18 @@ const getBteScore = (bteValue: number, moves: MoveSequence[]) => {
   return sumOfFirstThreeDribbles * bteValue
 }
 
+export const getTotalPoints = (sequences: Sequence[]) => {
+  return sequences.reduce((totalPoints, sequence) => {
+    const lastMove = sequence.moves[sequence.moves.length - 1]
+    const isMadeShot = lastMove.moveId === 7
+    if (!isMadeShot) return totalPoints
+    const direction = lastMove.x > 0 ? "right" : "left"
+    const isIn3PointArea = direction === "right" ? getIsInRight3PointArea(lastMove) : getIsInLeft3PointArea(lastMove)
+
+    return isIn3PointArea ? totalPoints + 3 : totalPoints + 2
+  }, 0)
+}
+
 /////////////////////////////////
 export const getSequenceData = (sequences: Sequence[], addedReportId: number) => {
   return sequences.map((sequence) => {
@@ -457,7 +469,7 @@ export const getSequenceData = (sequences: Sequence[], addedReportId: number) =>
   })
 }
 
-const getCsvData = (sequences: any[]) => {
+const getCsvData = (sequences: any[], playerInfo: PlayerInfo) => {
   if (sequences.length === 0) {
     return ""
   }
@@ -484,6 +496,10 @@ const getCsvData = (sequences: any[]) => {
   ]
 
   const columnHeaders = [
+    "Player Name",
+    "Points",
+    "Game",
+    "Date",
     "Possessions",
     "Play Code",
     "Initial Direction",
@@ -503,27 +519,31 @@ const getCsvData = (sequences: any[]) => {
     "BTE Score",
   ]
 
-  const rows = sequences.map((sequence) => {
-    return columns
-      .map((header, index) => {
-        const value = sequence[header]
-        if (header === "possessions") {
-          return `P${index + 1}`
-        }
-        if (header === "moves") {
-          return value.map((move: MoveSequence) => `${move.x},${move.y}`).join(" | ")
-        }
-        return value || ""
-      })
-      .join(",")
+  const rows = sequences.map((sequence, index) => {
+    // For the first row, include playerInfo values, for others include empty strings
+    const prefix =
+      index === 0 ? [playerInfo.name, playerInfo.points, playerInfo.game, playerInfo.date] : ["", "", "", ""]
+
+    const sequenceValues = columns.map((header, index) => {
+      const value = sequence[header]
+      if (header === "possessions") {
+        return `P${index + 1}`
+      }
+      if (header === "moves") {
+        return value.map((move: MoveSequence) => `${move.x.toFixed(2)} ${move.y.toFixed(2)}`).join(" | ")
+      }
+      return value || ""
+    })
+
+    return [...prefix, ...sequenceValues].join(",")
   })
 
   return [columnHeaders.join(","), ...rows].join("\n")
 }
 
 export const downloadCsv = (dataToSave: GameSaveData) => {
-  const { sequences, name } = dataToSave
-  const csvData = getCsvData(sequences)
+  const { sequences, name, playerInfo } = dataToSave
+  const csvData = getCsvData(sequences, playerInfo)
   const blob = new Blob([csvData], { type: "text/csv" })
   const url = URL.createObjectURL(blob)
   const a = document.createElement("a")
