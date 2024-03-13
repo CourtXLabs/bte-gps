@@ -2,8 +2,10 @@ import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogT
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { sequenceOptions } from "@/constants"
+import { cn } from "@/lib/utils"
 import { sequenceFormSchema } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "../ui/button"
@@ -29,6 +31,16 @@ export default function SequenceOptionsDialog({ open, onOpenChange, onSubmit }: 
     },
   })
 
+  const pickAndRollValue = form.watch("pick_and_roll")
+  const disableLastTwoOptions = !pickAndRollValue || pickAndRollValue === "NPNR"
+
+  useEffect(() => {
+    if (disableLastTwoOptions) {
+      form.setValue("defender_pick_and_roll", "")
+      form.setValue("ball_handler_pick_and_roll", "")
+    }
+  }, [disableLastTwoOptions])
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl">
@@ -43,26 +55,34 @@ export default function SequenceOptionsDialog({ open, onOpenChange, onSubmit }: 
                   key={sequenceInput.name}
                   control={form.control}
                   name={sequenceInput.name}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{sequenceInput.label}</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={sequenceInput.label} />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {sequenceInput.options.map((sequence) => (
-                            <SelectItem key={sequence.value} value={sequence.value}>
-                              {sequence.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    const isDisabled =
+                      sequenceInput.name === "defender_pick_and_roll" ||
+                      sequenceInput.name === "ball_handler_pick_and_roll"
+                        ? disableLastTwoOptions
+                        : false
+
+                    return (
+                      <FormItem className={cn({ "opacity-50": isDisabled, "pointer-events-none": isDisabled })}>
+                        <FormLabel>{sequenceInput.label}</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder={sequenceInput.label} />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {sequenceInput.options.map((sequence) => (
+                              <SelectItem key={sequence.value} value={sequence.value} disabled={isDisabled}>
+                                {sequence.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )
+                  }}
                 />
               ))}
             </div>

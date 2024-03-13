@@ -524,7 +524,7 @@ const getCsvData = (sequences: any[], playerInfo: PlayerInfo) => {
     const prefix =
       index === 0 ? [playerInfo.name, playerInfo.points, playerInfo.game, playerInfo.date] : ["", "", "", ""]
 
-    const sequenceValues = columns.map((header, index) => {
+    const sequenceValues = columns.map((header) => {
       const value = sequence[header]
       if (header === "possessions") {
         return `P${index + 1}`
