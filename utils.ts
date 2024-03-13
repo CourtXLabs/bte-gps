@@ -463,7 +463,7 @@ const getCsvData = (sequences: any[]) => {
   }
 
   // This assumes all objects have the same structure
-  const headers = [
+  const columns = [
     "play_code",
     "initial_direction",
     "counter_direction",
@@ -482,8 +482,27 @@ const getCsvData = (sequences: any[]) => {
     "bte_score",
   ]
 
+  const columnHeaders = [
+    "Play Code",
+    "Initial Direction",
+    "Counter Direction",
+    "Moves",
+    "Last Dribble Type",
+    "Lanes Left",
+    "Lanes Middle",
+    "Lanes Right",
+    "Pick & Roll",
+    "Defender Pick & Roll",
+    "Ball Handler Pick & Roll",
+    "Type of Shot",
+    "Full Combo",
+    "BTE Combo",
+    "BTE Value",
+    "BTE Score",
+  ]
+
   const rows = sequences.map((sequence) => {
-    return headers
+    return columns
       .map((header) => {
         const value = sequence[header]
         if (header === "moves") {
@@ -494,7 +513,7 @@ const getCsvData = (sequences: any[]) => {
       .join(",")
   })
 
-  return [headers.join(","), ...rows].join("\n")
+  return [columnHeaders.join(","), ...rows].join("\n")
 }
 
 export const downloadCsv = (dataToSave: GameSaveData) => {
