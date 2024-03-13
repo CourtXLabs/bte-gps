@@ -464,6 +464,7 @@ const getCsvData = (sequences: any[]) => {
 
   // This assumes all objects have the same structure
   const columns = [
+    "possessions",
     "play_code",
     "initial_direction",
     "counter_direction",
@@ -483,6 +484,7 @@ const getCsvData = (sequences: any[]) => {
   ]
 
   const columnHeaders = [
+    "Possessions",
     "Play Code",
     "Initial Direction",
     "Counter Direction",
@@ -503,8 +505,11 @@ const getCsvData = (sequences: any[]) => {
 
   const rows = sequences.map((sequence) => {
     return columns
-      .map((header) => {
+      .map((header, index) => {
         const value = sequence[header]
+        if (header === "possessions") {
+          return `P${index + 1}`
+        }
         if (header === "moves") {
           return value.map((move: MoveSequence) => `${move.x},${move.y}`).join(" | ")
         }
