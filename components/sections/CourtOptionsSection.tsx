@@ -1,6 +1,6 @@
 import { gameTypesPeriods } from "@/constants"
 import useBteStore from "@/stores/bteDataStore"
-import { downloadCsv } from "@/utils"
+import { downloadCsv } from "@/utils/get-csv-data"
 import { Button } from "../ui/button"
 
 const CourtOptionsSection = () => {
