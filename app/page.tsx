@@ -1,4 +1,4 @@
-import GameForm from "@/components/GameForm"
+import GameView from "@/components/GameView"
 import { createClient } from "@/lib/supabase/server"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
@@ -11,5 +11,5 @@ export default async function Home() {
   if (error || !data?.user) {
     redirect("/login")
   }
-  return <GameForm />
+  return <GameView />
 }

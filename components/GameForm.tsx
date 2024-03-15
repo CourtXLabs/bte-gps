@@ -1,24 +1,38 @@
 "use client"
 
+import { cn } from "@/lib/utils"
+import useBteStore from "@/stores/bteDataStore"
+import { GameTypes, gameFormSchema } from "@/types"
+import { format } from "date-fns"
+import { Calendar as CalendarIcon } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { Button } from "./ui/button"
+import { Calendar } from "./ui/calendar"
+
+import { saveGame } from "@/app/actions"
 import { INITIAL_GAME_TYPE } from "@/constants"
 import { createClient } from "@/lib/supabase/client"
-import useBteStore from "@/stores/bteDataStore"
-import { gameFormSchema } from "@/types"
-import { convertAllMoves } from "@/utils/get-moves-data"
-import { getSequenceData, getTotalPoints } from "@/utils/get-sequence-data"
-import { constructSequencesSvg } from "@/utils/get-svg-court"
+import { uploadImages } from "@/utils/upload-data"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
 import { z } from "zod"
-import GameMenu from "./GameMenu"
-import CourtSection from "./sections/CourtSection"
-import { Form } from "./ui/form"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
+import { Input } from "./ui/input"
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import { useToast } from "./ui/use-toast"
 
 export default function GameForm() {
-  const { toast } = useToast()
   const supabase = createClient()
-  const { sequences, toggleLoading, toggleIsSaved, setDatatoSave } = useBteStore()
+  const { toast } = useToast()
+  const { sequences, changeGameType, toggleLoading, toggleIsSaved, setDatatoSave } = useBteStore()
   const form = useForm<z.infer<typeof gameFormSchema>>({
     resolver: zodResolver(gameFormSchema),
     defaultValues: {
@@ -28,119 +42,134 @@ export default function GameForm() {
       opponentName: "",
     },
   })
+  const gameType = form.watch("gameType") as GameTypes
 
-  async function onSubmit(values: z.infer<typeof gameFormSchema>) {
-    try {
-      toggleLoading()
-      const date = values.date.toISOString()
-      const { playerName, teamName, gameType, jersey, opponentName } = values
-      const sequencesImages = await constructSequencesSvg(sequences)
-      const imageNames = []
-      for (let imageIndex = 0; imageIndex < sequencesImages.length; imageIndex++) {
-        const imageName = `${playerName}: ${teamName} vs ${opponentName}. ${date} - ${imageIndex}`
-        await supabase.storage.from("BTE GPS").upload(imageName, sequencesImages[imageIndex], {
-          contentType: "image/webp",
-        })
-        imageNames.push(imageName)
-      }
+  const onChangeGameType = (value: string) => {
+    form.setValue("gameType", value as GameTypes)
+    changeGameType(value as GameTypes)
+  }
 
-      const teamData = [
-        {
-          name: teamName,
-        },
-      ]
-      const oppoentTeamData = [
-        {
-          name: opponentName,
-        },
-      ]
+  const onSubmit = async (values: z.infer<typeof gameFormSchema>) => {
+    toggleLoading()
+    const imageNames = await uploadImages({ supabase, values, sequences })
+    const data = await saveGame({ values, sequences, imageNames })
 
-      const addedTeam = await supabase.from("team").insert(teamData).select("id")
-      const addedOppoentTeam = await supabase.from("team").insert(oppoentTeamData).select("id")
-
-      const gameData = [
-        {
-          type: gameType,
-          date,
-          home_team_id: addedTeam.data?.[0].id,
-          away_team_id: addedOppoentTeam.data?.[0].id,
-        },
-      ]
-      const addedGame = await supabase.from("game").insert(gameData).select("id")
-
-      const playerData = [
-        {
-          name: playerName,
-          jersey: jersey,
-          team_id: addedTeam.data?.[0].id,
-        },
-      ]
-      const addedPlayer = await supabase.from("player").insert(playerData).select("id")
-
-      const reportData = [
-        {
-          game_id: addedGame.data?.[0].id,
-          player_id: addedPlayer.data?.[0].id,
-        },
-      ]
-      const addedReport = await supabase.from("report").insert(reportData).select("id")
-
-      const sequencesWithConvertedCoordinates = convertAllMoves(sequences)
-      const sequencesData = getSequenceData(sequencesWithConvertedCoordinates, addedReport.data?.[0].id!)
-      const addedSequences = await supabase.from("sequence").insert(sequencesData).select("id")
-
-      const movesData = [] as any
-      for (let i = 0; i < sequencesWithConvertedCoordinates.length; i++) {
-        const moves = sequencesWithConvertedCoordinates[i]?.moves
-        moves.forEach((move) => {
-          movesData.push({
-            sequence_id: addedSequences.data?.[i].id,
-            x: move.x,
-            y: move.y,
-          })
-        })
-      }
-      await supabase.from("move").insert(movesData)
-
-      const imageSignedUrls = await supabase.storage.from("BTE GPS").createSignedUrls(imageNames, 3153600000)
-      const imageData = imageSignedUrls.data?.map((url, index) => {
-        return {
-          period: index + 1, // ASSUMING EXACTLY ONE GPS IMAGE PER PERIOD
-          url: url.signedUrl,
-          report_id: addedReport.data?.[0].id,
-        }
-      })
-      await supabase.from("gps").insert(imageData)
-      toast({ title: "Game data saved successfully!" })
-      toggleIsSaved()
-      setDatatoSave({
-        sequences: sequencesData.map((sequence, index) => ({
-          ...sequence,
-          moves: sequencesWithConvertedCoordinates[index].moves,
-        })),
-        name: `${playerName} - ${values.date.toISOString().split("T")[0]}`,
-        playerInfo: {
-          name: playerName,
-          points: getTotalPoints(sequencesWithConvertedCoordinates),
-          game: `${teamName} @ ${opponentName}`,
-          date: values.date.toISOString().split("T")[0],
-        },
-      })
-    } catch (error) {
+    if (data.error) {
       toast({ variant: "destructive", title: "An error occured" })
-      console.log({ error })
+      toggleLoading()
+      return
     }
+
+    toast({ title: "Game data saved successfully!" })
+    toggleIsSaved()
+    setDatatoSave(data as any)
     toggleLoading()
   }
 
   return (
-    <div className="mx-auto flex w-max max-w-7xl flex-col gap-12 px-4 py-20 xl:flex-row xl:gap-32">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} id="game-form">
-          <GameMenu />
-        </form>
-      </Form>
-      <CourtSection />
-    </div>
+    <Form {...form}>
+      <form id="game-form" className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="text-xl font-bold underline">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">{gameType}</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Game Type</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuRadioGroup value={gameType} onValueChange={onChangeGameType}>
+                <DropdownMenuRadioItem value={GameTypes.COLLEGE}>{GameTypes.COLLEGE}</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value={GameTypes.HIGH_SCHOOL}>{GameTypes.HIGH_SCHOOL}</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value={GameTypes.PROFESSIONAL}>{GameTypes.PROFESSIONAL}</DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <FormField
+          control={form.control}
+          name="playerName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Player Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Player Name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="teamName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Team Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Team Name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="opponentName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Opponent Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Opponent Name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="jersey"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Jersey</FormLabel>
+              <FormControl>
+                <Input placeholder="Jersey" type="number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn("pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
+                    >
+                      {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
   )
 }

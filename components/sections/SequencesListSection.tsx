@@ -1,6 +1,7 @@
+"use client"
+
 import useBteStore from "@/stores/bteDataStore"
 import { GameTypes, Sequence } from "@/types"
-import { useFormContext } from "react-hook-form"
 
 const OVERTIME = "Overtime"
 
@@ -56,9 +57,8 @@ const getSequencesContent = (sequnces: Sequence[], gameType: GameTypes) => {
 }
 
 export default function SequencesListSection() {
-  const { sequences, activePeriod } = useBteStore()
-  const form = useFormContext()
-  const gameType = form.watch("gameType") as GameTypes
+  const { sequences, activePeriod, game } = useBteStore()
+  const gameType = game?.gameType
 
   return (
     <div className="space-y-3 pt-2">

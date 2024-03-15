@@ -103,3 +103,15 @@ export const sequenceFormSchema = z.object({
   defender_pick_and_roll: z.string().optional(),
   ball_handler_pick_and_roll: z.string().optional(),
 })
+
+export interface TeamData {
+  id?: string
+  name: string
+}
+
+export interface PlayerData {
+  id?: string
+  name: string
+  jersey: string
+  team_id: string
+}
