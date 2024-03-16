@@ -17,11 +17,9 @@ const getData = async () => {
 export default async function GameSidebar() {
   const { teams, players } = await getData()
 
-  console.log({ teams, players })
-
   return (
     <div className="space-y-4 overflow-y-auto bg-background-dark p-6 lg:max-h-[780px] xl:w-72">
-      <GameForm />
+      <GameForm players={players} teams={teams} />
       <SequencesListSection />
     </div>
   )

@@ -2,7 +2,8 @@
 
 import { cn } from "@/lib/utils"
 import useBteStore from "@/stores/bteDataStore"
-import { GameTypes, gameFormSchema } from "@/types"
+import { GameSaveData, GameTypes, PlayerData, TeamData, gameFormSchema } from "@/types"
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -14,7 +15,9 @@ import { INITIAL_GAME_TYPE } from "@/constants"
 import { createClient } from "@/lib/supabase/client"
 import { uploadImages } from "@/utils/upload-data"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
 import { z } from "zod"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "./ui/command"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,7 +32,16 @@ import { Input } from "./ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import { useToast } from "./ui/use-toast"
 
-export default function GameForm() {
+interface Props {
+  players?: PlayerData[]
+  teams?: TeamData[]
+}
+
+export default function GameForm({ players, teams }: Props) {
+  const [isPlayerComboboxOpen, setIsPlayerComboboxOpen] = useState(false)
+  const [isTeamComboboxOpen, setIsTeamComboboxOpen] = useState(false)
+  const [IsOpponentTeamComboboxOpen, setIsOpponentTeamComboboxOpen] = useState(false)
+
   const supabase = createClient()
   const { toast } = useToast()
   const { sequences, changeGameType, toggleLoading, toggleIsSaved, setDatatoSave } = useBteStore()
@@ -43,6 +55,10 @@ export default function GameForm() {
     },
   })
   const gameType = form.watch("gameType") as GameTypes
+
+  const onToggleTeamCombobox = () => setIsTeamComboboxOpen((prev) => !prev)
+  const onTogglePlayerCombobox = () => setIsPlayerComboboxOpen((prev) => !prev)
+  const onToggleOpponentTeamCombobox = () => setIsOpponentTeamComboboxOpen((prev) => !prev)
 
   const onChangeGameType = (value: string) => {
     form.setValue("gameType", value as GameTypes)
@@ -62,7 +78,7 @@ export default function GameForm() {
 
     toast({ title: "Game data saved successfully!" })
     toggleIsSaved()
-    setDatatoSave(data as any)
+    setDatatoSave(data as GameSaveData)
     toggleLoading()
   }
 
@@ -89,11 +105,52 @@ export default function GameForm() {
           control={form.control}
           name="playerName"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Player Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Player Name" {...field} />
-              </FormControl>
+            <FormItem className="flex flex-col">
+              <FormLabel>Player</FormLabel>
+              <Popover open={isPlayerComboboxOpen} onOpenChange={onTogglePlayerCombobox}>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn("justify-between font-normal", !field.value && "text-muted-foreground")}
+                    >
+                      {field?.value || "Select player"}
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="p-0">
+                  <Command>
+                    <CommandInput placeholder="Search player..." className="h-9" />
+                    <CommandEmpty>No player found.</CommandEmpty>
+                    <CommandList>
+                      <CommandGroup>
+                        {players?.map((player) => (
+                          <CommandItem
+                            value={player.name}
+                            key={player.id}
+                            onSelect={() => {
+                              form.setValue("playerName", player.name)
+                              form.setValue("playerId", Number(player.id))
+                              form.setValue("jersey", player.jersey?.toString() || "")
+                              onTogglePlayerCombobox()
+                            }}
+                          >
+                            {player.name} {typeof player.jersey === "number" && `#${player.jersey}`}
+                            <CheckIcon
+                              className={cn(
+                                "ml-auto h-4 w-4",
+                                player.name === field.value ? "opacity-100" : "opacity-0",
+                              )}
+                            />
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}
@@ -102,11 +159,49 @@ export default function GameForm() {
           control={form.control}
           name="teamName"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Team Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Team Name" {...field} />
-              </FormControl>
+            <FormItem className="flex flex-col">
+              <FormLabel>Team</FormLabel>
+              <Popover open={isTeamComboboxOpen} onOpenChange={onToggleTeamCombobox}>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn("justify-between font-normal", !field.value && "text-muted-foreground")}
+                    >
+                      {field?.value || "Select team"}
+
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="p-0">
+                  <Command>
+                    <CommandInput placeholder="Search team..." className="h-9" />
+                    <CommandEmpty>No team found.</CommandEmpty>
+                    <CommandList>
+                      <CommandGroup>
+                        {teams?.map((team) => (
+                          <CommandItem
+                            value={team.name}
+                            key={team.id}
+                            onSelect={() => {
+                              form.setValue("teamName", team.name)
+                              form.setValue("teamId", Number(team.id))
+                              onToggleTeamCombobox()
+                            }}
+                          >
+                            {team.name}
+                            <CheckIcon
+                              className={cn("ml-auto h-4 w-4", team.name === field.value ? "opacity-100" : "opacity-0")}
+                            />
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}
@@ -115,11 +210,49 @@ export default function GameForm() {
           control={form.control}
           name="opponentName"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Opponent Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Opponent Name" {...field} />
-              </FormControl>
+            <FormItem className="flex flex-col">
+              <FormLabel>Opponent Team</FormLabel>
+              <Popover open={IsOpponentTeamComboboxOpen} onOpenChange={onToggleOpponentTeamCombobox}>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn("justify-between font-normal", !field.value && "text-muted-foreground")}
+                    >
+                      {field?.value || "Select team"}
+
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="p-0">
+                  <Command>
+                    <CommandInput placeholder="Search team..." className="h-9" />
+                    <CommandEmpty>No team found.</CommandEmpty>
+                    <CommandList>
+                      <CommandGroup>
+                        {teams?.map((team) => (
+                          <CommandItem
+                            value={team.name}
+                            key={team.id}
+                            onSelect={() => {
+                              form.setValue("opponentName", team.name)
+                              form.setValue("opponentTeamId", Number(team.id))
+                              onToggleOpponentTeamCombobox()
+                            }}
+                          >
+                            {team.name}
+                            <CheckIcon
+                              className={cn("ml-auto h-4 w-4", team.name === field.value ? "opacity-100" : "opacity-0")}
+                            />
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}

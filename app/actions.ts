@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/actionts"
 import { Sequence, gameFormSchema } from "@/types"
 import { convertAllMoves } from "@/utils/get-moves-data"
 import { getSequenceData, getTotalPoints } from "@/utils/get-sequence-data"
+import { uploadGame, uploadReport } from "@/utils/upload-data"
 import { cookies } from "next/headers"
 import { z } from "zod"
 
@@ -20,51 +21,54 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
   const supabase = createClient(cookieStore)
   try {
     const date = values.date.toISOString()
-    const { playerName, teamName, gameType, jersey, opponentName } = values
+    let { playerName, teamName, gameType, jersey, opponentName, playerId, teamId, opponentTeamId } = values
 
-    const teamData = [
-      {
-        name: teamName,
-      },
-    ]
-    const oppoentTeamData = [
-      {
-        name: opponentName,
-      },
-    ]
+    if (!teamId) {
+      const teamData = [
+        {
+          name: teamName,
+        },
+      ]
+      const addedTeam = await supabase.from("team").insert(teamData).select("id")
+      teamId = addedTeam.data?.[0].id as number
+    }
 
-    const addedTeam = await supabase.from("team").insert(teamData).select("id")
-    const addedOppoentTeam = await supabase.from("team").insert(oppoentTeamData).select("id")
+    if (!opponentTeamId) {
+      const oppoentTeamData = [
+        {
+          name: opponentName,
+        },
+      ]
+      const addedOppoentTeam = await supabase.from("team").insert(oppoentTeamData).select("id")
+      opponentTeamId = addedOppoentTeam.data?.[0].id as number
+    }
 
-    const gameData = [
-      {
-        type: gameType,
-        date,
-        home_team_id: addedTeam.data?.[0].id,
-        away_team_id: addedOppoentTeam.data?.[0].id,
-      },
-    ]
-    const addedGame = await supabase.from("game").insert(gameData).select("id")
+    if (!playerId) {
+      const playerData = [
+        {
+          name: playerName,
+          jersey,
+          team_id: teamId,
+        },
+      ]
+      const addedPlayer = await supabase.from("player").insert(playerData).select("id")
+      playerId = addedPlayer.data?.[0].id as number
+    }
 
-    const playerData = [
-      {
-        name: playerName,
-        jersey: jersey,
-        team_id: addedTeam.data?.[0].id,
-      },
-    ]
-    const addedPlayer = await supabase.from("player").insert(playerData).select("id")
+    const addedGameId = await uploadGame(supabase, {
+      type: gameType,
+      date,
+      home_team_id: teamId,
+      away_team_id: opponentTeamId,
+    })
 
-    const reportData = [
-      {
-        game_id: addedGame.data?.[0].id,
-        player_id: addedPlayer.data?.[0].id,
-      },
-    ]
-    const addedReport = await supabase.from("report").insert(reportData).select("id")
+    const addedReportId = await uploadReport(supabase, {
+      game_id: addedGameId,
+      player_id: playerId,
+    })
 
     const sequencesWithConvertedCoordinates = convertAllMoves(sequences)
-    const sequencesData = getSequenceData(sequencesWithConvertedCoordinates, addedReport.data?.[0].id!)
+    const sequencesData = getSequenceData(sequencesWithConvertedCoordinates, addedReportId!)
     const addedSequences = await supabase.from("sequence").insert(sequencesData).select("id")
 
     const movesData = [] as any
@@ -80,17 +84,17 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
     }
     await supabase.from("move").insert(movesData)
 
-    // const imageSignedUrls = await supabase.storage.from("BTE GPS").createSignedUrls(imageNames, 3153600000)
-    // const imageData = imageSignedUrls.data?.map((url, index) => {
-    //   return {
-    //     period: index + 1, // ASSUMING EXACTLY ONE GPS IMAGE PER PERIOD
-    //     url: url.signedUrl,
-    //     report_id: addedReport.data?.[0].id,
-    //   }
-    // })
-    // await supabase.from("gps").insert(imageData)
+    const imageSignedUrls = await supabase.storage.from("BTE GPS").createSignedUrls(imageNames, 3153600000)
+    const imageData = imageSignedUrls.data?.map((url, index) => {
+      return {
+        period: index + 1, // ASSUMING EXACTLY ONE GPS IMAGE PER PERIOD
+        url: url.signedUrl,
+        report_id: addedReportId,
+      }
+    })
+    await supabase.from("gps").insert(imageData)
 
-    return {
+    const dataToDownload = {
       sequences: sequencesData.map((sequence, index) => ({
         ...sequence,
         moves: sequencesWithConvertedCoordinates[index].moves,
@@ -102,7 +106,10 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
         game: `${teamName} @ ${opponentName}`,
         date: values.date.toISOString().split("T")[0],
       },
+      error: null,
     }
+
+    return dataToDownload
   } catch (error) {
     return { error }
   }

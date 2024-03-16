@@ -87,8 +87,11 @@ const errorMessage = "This field is required"
 export const gameFormSchema = z.object({
   gameType: z.nativeEnum(GameTypes),
   playerName: z.string().min(1, { message: errorMessage }),
+  playerId: z.number().optional(),
   teamName: z.string().min(1, { message: errorMessage }),
+  teamId: z.number().optional(),
   opponentName: z.string().min(1, { message: errorMessage }),
+  opponentTeamId: z.number().optional(),
   jersey: z.string().min(1, { message: errorMessage }),
   date: z.date(),
 })
@@ -114,4 +117,18 @@ export interface PlayerData {
   name: string
   jersey: string
   team_id: string
+}
+
+// Input for API
+
+export interface GameInput {
+  type: string
+  date: string
+  home_team_id: number | string
+  away_team_id: number | string
+}
+
+export interface ReportInput {
+  game_id: number | string
+  player_id: number | string
 }
