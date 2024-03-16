@@ -1,7 +1,7 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
-import { uploadPlayers, uploadTeams } from "@/utils/upload-data"
+import { uploadPlayers, uploadTeams } from "@/utils/upload-db-data"
 
 // Commented out so no one accidentally re-adds these teams and players
 

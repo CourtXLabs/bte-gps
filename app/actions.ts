@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/actionts"
 import { Sequence, gameFormSchema } from "@/types"
 import { convertAllMoves } from "@/utils/get-moves-data"
 import { getSequenceData, getTotalPoints } from "@/utils/get-sequence-data"
-import { uploadGame, uploadReport } from "@/utils/upload-data"
+import { uploadGame, uploadReport } from "@/utils/upload-db-data"
 import { cookies } from "next/headers"
 import { z } from "zod"
 
