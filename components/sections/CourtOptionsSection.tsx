@@ -6,7 +6,7 @@ import { downloadCsv } from "@/utils/get-csv-data"
 import { Button } from "../ui/button"
 
 const CourtOptionsSection = () => {
-  const { incrementPeriod, decrementPeriod, resetGame, activePeriod, game, dataToSave, isLoading, isSaved } =
+  const { incrementPeriod, decrementPeriod, resetGame, activePeriod, game, dataToSave, isLoading, isSaved, sequences } =
     useBteStore()
 
   const onClickNextPeriod = () => {
@@ -23,10 +23,12 @@ const CourtOptionsSection = () => {
   const canHaveNextPeriod = currentActivePeriod < maxPeriod
   const canHavePreviousPeriod = currentActivePeriod > 1
 
+  const saveDisabled = isLoading || !sequences.length || isSaved
+
   return (
     <div className="flex justify-between">
       <div className="flex items-center gap-3">
-        <Button type="submit" form="game-form" disabled={isLoading}>
+        <Button type="submit" form="game-form" disabled={saveDisabled}>
           Save Game
         </Button>
         {isSaved && (

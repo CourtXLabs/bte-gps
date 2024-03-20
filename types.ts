@@ -73,6 +73,7 @@ export interface PlayerInfo {
 }
 
 export interface GameSaveData {
+  error?: string | null
   name: string
   sequences: any[]
   playerInfo: PlayerInfo
