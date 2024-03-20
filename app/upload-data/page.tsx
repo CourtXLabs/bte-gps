@@ -1,6 +1,7 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
+import { getAllGames } from "@/utils/get-db-data"
 import { uploadPlayers, uploadTeams } from "@/utils/upload-db-data"
 
 // Commented out so no one accidentally re-adds these teams and players
@@ -96,6 +97,7 @@ export default function UploadDataPage() {
     <div className="flex gap-4 p-10">
       <Button onClick={() => uploadTeams(supabase, teams)}>Upload teams</Button>
       <Button onClick={() => uploadPlayers(supabase, players)}>Upload players</Button>
+      <Button onClick={() => getAllGames(supabase)}>Get all games</Button>
     </div>
   )
 }
