@@ -133,3 +133,7 @@ export interface ReportInput {
   game_id: number | string
   player_id: number | string
 }
+
+export enum USER_ROLES {
+  ADMIN = 1,
+}

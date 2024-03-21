@@ -1,8 +1,7 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/actionts"
-import { loginFormSchema } from "@/types"
-import { revalidatePath } from "next/cache"
+import { USER_ROLES, loginFormSchema } from "@/types"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { z } from "zod"
@@ -24,12 +23,23 @@ export async function login(values: Inputs) {
     password,
   }
 
-  const { error } = await supabase.auth.signInWithPassword(data)
+  const { data: userData, error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
     redirect("/error")
   }
 
-  revalidatePath("/", "layout")
+  // TODO: Add role data on the token to avoid this extra request
+  const { data: roleData } = await supabase
+    .schema("users")
+    .from("user_roles")
+    .select("*")
+    .eq("user_id", userData.user.id)
+    .single()
+
+  if (roleData?.role_id === USER_ROLES.ADMIN) {
+    redirect("/add-game")
+  }
+
   redirect("/")
 }

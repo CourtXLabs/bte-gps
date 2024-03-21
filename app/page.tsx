@@ -1,15 +1,5 @@
-import GameView from "@/components/GameView"
-import { createClient } from "@/lib/supabase/server"
-import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
+import AuthGuard from "@/guards/AuthGuard"
 
 export default async function Home() {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
-
-  const { data, error } = await supabase.auth.getUser()
-  if (error || !data?.user) {
-    redirect("/login")
-  }
-  return <GameView />
+  return <AuthGuard>Hello Customer!</AuthGuard>
 }
