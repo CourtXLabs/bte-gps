@@ -75,7 +75,7 @@ export interface PlayerInfo {
 export interface GameSaveData {
   error?: string | null
   name: string
-  sequences: any[]
+  sequences: Sequence[]
   playerInfo: PlayerInfo
 }
 
@@ -147,4 +147,16 @@ export interface ReportApiData {
   id?: string
   name?: string
   player_id: PlayerApiData
+  game_id: GameApiData
+}
+
+export interface GameApiData {
+  id?: string
+  date: string
+  home_team_id: TeamData
+  away_team_id: TeamData
+}
+
+export interface SequenceApiData extends Sequence {
+  move: MoveSequence[]
 }

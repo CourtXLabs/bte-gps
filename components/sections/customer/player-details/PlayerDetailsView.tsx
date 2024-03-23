@@ -11,7 +11,7 @@ const getData = async (id: string) => {
   try {
     const { data, error } = await supabase
       .from("report")
-      .select("id, name, player_id(name, jersey, team_id(name))")
+      .select("id, name, player_id(name, jersey, team_id(name)), game_id(date, home_team_id(name), away_team_id(name))")
       .eq("player_id", id) // Filters rows where player_id matches the given value
 
     return { data: data as unknown as ReportApiData[], error }
