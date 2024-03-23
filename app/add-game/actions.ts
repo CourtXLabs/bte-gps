@@ -108,6 +108,7 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
         game: `${teamName} @ ${opponentName}`,
         date: values.date.toISOString().split("T")[0],
       },
+      imageInfo: imageData || [],
       error: null,
     }
 

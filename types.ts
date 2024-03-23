@@ -76,6 +76,7 @@ export interface GameSaveData {
   error?: string | null
   name: string
   sequences: Sequence[]
+  imageInfo: GPSApiData[]
   playerInfo: PlayerInfo
 }
 
@@ -159,4 +160,12 @@ export interface GameApiData {
 
 export interface SequenceApiData extends Sequence {
   move: MoveSequence[]
+}
+
+export interface GPSApiData {
+  id?: number
+  created_at?: string
+  period?: number
+  url?: string
+  report_id?: number
 }

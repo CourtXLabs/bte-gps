@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useToast } from "@/components/ui/use-toast"
 import { createClient } from "@/lib/supabase/client"
-import { ReportApiData, Sequence, SequenceApiData, TeamData } from "@/types"
+import { GPSApiData, ReportApiData, Sequence, SequenceApiData, TeamData } from "@/types"
 import { downloadCsv } from "@/utils/get-csv-data"
 import { getTotalPoints } from "@/utils/get-sequence-data"
 import { DownloadIcon } from "@radix-ui/react-icons"
@@ -35,8 +35,13 @@ export default function ReportsList({ data }: Props) {
         throw new Error("Report not found")
       }
 
-      const response = await supabase.from("sequence").select("*, move(*)").eq("report_id", id)
-      const sequencesData: SequenceApiData[] | null = response.data
+      const [sequenceResponse, gpsResponse] = await Promise.all([
+        supabase.from("sequence").select("*, move(*)").eq("report_id", id),
+        supabase.from("gps").select("period, url").eq("report_id", id),
+      ])
+
+      const sequencesData: SequenceApiData[] | null = sequenceResponse.data
+      const gpsData: GPSApiData[] | null = gpsResponse.data
 
       if (!sequencesData) {
         throw new Error("No sequences found")
@@ -56,6 +61,7 @@ export default function ReportsList({ data }: Props) {
           game: `${report.game_id?.away_team_id?.name} @ ${report.game_id?.home_team_id?.name}`,
           date: report.game_id?.date?.split("T")[0] || "",
         },
+        imageInfo: gpsData || [],
         error: null,
       }
 

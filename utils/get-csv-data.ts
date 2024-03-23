@@ -1,6 +1,8 @@
-import { GameSaveData, MoveSequence, PlayerInfo } from "@/types"
+import { GameSaveData, MoveSequence, Sequence } from "@/types"
 
-const getCsvData = (sequences: any[], playerInfo: PlayerInfo) => {
+type CsvSaveData = Omit<GameSaveData, "name">
+
+const getCsvData = ({ sequences, playerInfo, imageInfo }: CsvSaveData) => {
   if (sequences.length === 0) {
     return ""
   }
@@ -24,8 +26,8 @@ const getCsvData = (sequences: any[], playerInfo: PlayerInfo) => {
     "bte_combo",
     "bte_value",
     "bte_score",
+    "period",
   ]
-
   const columnHeaders = [
     "Player Name",
     "Points",
@@ -48,7 +50,10 @@ const getCsvData = (sequences: any[], playerInfo: PlayerInfo) => {
     "BTE Combo",
     "BTE Value",
     "BTE Score",
+    "Period",
+    "Images",
   ]
+  const commasForImageAlignment = new Array(columnHeaders.length).fill("").join(",")
 
   const rows = sequences.map((sequence, index) => {
     // For the first row, include playerInfo values, for others include empty strings
@@ -56,12 +61,14 @@ const getCsvData = (sequences: any[], playerInfo: PlayerInfo) => {
       index === 0 ? [playerInfo.name, playerInfo.points, playerInfo.game, playerInfo.date] : ["", "", "", ""]
 
     const sequenceValues = columns.map((header) => {
-      const value = sequence[header]
+      const value = sequence[header as keyof Sequence]
       if (header === "possessions") {
         return `P${index + 1}`
       }
       if (header === "moves") {
-        return value.map((move: MoveSequence) => `${move.x.toFixed(2)} ${move.y.toFixed(2)}`).join(" | ")
+        return (value as MoveSequence[])
+          .map((move: MoveSequence) => `${move.x.toFixed(2)} ${move.y.toFixed(2)}`)
+          .join(" | ")
       }
       return value || ""
     })
@@ -69,12 +76,13 @@ const getCsvData = (sequences: any[], playerInfo: PlayerInfo) => {
     return [...prefix, ...sequenceValues].join(",")
   })
 
-  return [columnHeaders.join(","), ...rows].join("\n")
+  const imageRows = imageInfo.map((img) => `${commasForImageAlignment}${img.url}`)
+  return [columnHeaders.join(","), ...rows, ...imageRows].join("\n")
 }
 
 export const downloadCsv = (dataToSave: GameSaveData) => {
-  const { sequences, name, playerInfo } = dataToSave
-  const csvData = getCsvData(sequences, playerInfo)
+  const { sequences, name, playerInfo, imageInfo } = dataToSave
+  const csvData = getCsvData({ sequences, playerInfo, imageInfo })
   const blob = new Blob([csvData], { type: "text/csv" })
   const url = URL.createObjectURL(blob)
   const a = document.createElement("a")
