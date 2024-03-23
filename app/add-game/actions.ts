@@ -22,6 +22,7 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
   try {
     const date = values.date.toISOString()
     let { playerName, teamName, gameType, jersey, opponentName, playerId, teamId, opponentTeamId } = values
+    const reportName = `${playerName} - ${date.split("T")[0]}`
 
     if (!teamId) {
       const teamData = [
@@ -64,6 +65,7 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
 
     const addedReportId = await uploadReport(supabase, {
       game_id: addedGameId,
+      name: reportName,
       player_id: playerId,
     })
 
@@ -99,7 +101,7 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
         ...sequence,
         moves: sequencesWithConvertedCoordinates[index].moves,
       })),
-      name: `${playerName} - ${values.date.toISOString().split("T")[0]}`,
+      name: reportName,
       playerInfo: {
         name: playerName,
         points: getTotalPoints(sequencesWithConvertedCoordinates),

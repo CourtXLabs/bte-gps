@@ -116,7 +116,7 @@ export interface TeamData {
 export interface PlayerData {
   id?: string
   name: string
-  jersey: string
+  jersey: string | number
   team_id: string
 }
 
@@ -131,9 +131,20 @@ export interface GameInput {
 
 export interface ReportInput {
   game_id: number | string
+  name: string
   player_id: number | string
 }
 
 export enum USER_ROLES {
   ADMIN = 1,
+}
+
+export interface PlayerApiData extends Omit<PlayerData, "team_id"> {
+  team_id: TeamData[] | TeamData
+}
+
+export interface ReportApiData {
+  id?: string
+  name?: string
+  player_id: PlayerApiData
 }
