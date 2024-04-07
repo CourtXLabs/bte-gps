@@ -25,7 +25,22 @@ export const convertPixelsToCoordinates = ({
   const yInFeet = y / yRatio
   const courtX = xInFeet - courtWidth / 2
   const courtY = -(yInFeet - courtHeight / 2) // Invert the y-axis
-  return { x: courtX, y: courtY }
+  return { x: Number(courtX.toFixed(2)), y: Number(courtY.toFixed(2)) }
+}
+
+export const convertCoordinatesToPixels = ({
+  x,
+  y,
+  pixelWidth = COURT_WIDTH,
+  pixelHeight = COURT_HEIGHT,
+  courtWidth = COURT_WIDTH_FEET,
+  courtHeight = COURT_HEIGHT_FEET,
+}: ConvertCoordiantesInput) => {
+  const xRatio = pixelWidth / courtWidth
+  const yRatio = pixelHeight / courtHeight
+  const xInPixels = (x + courtWidth / 2) * xRatio
+  const yInPixels = -(y - courtHeight / 2) * yRatio // Invert the y-axis
+  return { x: xInPixels, y: yInPixels }
 }
 
 export const convertAllMoves = (sequences: Sequence[]) => {

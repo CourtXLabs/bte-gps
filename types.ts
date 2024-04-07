@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { MoveIds } from "./constants"
 
 export interface Coordinates {
   x: number
@@ -6,7 +7,7 @@ export interface Coordinates {
 }
 
 export interface Option {
-  id: number
+  id: MoveIds
   image?: string
   keyShortcut: string
   name: string
@@ -36,7 +37,7 @@ export enum GameTypes {
 
 export interface MoveSequence {
   uid: string
-  moveId: number
+  moveId: MoveIds
   x: number
   y: number
   color?: string
@@ -168,4 +169,15 @@ export interface GPSApiData {
   period?: number
   url?: string
   report_id?: number
+}
+
+export interface EditMoveInput {
+  sequenceIndex: number
+  moveIndex: number
+  newMove: MoveSequence
+}
+
+export interface DeleteMoveInput {
+  sequenceIndex: number
+  moveIndex: number
 }

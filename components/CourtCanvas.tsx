@@ -21,10 +21,12 @@ const CourtCanvas = () => {
   const {
     activeSequenceMoves,
     activePeriod,
+    activeSequenceIndex,
     addMoveToActiveSequence,
     undoLastMove,
     addNewSequence,
     resetActiveSequence,
+    updateActiveSequenceIndex,
   } = useBteStore()
 
   const dropdownCoordinates = { x: COURT_WIDTH / 2, y: markerCoordinates.y + 20 }
@@ -51,6 +53,7 @@ const CourtCanvas = () => {
 
     if (option.isFinalMove) {
       toggleSequenceOptionsDialog()
+      updateActiveSequenceIndex(activeSequenceIndex + 1)
     }
   }
 

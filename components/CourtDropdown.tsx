@@ -1,3 +1,4 @@
+import { options } from "@/constants"
 import { Coordinates, Option } from "@/types"
 import Image from "next/image"
 import { useEffect, useRef } from "react"
@@ -7,64 +8,6 @@ interface Props {
   onSubmit: (args: any) => void
   coordinates: Coordinates
 }
-
-const options = [
-  {
-    id: 1,
-    image: "/DribbleTree1.png",
-    keyShortcut: "1",
-    name: "Pound",
-    color: "#E52127",
-  },
-  {
-    id: 2,
-    image: "/DribbleTree2.png",
-    keyShortcut: "2",
-    name: "Cross",
-    color: "#1E4695",
-  },
-  {
-    id: 3,
-    image: "/DribbleTree3.png",
-    keyShortcut: "3",
-    name: "In + Out",
-    color: "#186D38",
-  },
-  {
-    id: 4,
-    image: "/DribbleTree4.png",
-    keyShortcut: "4",
-    name: "Between The Legs",
-    color: "#814198",
-  },
-  {
-    id: 5,
-    image: "/DribbleTree5.png",
-    keyShortcut: "5",
-    name: "Behind The Back",
-    color: "#FCD407",
-  },
-  {
-    id: 6,
-    image: "/DribbleTree6.png",
-    keyShortcut: "6",
-    name: "Spin",
-    color: "#FF9E1F",
-  },
-  {
-    id: 7,
-    keyShortcut: "A",
-    name: "Made Shot",
-    color: "#000",
-    isFinalMove: true,
-  },
-  {
-    id: 8,
-    keyShortcut: "B",
-    name: "Missed Shot",
-    isFinalMove: true,
-  },
-] as Option[]
 
 export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props) {
   const dropdownRef = useRef<HTMLDivElement>(null) // Ref for the dropdown div

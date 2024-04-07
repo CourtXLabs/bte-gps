@@ -1,10 +1,80 @@
-import { GameTypes, SequenceInput } from "./types"
+import { GameTypes, Option, SequenceInput } from "./types"
 
 export const COURT_WIDTH = 850
 export const COURT_HEIGHT = 458
 
 export const COURT_WIDTH_FEET = 94
 export const COURT_HEIGHT_FEET = 50
+
+export const options = [
+  {
+    id: 1,
+    image: "/DribbleTree1.png",
+    keyShortcut: "1",
+    name: "Pound",
+    color: "#E52127",
+  },
+  {
+    id: 2,
+    image: "/DribbleTree2.png",
+    keyShortcut: "2",
+    name: "Cross",
+    color: "#1E4695",
+  },
+  {
+    id: 3,
+    image: "/DribbleTree3.png",
+    keyShortcut: "3",
+    name: "In + Out",
+    color: "#186D38",
+  },
+  {
+    id: 4,
+    image: "/DribbleTree4.png",
+    keyShortcut: "4",
+    name: "Between The Legs",
+    color: "#814198",
+  },
+  {
+    id: 5,
+    image: "/DribbleTree5.png",
+    keyShortcut: "5",
+    name: "Behind The Back",
+    color: "#FCD407",
+  },
+  {
+    id: 6,
+    image: "/DribbleTree6.png",
+    keyShortcut: "6",
+    name: "Spin",
+    color: "#FF9E1F",
+  },
+  {
+    id: 7,
+    keyShortcut: "A",
+    name: "Made Shot",
+    color: "#000",
+    isFinalMove: true,
+  },
+  {
+    id: 8,
+    keyShortcut: "B",
+    name: "Missed Shot",
+    isFinalMove: true,
+  },
+] as Option[]
+
+export const moveIdToNames = {
+  1: "Pound",
+  2: "Cross",
+  3: "In + Out",
+  4: "Between The Legs",
+  5: "Behind The Back",
+  6: "Spin",
+  7: "Made Shot",
+  8: "Missed Shot",
+}
+export type MoveIds = keyof typeof moveIdToNames
 
 export const sequenceOptions = [
   {

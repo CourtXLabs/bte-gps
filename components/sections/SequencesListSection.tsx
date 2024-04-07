@@ -1,7 +1,9 @@
 "use client"
 
 import useBteStore from "@/stores/bteDataStore"
-import { GameTypes, Sequence } from "@/types"
+import { GameTypes } from "@/types"
+import { useMemo } from "react"
+import { Button } from "../ui/button"
 
 const OVERTIME = "Overtime"
 
@@ -34,36 +36,60 @@ const halvesPeriodNumberToWord = {
   3: OVERTIME,
 } as PeriodToWord
 
-const getSequencesContent = (sequnces: Sequence[], gameType: GameTypes) => {
-  const periodName = gameTypePeriodName[gameType]
-  const elements = []
-  let previousPeriod = 0
-
-  for (let sequnceIndex = 0; sequnceIndex < sequnces.length; sequnceIndex++) {
-    const period = sequnces[sequnceIndex].period as 1 | 2 | 3 | 4 | 5
-    const periodNumberToWord = periodName === PeriodName.QUARTER ? quartersPeriodNumberToWord : halvesPeriodNumberToWord
-    if (period !== previousPeriod) {
-      const periodWord = periodNumberToWord[period]
-      elements.push(
-        <p key={`${period}-${sequnceIndex}`} className="font-bold underline">
-          {periodWord} {periodWord !== OVERTIME && periodName}
-        </p>,
-      )
-      previousPeriod = period
-    }
-    elements.push(<p key={sequnceIndex}>Sequence {sequnceIndex + 1}</p>)
-  }
-  return elements
-}
-
 export default function SequencesListSection() {
-  const { sequences, activePeriod, game } = useBteStore()
+  const { sequences, activePeriod, game, updateActiveSequenceIndex, activeSequenceIndex } = useBteStore()
   const gameType = game?.gameType
 
+  const sequencesContent = useMemo(() => {
+    const onClickSequence = (index: number) => () => {
+      updateActiveSequenceIndex(index)
+    }
+
+    const periodName = gameTypePeriodName[gameType]
+    const elements = []
+    let previousPeriod = 0
+
+    for (let sequenceIndex = 0; sequenceIndex < sequences.length; sequenceIndex++) {
+      const period = sequences[sequenceIndex].period as 1 | 2 | 3 | 4 | 5
+      const periodNumberToWord =
+        periodName === PeriodName.QUARTER ? quartersPeriodNumberToWord : halvesPeriodNumberToWord
+      if (period !== previousPeriod) {
+        const periodWord = periodNumberToWord[period]
+        elements.push(
+          <p key={`${period}-${sequenceIndex}`} className="pt-3 font-bold underline">
+            {periodWord} {periodWord !== OVERTIME && periodName}
+          </p>,
+        )
+        previousPeriod = period
+      }
+      elements.push(
+        <Button
+          variant="link"
+          key={sequenceIndex}
+          className={`block ${activeSequenceIndex === sequenceIndex ? "text-primary" : "text-foreground"}`}
+          onClick={onClickSequence(sequenceIndex)}
+        >
+          Sequence {sequenceIndex + 1}
+        </Button>,
+      )
+    }
+    elements.push(
+      <Button
+        variant="link"
+        key={sequences.length}
+        className={`block ${activeSequenceIndex === sequences.length ? "text-primary" : "text-foreground"}`}
+        onClick={onClickSequence(sequences.length)}
+      >
+        Sequence {sequences.length + 1}
+      </Button>,
+    )
+    return elements
+  }, [sequences, gameType, updateActiveSequenceIndex, activeSequenceIndex])
+
   return (
-    <div className="space-y-3 pt-2">
+    <div className="pt-2">
       <p className="font-semibold text-primary">Current Period: {activePeriod}</p>
-      {getSequencesContent(sequences, gameType)}
+      {sequencesContent}
     </div>
   )
 }
