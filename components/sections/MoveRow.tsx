@@ -1,7 +1,6 @@
 import { moveIdToNames } from "@/constants"
 import useBteStore from "@/stores/bteDataStore"
 import { MoveSequence } from "@/types"
-import { convertCoordinatesToPixels, convertPixelsToCoordinates } from "@/utils/get-moves-data"
 import { CheckIcon, EditIcon, TrashIcon, XIcon } from "lucide-react"
 import { useState } from "react"
 import { Button } from "../ui/button"
@@ -14,7 +13,7 @@ type Props = {
 }
 
 const MoveRow = ({ move, moveIndex }: Props) => {
-  const { x: initialX, y: initialY } = convertPixelsToCoordinates({ x: move.x, y: move.y })
+  const { x: initialX, y: initialY } = { x: move.x, y: move.y }
   const { editMove, deleteMove, activeSequenceIndex } = useBteStore()
   const [isEditing, setIsEditing] = useState(false)
   const [xCoordinate, setXCoordinate] = useState(initialX)
@@ -35,9 +34,8 @@ const MoveRow = ({ move, moveIndex }: Props) => {
   }
 
   const onUpdate = () => {
-    const { x, y } = convertCoordinatesToPixels({ x: xCoordinate, y: yCoordinate })
     setIsEditing(false)
-    editMove({ moveIndex, sequenceIndex: activeSequenceIndex, newMove: { ...move, x, y } })
+    editMove({ moveIndex, sequenceIndex: activeSequenceIndex, newMove: { ...move, x: xCoordinate, y: yCoordinate } })
   }
 
   const onStartEditing = () => {

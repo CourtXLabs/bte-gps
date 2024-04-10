@@ -330,3 +330,4 @@ export const gameTypesPeriods = {
 }
 
 export const PERMANENT_MARKER_CLASS = "permanent-marker"
+export const TEMPORARY_SELECTION_MARKER_CLASS = "temp-marker-group"

@@ -2,7 +2,6 @@
 
 import { createClient } from "@/lib/supabase/actionts"
 import { Sequence, gameFormSchema } from "@/types"
-import { convertAllMoves } from "@/utils/get-moves-data"
 import { getSequenceData, getTotalPoints } from "@/utils/get-sequence-data"
 import { uploadGame, uploadReport } from "@/utils/upload-db-data"
 import { cookies } from "next/headers"
@@ -69,13 +68,12 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
       player_id: playerId,
     })
 
-    const sequencesWithConvertedCoordinates = convertAllMoves(sequences)
-    const sequencesData = getSequenceData(sequencesWithConvertedCoordinates, addedReportId!)
+    const sequencesData = getSequenceData(sequences, addedReportId!)
     const addedSequences = await supabase.from("sequence").insert(sequencesData).select("id")
 
     const movesData = [] as any
-    for (let i = 0; i < sequencesWithConvertedCoordinates.length; i++) {
-      const moves = sequencesWithConvertedCoordinates[i]?.moves
+    for (let i = 0; i < sequences.length; i++) {
+      const moves = sequences[i]?.moves
       moves.forEach((move) => {
         movesData.push({
           sequence_id: addedSequences.data?.[i].id,
@@ -99,12 +97,12 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
     const dataToDownload = {
       sequences: sequencesData.map((sequence, index) => ({
         ...sequence,
-        moves: sequencesWithConvertedCoordinates[index].moves,
+        moves: sequences[index].moves,
       })),
       name: reportName,
       playerInfo: {
         name: playerName,
-        points: getTotalPoints(sequencesWithConvertedCoordinates),
+        points: getTotalPoints(sequences),
         game: `${teamName} @ ${opponentName}`,
         date: values.date.toISOString().split("T")[0],
       },

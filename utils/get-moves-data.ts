@@ -43,16 +43,6 @@ export const convertCoordinatesToPixels = ({
   return { x: xInPixels, y: yInPixels }
 }
 
-export const convertAllMoves = (sequences: Sequence[]) => {
-  return sequences.map((sequence) => {
-    const moves = sequence.moves.map((move) => {
-      const { x, y } = convertPixelsToCoordinates({ x: move.x, y: move.y })
-      return { ...move, x, y }
-    })
-    return { ...sequence, moves }
-  })
-}
-
 export const getLanes = (sequence: Sequence) => {
   const lastMove = sequence.moves[sequence.moves.length - 1]
   const attackingHalf = lastMove.x > 0 ? "right" : "left"
