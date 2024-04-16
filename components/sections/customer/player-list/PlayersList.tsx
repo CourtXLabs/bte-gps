@@ -3,8 +3,8 @@
 import { PlayerApiData, TeamData } from "@/types"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { Input } from "../../ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../ui/table"
+import { Input } from "../../../ui/input"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../ui/table"
 
 interface Props {
   data: PlayerApiData[]

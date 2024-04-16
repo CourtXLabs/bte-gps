@@ -1,4 +1,4 @@
-import CustomerHomeView from "@/components/sections/customer/CustomerHomeView"
+import CustomerHomeView from "@/components/sections/customer/player-list/CustomerHomeView"
 import AuthGuard from "@/guards/AuthGuard"
 import { Metadata } from "next"
 

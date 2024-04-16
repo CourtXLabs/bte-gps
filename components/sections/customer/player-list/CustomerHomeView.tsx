@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { PlayerApiData } from "@/types"
 import { cookies } from "next/headers"
-import NotFound404Error from "../error/NotFound404Error"
+import NotFound404Error from "../../error/NotFound404Error"
 import PlayersList from "./PlayersList"
 
 const getData = async () => {
