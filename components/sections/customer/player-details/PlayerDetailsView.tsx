@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { ComboToPointData, ReportApiData } from "@/types"
+import { getTotalPointsFromMoves } from "@/utils/get-sequence-data"
 import { cookies } from "next/headers"
 import PlayerCharts from "./PlayerCharts"
 import ReportsList from "./ReportsList"
@@ -68,7 +69,7 @@ const getComboPointsRatio = async (id: string) => {
     for (const { report, moves } of Object.values(groupedData)) {
       const date = report.game_id.date.split("T")[0]
       const comboCount = moves.length - 1 // Assuming all moves are dribbles except the last one, which is the shot
-      const points = comboCount * 3 // TODO: Calculate points based on the actual moves
+      const points = getTotalPointsFromMoves(moves)
       chartData.push({ date, comboCount, points })
     }
 

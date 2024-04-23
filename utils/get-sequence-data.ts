@@ -1,4 +1,4 @@
-import { MoveSequence, Sequence } from "@/types"
+import { MoveApiData, MoveSequence, Sequence } from "@/types"
 import { getLanes } from "./get-moves-data"
 import {
   getIsInLeft3PointArea,
@@ -42,14 +42,15 @@ export const getTotalPoints = (sequences: Sequence[]) => {
   }, 0)
 }
 
-export const getTotalPointsFromMoves = (moves: MoveSequence[]) => {
-  // TODO: Implement this function
-  // const lastMove = moves[moves.length - 1]
-  // const isMadeShot = lastMove.moveId === 7
-  // if (!isMadeShot) return 0
-  // const direction = lastMove.x > 0 ? "right" : "left"
-  // const isIn3PointArea = direction === "right" ? getIsInRight3PointArea(lastMove) : getIsInLeft3PointArea(lastMove)
-  // return isIn3PointArea ? 3 : 2
+export const getTotalPointsFromMoves = (moves: MoveApiData[]) => {
+  return moves.reduce((totalPoints, move) => {
+    const isMadeShot = move.code === 7
+    if (!isMadeShot) return totalPoints
+
+    const direction = move.x > 0 ? "right" : "left"
+    const isIn3PointArea = direction === "right" ? getIsInRight3PointArea(move) : getIsInLeft3PointArea(move)
+    return isIn3PointArea ? totalPoints + 3 : totalPoints + 2
+  }, 0)
 }
 
 export const getSequenceData = (sequences: Sequence[], addedReportId: number) => {

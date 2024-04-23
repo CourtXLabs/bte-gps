@@ -77,6 +77,7 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
       moves.forEach((move) => {
         movesData.push({
           sequence_id: addedSequences.data?.[i].id,
+          code: move.moveId,
           x: move.x,
           y: move.y,
         })

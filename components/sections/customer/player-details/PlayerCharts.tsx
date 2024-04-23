@@ -97,7 +97,6 @@ export default function PlayerCharts({ data }: Props) {
         return height - y(d.comboCount)
       })
       .delay(function (d, i) {
-        console.log(i)
         return i * 100
       })
   }, [])

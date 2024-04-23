@@ -137,8 +137,6 @@ export default function GameForm({ players, teams }: Props) {
     toggleLoading()
   }
 
-  console.log(form.getValues())
-
   return (
     <Form {...form}>
       <form id="game-form" className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>

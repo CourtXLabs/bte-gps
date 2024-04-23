@@ -210,3 +210,9 @@ export interface ComboToPointData {
   comboCount: number
   points: number
 }
+
+export interface MoveApiData {
+  code: number
+  x: number
+  y: number
+}
