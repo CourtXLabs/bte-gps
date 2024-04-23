@@ -110,6 +110,11 @@ export const sequenceFormSchema = z.object({
   ball_handler_pick_and_roll: z.string().optional(),
 })
 
+export const dashboardToolbarFormSchema = z.object({
+  team: z.string().optional(),
+  player: z.string().optional(),
+})
+
 export interface TeamData {
   id?: string
   name: string
@@ -180,4 +185,22 @@ export interface EditMoveInput {
 export interface DeleteMoveInput {
   sequenceIndex: number
   moveIndex: number
+}
+
+export interface Pagination {
+  page: number
+  pageSize: number
+  total: number
+}
+
+export interface SimpleTeamData {
+  id: number
+  name: string
+}
+
+export interface SimlePlayerData {
+  id: number
+  name: string
+  jersey: number
+  team_id: number
 }

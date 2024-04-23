@@ -7,10 +7,19 @@ export const metadata: Metadata = {
   description: "BTE Players",
 }
 
-export default async function Home() {
+interface Props {
+  searchParams: {
+    page?: string
+    pageSize?: string
+    team?: string
+    player?: string
+  }
+}
+
+export default async function Home({ searchParams }: Props) {
   return (
     <AuthGuard>
-      <CustomerHomeView />
+      <CustomerHomeView {...searchParams} />
     </AuthGuard>
   )
 }

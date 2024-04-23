@@ -16,7 +16,7 @@ import { uploadImages } from "@/utils/upload-image-data"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { z } from "zod"
-import Combobox from "./Combobox"
+import Autocomplete from "./Autocomplete"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -137,6 +137,8 @@ export default function GameForm({ players, teams }: Props) {
     toggleLoading()
   }
 
+  console.log(form.getValues())
+
   return (
     <Form {...form}>
       <form id="game-form" className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -162,7 +164,7 @@ export default function GameForm({ players, teams }: Props) {
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Player</FormLabel>
-              <Combobox
+              <Autocomplete
                 isOpen={isPlayerComboboxOpen}
                 options={playerOptions}
                 value={field.value}
@@ -183,7 +185,7 @@ export default function GameForm({ players, teams }: Props) {
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Team</FormLabel>
-              <Combobox
+              <Autocomplete
                 isOpen={isTeamComboboxOpen}
                 options={teasmOptions}
                 value={field.value}
@@ -204,7 +206,7 @@ export default function GameForm({ players, teams }: Props) {
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Opponent Team</FormLabel>
-              <Combobox
+              <Autocomplete
                 isOpen={IsOpponentTeamComboboxOpen}
                 options={teasmOptions}
                 value={field.value}

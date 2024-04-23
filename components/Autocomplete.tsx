@@ -20,7 +20,7 @@ interface Props {
   onAddNew?: (value: string) => void
 }
 
-export default function Combobox({
+export default function Autocomplete({
   isOpen,
   onToggle,
   value,
@@ -59,9 +59,11 @@ export default function Combobox({
           <CommandInput placeholder={searchPlaceholder || "Search..."} className="h-9" ref={searchInputRef} />
           <CommandEmpty>
             <div>{noDataMessage || "No data found"}</div>
-            <Button variant="link" className="mt-2" onClick={handleAddNew}>
-              Add new entry <PlusIcon className="ml-1 h-4 w-4" />
-            </Button>
+            {onAddNew && (
+              <Button variant="link" className="mt-2" onClick={handleAddNew}>
+                Add new entry <PlusIcon className="ml-1 h-4 w-4" />
+              </Button>
+            )}
           </CommandEmpty>
           <CommandList>
             <CommandGroup>

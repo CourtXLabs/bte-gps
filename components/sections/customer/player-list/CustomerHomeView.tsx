@@ -1,28 +1,56 @@
+import { DEFAULT_PAGE_SIZE } from "@/constants"
 import { createClient } from "@/lib/supabase/server"
 import { PlayerApiData } from "@/types"
 import { cookies } from "next/headers"
 import NotFound404Error from "../../error/NotFound404Error"
-import PlayersList from "./PlayersList"
+import PlayersTable from "./PlayersTable"
 
-const getData = async () => {
+interface Props {
+  page?: string
+  pageSize?: string
+  team?: string
+  player?: string
+}
+
+const getData = async ({ page, pageSize, team, player }: Props) => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
+  if (!page) page = "1"
+  if (!pageSize) pageSize = DEFAULT_PAGE_SIZE.toString()
+
+  const from = (parseInt(page) - 1) * parseInt(pageSize)
+  const to = from + parseInt(pageSize) - 1
+
+  let query = supabase.from("player").select("id, name, jersey, team_id (name)", { count: "exact" })
+
+  if (typeof team === "string" && team.trim() !== "") {
+    query = query.eq("team_id", team)
+  }
+
+  if (typeof player === "string" && player.trim() !== "") {
+    query = query.eq("id", player)
+  }
+
   try {
-    const players = await supabase.from("player").select("id, name, jersey, team_id (name)")
-    return { players: players.data as PlayerApiData[] }
+    const players = await query.range(from, to)
+    return {
+      data: players.data as PlayerApiData[],
+      count: players.count,
+    }
   } catch (error: any) {
+    console.log(error)
     return { error: typeof error === "string" ? error : error.message || "An error occurred" }
   }
 }
 
-export default async function CustomerHomeView() {
-  const data = await getData()
-  if (data.error || !data.players) return <NotFound404Error />
+export default async function CustomerHomeView(props: Props) {
+  const players = await getData(props)
+  if (players.error || !players.data) return <NotFound404Error />
 
   return (
     <div className="mx-auto w-max max-w-7xl px-4 py-20 lg:px-0">
-      <PlayersList data={data.players} />
+      <PlayersTable data={players.data} count={players.count || 0} />
     </div>
   )
 }
