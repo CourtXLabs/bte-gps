@@ -204,3 +204,9 @@ export interface SimlePlayerData {
   jersey: number
   team_id: number
 }
+
+export interface ComboToPointData {
+  date: string
+  comboCount: number
+  points: number
+}

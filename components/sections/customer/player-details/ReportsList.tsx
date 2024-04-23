@@ -75,7 +75,7 @@ export default function ReportsList({ data }: Props) {
   }
 
   return (
-    <>
+    <div>
       <Input placeholder="Search report..." className="w-full" value={searchInput} onChange={onChangeInput} />
 
       <Table className="mt-6">
@@ -112,6 +112,6 @@ export default function ReportsList({ data }: Props) {
           ))}
         </TableBody>
       </Table>
-    </>
+    </div>
   )
 }

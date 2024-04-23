@@ -42,6 +42,16 @@ export const getTotalPoints = (sequences: Sequence[]) => {
   }, 0)
 }
 
+export const getTotalPointsFromMoves = (moves: MoveSequence[]) => {
+  // TODO: Implement this function
+  // const lastMove = moves[moves.length - 1]
+  // const isMadeShot = lastMove.moveId === 7
+  // if (!isMadeShot) return 0
+  // const direction = lastMove.x > 0 ? "right" : "left"
+  // const isIn3PointArea = direction === "right" ? getIsInRight3PointArea(lastMove) : getIsInLeft3PointArea(lastMove)
+  // return isIn3PointArea ? 3 : 2
+}
+
 export const getSequenceData = (sequences: Sequence[], addedReportId: number) => {
   return sequences.map((sequence) => {
     const { moves, ...rest } = sequence
