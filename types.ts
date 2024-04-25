@@ -6,6 +6,15 @@ export interface Coordinates {
   y: number
 }
 
+export enum Colors {
+  POUND = "#E52127",
+  CROSSOVER = "#1E4695",
+  IN_AND_OUT = "#186D38",
+  BETWEEN_THE_LEGS = "#814198",
+  BEHIND_THE_BACK = "#FCD407",
+  SPIN = "#FF9E1F",
+}
+
 export interface Option {
   id: MoveIds
   image?: string

@@ -2,8 +2,9 @@ import { createClient } from "@/lib/supabase/server"
 import { ComboToPointData, ReportApiData } from "@/types"
 import { getTotalPointsFromMoves } from "@/utils/get-sequence-data"
 import { cookies } from "next/headers"
-import PlayerCharts from "./PlayerCharts"
 import ReportsList from "./ReportsList"
+import DribblePieChart from "./charts/DribblePieChart"
+import PointsComboBarChart from "./charts/PointsComboBarChart"
 
 function groupByReportId(data: Record<string, any>[]) {
   const grouped = data.reduce((acc: any, item: any) => {
@@ -93,7 +94,10 @@ export default async function PlayerDetailsView({ id }: Props) {
   }
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-20 lg:px-0">
-      {comboPointsResponse.data && <PlayerCharts data={comboPointsResponse.data} />}
+      <div className="flex flex-col items-center justify-center gap-10 lg:flex-row">
+        {comboPointsResponse.data && <PointsComboBarChart data={comboPointsResponse.data} />}
+        <DribblePieChart />
+      </div>
       <ReportsList data={reportsResponse.data} />
     </div>
   )

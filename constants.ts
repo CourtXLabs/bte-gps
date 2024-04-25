@@ -1,4 +1,4 @@
-import { GameTypes, Option, SequenceInput } from "./types"
+import { Colors, GameTypes, Option, SequenceInput } from "./types"
 
 export const COURT_WIDTH = 850
 export const COURT_HEIGHT = 458
@@ -12,42 +12,42 @@ export const options = [
     image: "/DribbleTree1.png",
     keyShortcut: "1",
     name: "Pound",
-    color: "#E52127",
+    color: Colors.POUND,
   },
   {
     id: 2,
     image: "/DribbleTree2.png",
     keyShortcut: "2",
     name: "Cross",
-    color: "#1E4695",
+    color: Colors.CROSSOVER,
   },
   {
     id: 3,
     image: "/DribbleTree3.png",
     keyShortcut: "3",
     name: "In + Out",
-    color: "#186D38",
+    color: Colors.IN_AND_OUT,
   },
   {
     id: 4,
     image: "/DribbleTree4.png",
     keyShortcut: "4",
     name: "Between The Legs",
-    color: "#814198",
+    color: Colors.BETWEEN_THE_LEGS,
   },
   {
     id: 5,
     image: "/DribbleTree5.png",
     keyShortcut: "5",
     name: "Behind The Back",
-    color: "#FCD407",
+    color: Colors.BEHIND_THE_BACK,
   },
   {
     id: 6,
     image: "/DribbleTree6.png",
     keyShortcut: "6",
     name: "Spin",
-    color: "#FF9E1F",
+    color: Colors.SPIN,
   },
   {
     id: 7,

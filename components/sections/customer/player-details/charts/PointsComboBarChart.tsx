@@ -10,7 +10,7 @@ interface Props {
   data: ComboToPointData[]
 }
 
-export default function PlayerCharts({ data }: Props) {
+export default function PointsComboBarChart({ data }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null)
   // set the dimensions and margins of the graph
   var margin = { top: 10, right: 30, bottom: 90, left: 40 },
