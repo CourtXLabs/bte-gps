@@ -6,6 +6,9 @@ import { useEffect, useRef } from "react"
 
 const PRIMARY_COLOR = "#FCBE22"
 
+const margin = { top: 10, right: 30, bottom: 70, left: 40 }
+const width = 500 - margin.left - margin.right
+const height = 500 - margin.top - margin.bottom
 interface Props {
   data: ComboToPointData[]
 }
@@ -13,9 +16,6 @@ interface Props {
 export default function PointsComboBarChart({ data }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null)
   // set the dimensions and margins of the graph
-  var margin = { top: 10, right: 30, bottom: 90, left: 40 },
-    width = 500 - margin.left - margin.right,
-    height = 450 - margin.top - margin.bottom
 
   useEffect(() => {
     // append the svg object to the body of the page
@@ -99,13 +99,13 @@ export default function PointsComboBarChart({ data }: Props) {
       .delay(function (d, i) {
         return i * 100
       })
-  }, [])
+  }, [data])
 
   return (
     <svg
       id="combo-to-point"
       ref={svgRef}
-      className="h-[450px] w-[500px]"
+      className="h-[500px] w-[500px]"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
     />
