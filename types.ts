@@ -124,6 +124,11 @@ export const dashboardToolbarFormSchema = z.object({
   player: z.string().optional(),
 })
 
+export const playerDashboardToolbarFormSchema = z.object({
+  player: z.string().optional(),
+  game: z.string().optional(),
+})
+
 export interface TeamData {
   id?: string
   name: string

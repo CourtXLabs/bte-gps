@@ -1,8 +1,9 @@
 import { moveIdKeys } from "@/constants"
 import { createClient } from "@/lib/supabase/server"
-import { ComboToPointData, ReportApiData } from "@/types"
+import { ComboToPointData, ReportApiData, SimlePlayerData } from "@/types"
 import { getTotalPointsFromMoves } from "@/utils/get-sequence-data"
 import { cookies } from "next/headers"
+import PlayerDashboardToolbar from "./PlayerDashboardToolbar"
 import ReportsList from "./ReportsList"
 import DribblePieChart from "./charts/DribblePieChart"
 import PointsComboBarChart from "./charts/PointsComboBarChart"
@@ -28,6 +29,19 @@ function groupByReportId(data: Record<string, any>[]) {
   }, {})
 
   return grouped
+}
+
+const getAllPlayers = async () => {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+
+  try {
+    const { data, error } = await supabase.from("player").select("*")
+
+    return { data: data as SimlePlayerData[], error }
+  } catch (error: any) {
+    return { error: typeof error === "string" ? error : error.message || "An error occurred" }
+  }
 }
 
 const getReports = async (id: string) => {
@@ -81,7 +95,7 @@ const getComboPointsRatio = async (id: string) => {
   }
 }
 
-const getDribbleBreakdown = async (id: string) => {
+const getDribblesCounts = async (id: string) => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
@@ -95,7 +109,8 @@ const getDribbleBreakdown = async (id: string) => {
       return { error: "No data found" }
     }
 
-    const dribbleBreakdown = data.reduce((acc: Record<string, number>, report) => {
+    const dribbleCounts = data.reduce((acc: Record<string, number>, report) => {
+      if (!report.report) return acc
       const moves = report.move
 
       moves.forEach((move) => {
@@ -112,7 +127,9 @@ const getDribbleBreakdown = async (id: string) => {
       return acc
     }, {})
 
-    return { data: dribbleBreakdown, error }
+    const isEmpty = Object.keys(dribbleCounts).length === 0
+
+    return { data: !isEmpty ? dribbleCounts : null, error }
   } catch (error: any) {
     return { error: typeof error === "string" ? error : error.message || "An error occurred" }
   }
@@ -123,24 +140,27 @@ interface Props {
 }
 
 export default async function PlayerDetailsView({ id }: Props) {
-  const [reportsResponse, comboPointsResponse, dribbleBreakdown] = await Promise.all([
+  const [playersResponse, reportsResponse, comboPointsResponse, dribbleCounts] = await Promise.all([
+    getAllPlayers(),
     getReports(id),
     getComboPointsRatio(id),
-    getDribbleBreakdown(id),
+    getDribblesCounts(id),
   ])
 
-  await getComboPointsRatio(id)
-
-  if (!reportsResponse.data || !reportsResponse.data.length) {
-    return <div>No player data yet</div>
-  }
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-20 lg:px-0">
-      <div className="flex flex-col items-center justify-center gap-10 lg:flex-row">
-        {comboPointsResponse.data && <PointsComboBarChart data={comboPointsResponse.data} />}
-        {dribbleBreakdown.data && <DribblePieChart data={dribbleBreakdown.data as Record<moveIdKeys, number>} />}
+    <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-10 lg:px-0">
+      {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} />}
+      <div className="flex flex-col items-center justify-center gap-10 py-10 lg:flex-row">
+        {!!dribbleCounts.data && <DribblePieChart data={dribbleCounts.data as Record<moveIdKeys, number>} />}
+        {!!comboPointsResponse.data?.length && <PointsComboBarChart data={comboPointsResponse.data} />}
       </div>
-      <ReportsList data={reportsResponse.data} />
+      {reportsResponse.data?.length ? (
+        <ReportsList data={reportsResponse.data} />
+      ) : (
+        <div>
+          <p>No reports found for this player</p>
+        </div>
+      )}
     </div>
   )
 }

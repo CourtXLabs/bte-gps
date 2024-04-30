@@ -133,7 +133,6 @@ export default function DribblePieChart({ data }: Props) {
     arcs
       .append("text")
       .attr("transform", function (d: any) {
-        console.log(labelArc.centroid(d))
         return `translate(${labelArc.centroid(d)})`
       })
       .attr("text-anchor", "middle") // Center text horizontally
