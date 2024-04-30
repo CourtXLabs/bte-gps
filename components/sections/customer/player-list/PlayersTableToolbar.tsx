@@ -87,7 +87,7 @@ export default function PlayersTableToolbar() {
         <FormField
           control={form.control}
           name="team"
-          render={({ field }) => (
+          render={() => (
             <FormItem className="flex w-40 flex-col">
               <FormLabel>Team</FormLabel>
               <Autocomplete
@@ -107,7 +107,7 @@ export default function PlayersTableToolbar() {
         <FormField
           control={form.control}
           name="player"
-          render={({ field }) => (
+          render={() => (
             <FormItem className="flex w-40 flex-col">
               <FormLabel>Player</FormLabel>
               <Autocomplete

@@ -1,6 +1,8 @@
 "use client"
 
+import { moveIdKeys, moveIdToNames } from "@/constants"
 import { Colors } from "@/types"
+import { getIsShot } from "@/utils/get-is-shot"
 import * as d3 from "d3"
 import { useEffect, useRef } from "react"
 
@@ -17,18 +19,18 @@ const colors = [
   Colors.SPIN,
 ]
 
-export default function DribblePieChart() {
+interface Props {
+  data: Record<moveIdKeys, number>
+}
+
+export default function DribblePieChart({ data }: Props) {
+  const formattedData = Object.entries(data).flatMap(([key, value]) =>
+    getIsShot(Number(key)) ? [] : { name: moveIdToNames[key as moveIdKeys], value },
+  )
+
   const svgRef = useRef<SVGSVGElement | null>(null)
 
   useEffect(() => {
-    const data = [
-      { value: 35, name: "Group A" },
-      { value: 12, name: "Group B" },
-      { value: 8, name: "Group C" },
-      { value: 12, name: "Group D" },
-      { value: 6, name: "Group E" },
-      { value: 4, name: "Group F" },
-    ]
     const svg = d3.select(svgRef.current)
 
     svg.selectAll("*").remove()
@@ -39,15 +41,16 @@ export default function DribblePieChart() {
     const color = d3.scaleOrdinal(colors)
 
     // Render the pie chart
-    g.selectAll(".arc")
-      .data(pie(data as any))
+    const arcs = g
+      .selectAll(".arc")
+      .data(pie(formattedData as any))
       .enter()
       .append("path")
       .attr("d", arc as any)
       .attr("fill", (d, i) => color(i as any))
       .attr("stroke", "#1f1e1e")
       .attr("stroke-width", 2)
-  }, [])
+  }, [formattedData])
 
   return (
     <svg

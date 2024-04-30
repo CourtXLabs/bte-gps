@@ -1,3 +1,4 @@
+import { moveIdKeys } from "@/constants"
 import { createClient } from "@/lib/supabase/server"
 import { ComboToPointData, ReportApiData } from "@/types"
 import { getTotalPointsFromMoves } from "@/utils/get-sequence-data"
@@ -80,12 +81,53 @@ const getComboPointsRatio = async (id: string) => {
   }
 }
 
+const getDribbleBreakdown = async (id: string) => {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+
+  try {
+    const { data, error } = await supabase
+      .from("sequence")
+      .select("move (code), report:report_id (player_id)")
+      .eq("report.player_id", id)
+
+    if (!data) {
+      return { error: "No data found" }
+    }
+
+    const dribbleBreakdown = data.reduce((acc: Record<string, number>, report) => {
+      const moves = report.move
+
+      moves.forEach((move) => {
+        const code = move.code as moveIdKeys
+        if (!code) return
+
+        if (!acc[code]) {
+          acc[code] = 1
+        } else {
+          acc[code] += 1
+        }
+      })
+
+      return acc
+    }, {})
+
+    return { data: dribbleBreakdown, error }
+  } catch (error: any) {
+    return { error: typeof error === "string" ? error : error.message || "An error occurred" }
+  }
+}
+
 interface Props {
   id: string
 }
 
 export default async function PlayerDetailsView({ id }: Props) {
-  const [reportsResponse, comboPointsResponse] = await Promise.all([getReports(id), getComboPointsRatio(id)])
+  const [reportsResponse, comboPointsResponse, dribbleBreakdown] = await Promise.all([
+    getReports(id),
+    getComboPointsRatio(id),
+    getDribbleBreakdown(id),
+  ])
 
   await getComboPointsRatio(id)
 
@@ -96,7 +138,7 @@ export default async function PlayerDetailsView({ id }: Props) {
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-20 lg:px-0">
       <div className="flex flex-col items-center justify-center gap-10 lg:flex-row">
         {comboPointsResponse.data && <PointsComboBarChart data={comboPointsResponse.data} />}
-        <DribblePieChart />
+        {dribbleBreakdown.data && <DribblePieChart data={dribbleBreakdown.data as Record<moveIdKeys, number>} />}
       </div>
       <ReportsList data={reportsResponse.data} />
     </div>
