@@ -13,7 +13,7 @@ interface Props {
   onToggle: () => void
   value?: string
   onSelect: (value: string) => void
-  options: { value: string; label: string }[]
+  options: { value: string | number; label: string }[]
   placeholder?: string
   searchPlaceholder?: string
   noDataMessage?: string
@@ -68,7 +68,11 @@ export default function Autocomplete({
           <CommandList>
             <CommandGroup>
               {options?.map((option) => (
-                <CommandItem value={option.value} key={option.value} onSelect={handleSelect(option.value)}>
+                <CommandItem
+                  value={option.value as string}
+                  key={option.value}
+                  onSelect={handleSelect(option.value as string)}
+                >
                   {option.label}
                   <CheckIcon className={cn("ml-auto h-4 w-4", option.value === value ? "opacity-100" : "opacity-0")} />
                 </CommandItem>

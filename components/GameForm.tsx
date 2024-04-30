@@ -61,7 +61,7 @@ export default function GameForm({ players, teams }: Props) {
       label: `${player.name} ${typeof player.jersey === "number" && `#${player.jersey}`}`,
     })) || []
 
-  const teasmOptions =
+  const teamsOptions =
     teams?.map((team) => ({
       value: team.id!,
       label: team.name,
@@ -185,7 +185,7 @@ export default function GameForm({ players, teams }: Props) {
               <FormLabel>Team</FormLabel>
               <Autocomplete
                 isOpen={isTeamComboboxOpen}
-                options={teasmOptions}
+                options={teamsOptions}
                 value={field.value}
                 placeholder="Select team"
                 onToggle={onToggleTeamCombobox}
@@ -206,7 +206,7 @@ export default function GameForm({ players, teams }: Props) {
               <FormLabel>Opponent Team</FormLabel>
               <Autocomplete
                 isOpen={IsOpponentTeamComboboxOpen}
-                options={teasmOptions}
+                options={teamsOptions}
                 value={field.value}
                 placeholder="Select opponent team"
                 searchPlaceholder="Search team..."

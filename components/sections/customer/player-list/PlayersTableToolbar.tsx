@@ -2,6 +2,7 @@
 
 import Autocomplete from "@/components/Autocomplete"
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { EMPTY_AUTOCOMPLETE_VALUE } from "@/constants"
 import fetcher from "@/lib/swr/fetcher"
 import { SimlePlayerData, SimpleTeamData, dashboardToolbarFormSchema } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -18,23 +19,23 @@ export default function PlayersTableToolbar() {
   const activePlayerId = searchParams.get("player")
 
   const { data: teamData } = useSWR<SimpleTeamData[]>("/api/teams", fetcher)
-  const { data: playerData } = useSWR<SimlePlayerData[]>(`/api/players?team=${activeTeamId}`, fetcher)
+  const { data: playerData } = useSWR<SimlePlayerData[]>(`/api/players?team=${activeTeamId ?? ""}`, fetcher)
 
   const [isTeamAutocompleteOpen, setIsTeamAutocompleteOpen] = useState(false)
   const [isPlayerAutocompleteOpen, setIsPlayerAutocompleteOpen] = useState(false)
 
   const teamsOptions = [
-    { value: "", label: "No filter" }, // Empty first element
+    { value: EMPTY_AUTOCOMPLETE_VALUE, label: "No filter" }, // Empty first element
     ...(teamData?.map((team) => ({
-      value: team.id.toString(),
+      value: team.id,
       label: team.name,
     })) || []),
   ]
 
   const playersOptions = [
-    { value: "", label: "No filter" }, // Empty first element
+    { value: EMPTY_AUTOCOMPLETE_VALUE, label: "No filter" }, // Empty first element
     ...(playerData?.map((player) => ({
-      value: player.id.toString(),
+      value: player.id,
       label: player.name,
     })) || []),
   ]
@@ -58,10 +59,10 @@ export default function PlayersTableToolbar() {
     setIsPlayerAutocompleteOpen((previous) => !previous)
   }
 
-  const onSelectTeam = (value: string) => {
+  const onSelectTeam = (value: string | number) => {
     const newSearchParams = new URLSearchParams(searchParams)
-    if (value) {
-      newSearchParams.set("team", value)
+    if (value !== EMPTY_AUTOCOMPLETE_VALUE) {
+      newSearchParams.set("team", value as string)
     } else {
       newSearchParams.delete("team")
     }
@@ -69,10 +70,10 @@ export default function PlayersTableToolbar() {
     router.push(`?${newSearchParams.toString()}`)
   }
 
-  const onSelectPlayer = (value: string) => {
+  const onSelectPlayer = (value: string | number) => {
     const newSearchParams = new URLSearchParams(searchParams)
-    if (value) {
-      newSearchParams.set("player", value)
+    if (value !== EMPTY_AUTOCOMPLETE_VALUE) {
+      newSearchParams.set("player", value as string)
     } else {
       newSearchParams.delete("player")
     }

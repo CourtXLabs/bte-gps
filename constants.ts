@@ -333,3 +333,5 @@ export const PERMANENT_MARKER_CLASS = "permanent-marker"
 export const TEMPORARY_SELECTION_MARKER_CLASS = "temp-marker-group"
 
 export const DEFAULT_PAGE_SIZE = 10
+
+export const EMPTY_AUTOCOMPLETE_VALUE = -1

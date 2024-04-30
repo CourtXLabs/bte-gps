@@ -49,7 +49,7 @@ export default async function CustomerHomeView(props: Props) {
   if (players.error || !players.data) return <NotFound404Error />
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-20 lg:px-0">
+    <div className="mx-auto w-full max-w-7xl px-4 py-20">
       <PlayersTable data={players.data} count={players.count || 0} />
     </div>
   )
