@@ -6,8 +6,8 @@ import { useEffect, useRef } from "react"
 
 const PRIMARY_COLOR = "#FCBE22"
 
-const margin = { top: 10, right: 30, bottom: 70, left: 40 }
-const width = 500 - margin.left - margin.right
+const margin = { top: 48, right: 30, bottom: 70, left: 40 }
+const width = 600 - margin.left - margin.right
 const height = 500 - margin.top - margin.bottom
 interface Props {
   data: ComboToPointData[]
@@ -51,6 +51,20 @@ export default function PointsComboBarChart({ data }: Props) {
     // Add Y axis
     const y = d3.scaleLinear().domain([0, 50]).range([height, 0])
     svg.append("g").call(d3.axisLeft(y)).style("font-size", "12px")
+
+    // Grid lines
+    svg
+      .append("g")
+      .attr("class", "grid")
+
+      .call(
+        d3
+          .axisLeft(y)
+          .tickSize(-width)
+          .tickFormat(() => "")
+          .ticks(10),
+      )
+      .style("color", "#666")
 
     // Bars
     svg
@@ -156,8 +170,8 @@ export default function PointsComboBarChart({ data }: Props) {
 
     // Move the entire legend group up to place it above the chart
     legend.attr("transform", (d, i) => {
-      const offset = width / 2 + (i - (legendData.length - 1) / 2) * 90
-      return `translate(${offset}, -10)` // Adjust y-position to move above the chart
+      const offset = (width - margin.left - margin.right) / 2 + (i - (legendData.length - 1) / 2) * 90
+      return `translate(${offset}, -40)` // Adjust y-position to move above the chart
     })
   }, [data])
 
@@ -165,7 +179,7 @@ export default function PointsComboBarChart({ data }: Props) {
     <svg
       id="combo-to-point"
       ref={svgRef}
-      className="h-[500px] w-[500px]"
+      className="h-[500px] w-[600px]"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
     />
