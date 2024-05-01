@@ -6,6 +6,7 @@ import { cookies } from "next/headers"
 import PlayerDashboardToolbar from "./PlayerDashboardToolbar"
 import ReportsList from "./ReportsList"
 import DribblePieChart from "./charts/DribblePieChart"
+import DribblePieChartLegend from "./charts/DribblePieChartLegend"
 import PointsComboBarChart from "./charts/PointsComboBarChart"
 
 function groupByReportId(data: Record<string, any>[]) {
@@ -109,25 +110,32 @@ const getDribblesCounts = async (id: string) => {
       return { error: "No data found" }
     }
 
-    const dribbleCounts = data.reduce((acc: Record<string, number>, report) => {
-      if (!report.report) return acc
-      const moves = report.move
+    const dribbleCounts = data.reduce(
+      (acc: Record<string, Record<string, number>>, report) => {
+        if (!report.report) return acc
+        const moves = report.move
 
-      moves.forEach((move) => {
-        const code = move.code as moveIdKeys
-        if (!code) return
+        const isMadeShot = moves[moves.length - 1].code === 7
+        const objectToChange = acc[isMadeShot ? "madeShots" : "missedShots"]
 
-        if (!acc[code]) {
-          acc[code] = 1
-        } else {
-          acc[code] += 1
-        }
-      })
+        moves.slice(0, -1).forEach((move) => {
+          const code = move.code as moveIdKeys
+          if (!code) return
 
-      return acc
-    }, {})
+          if (!objectToChange[code]) {
+            objectToChange[code] = 1
+          } else {
+            objectToChange[code] += 1
+          }
+        })
 
-    const isEmpty = Object.keys(dribbleCounts).length === 0
+        return acc
+      },
+      { madeShots: {}, missedShots: {} },
+    )
+
+    const isEmpty =
+      Object.keys(dribbleCounts.madeShots).length === 0 && Object.keys(dribbleCounts.missedShots).length === 0
 
     return { data: !isEmpty ? dribbleCounts : null, error }
   } catch (error: any) {
@@ -147,11 +155,27 @@ export default async function PlayerDetailsView({ id }: Props) {
     getDribblesCounts(id),
   ])
 
+  const allDribbleCounts = { ...dribbleCounts.data?.madeShots, ...dribbleCounts.data?.missedShots }
+
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-10 lg:px-0">
       {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} />}
-      <div className="flex flex-col items-center justify-center gap-10 py-10 lg:flex-row">
-        {!!dribbleCounts.data && <DribblePieChart data={dribbleCounts.data as Record<moveIdKeys, number>} />}
+      <div>
+        {!!dribbleCounts.data && (
+          <div className="flex flex-col items-center py-10">
+            <div className="flex flex-col items-center justify-center gap-6 lg:flex-row">
+              <div>
+                <h2 className="pb-6 text-center text-2xl font-bold">Made Shots Count</h2>
+                <DribblePieChart data={dribbleCounts.data.madeShots} />
+              </div>
+              <div>
+                <h2 className="pb-6 text-center text-2xl font-bold">Missed Shots Count</h2>
+                <DribblePieChart data={dribbleCounts.data.missedShots} />
+              </div>
+            </div>
+            <DribblePieChartLegend data={allDribbleCounts} />
+          </div>
+        )}
         {!!comboPointsResponse.data?.length && <PointsComboBarChart data={comboPointsResponse.data} />}
       </div>
       {reportsResponse.data?.length ? (
