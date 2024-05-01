@@ -19,7 +19,7 @@ export default function PointsComboBarChart({ data }: Props) {
 
   useEffect(() => {
     // append the svg object to the body of the page
-    var svg = d3
+    const svg = d3
       .select(svgRef.current)
       .append("svg")
       .attr("width", width + margin.left + margin.right)
@@ -27,8 +27,10 @@ export default function PointsComboBarChart({ data }: Props) {
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
+    svg.selectAll("*").remove()
+
     // X axis
-    var x = d3
+    const x = d3
       .scaleBand()
       .range([0, width])
       .domain(
@@ -44,10 +46,11 @@ export default function PointsComboBarChart({ data }: Props) {
       .selectAll("text")
       .attr("transform", "translate(-10,0)rotate(-45)")
       .style("text-anchor", "end")
+      .style("font-size", "12px")
 
     // Add Y axis
-    var y = d3.scaleLinear().domain([0, 50]).range([height, 0])
-    svg.append("g").call(d3.axisLeft(y))
+    const y = d3.scaleLinear().domain([0, 50]).range([height, 0])
+    svg.append("g").call(d3.axisLeft(y)).style("font-size", "12px")
 
     // Bars
     svg
@@ -99,6 +102,63 @@ export default function PointsComboBarChart({ data }: Props) {
       .delay(function (d, i) {
         return i * 100
       })
+
+    const legendData = [
+      { name: "Points", color: "red", type: "line" },
+      { name: "Combos", color: PRIMARY_COLOR, type: "rect" },
+    ]
+
+    const legend = svg
+      .append("g")
+      .attr("font-size", 14)
+      .attr("font-weight", 500)
+      .style("fill", "white")
+      .attr("text-anchor", "middle") // Center alignment
+      .selectAll("g")
+      .data(legendData)
+      .enter()
+      .append("g")
+      .attr("transform", function (d, i) {
+        // Calculate offset for each legend item to be centered
+        const offset = width / 2 + (i - (legendData.length - 1) / 2) * 90
+        return `translate(${offset}, 0)`
+      })
+
+    legend.each(function (d) {
+      const sel = d3.select(this)
+      if (d.type === "rect") {
+        sel
+          .append("rect")
+          .attr("x", -9) // Centered relative to the text
+          .attr("width", 18)
+          .attr("height", 18)
+          .attr("fill", d.color)
+      } else if (d.type === "line") {
+        sel
+          .append("line")
+          .attr("x1", -9)
+          .attr("x2", 9)
+          .attr("y1", 9)
+          .attr("y2", 9)
+          .attr("stroke-width", 3)
+          .attr("stroke", d.color)
+      }
+    })
+
+    legend
+      .append("text")
+      .attr("x", 40) // Offset text to the right of the shape
+      .attr("y", 9) // Vertically center text with the shape
+      .attr("dy", "0.35em") // Small vertical adjustment
+      .text(function (d) {
+        return d.name
+      })
+
+    // Move the entire legend group up to place it above the chart
+    legend.attr("transform", (d, i) => {
+      const offset = width / 2 + (i - (legendData.length - 1) / 2) * 90
+      return `translate(${offset}, -10)` // Adjust y-position to move above the chart
+    })
   }, [data])
 
   return (

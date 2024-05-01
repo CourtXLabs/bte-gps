@@ -163,7 +163,7 @@ export default async function PlayerDetailsView({ id }: Props) {
       <div>
         {!!dribbleCounts.data && (
           <div className="flex flex-col items-center py-10">
-            <div className="flex flex-col items-center justify-center gap-6 lg:flex-row">
+            <div className="flex flex-col items-center justify-center gap-10 lg:flex-row">
               <div>
                 <h2 className="pb-6 text-center text-2xl font-bold">Made Shots Count</h2>
                 <DribblePieChart data={dribbleCounts.data.madeShots} />
