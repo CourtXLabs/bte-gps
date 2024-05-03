@@ -1,21 +1,20 @@
 import { moveIdKeys } from "@/constants"
 import { createClient } from "@/lib/supabase/server"
-import { ComboToPointData, ReportApiData, SimlePlayerData } from "@/types"
+import { ComboToPointData, DribbleChartApiData, ReportApiData, SequenceCombosData, SimlePlayerData } from "@/types"
 import { getTotalPointsFromMoves } from "@/utils/get-sequence-data"
 import { cookies } from "next/headers"
 import PlayerDashboardToolbar from "./PlayerDashboardToolbar"
 import ReportsList from "./ReportsList"
+import ComboTimesUsedChart from "./charts/ComboTimesUsedChart"
 import DribblePieChart from "./charts/DribblePieChart"
 import DribblePieChartLegend from "./charts/DribblePieChartLegend"
 import PointsComboBarChart from "./charts/PointsComboBarChart"
 
 function groupByReportId(data: Record<string, any>[]) {
   const grouped = data.reduce((acc: any, item: any) => {
-    // Handle cases where report might be null
     const reportId = item.report?.id
     if (!reportId) return acc
 
-    // Initialize the group if it does not already exist
     if (!acc[reportId]) {
       acc[reportId] = {
         report: item.report,
@@ -23,13 +22,67 @@ function groupByReportId(data: Record<string, any>[]) {
       }
     }
 
-    // Append all moves to the group
     acc[reportId].moves = acc[reportId].moves.concat(item.move)
 
     return acc
   }, {})
 
   return grouped
+}
+
+const groupMoves = (data: DribbleChartApiData[]) => {
+  const moveCounts = data.reduce(
+    (acc: Record<string, Record<string, number>>, report) => {
+      if (!report.report) return acc
+      const moves = report.move
+
+      const isMadeShot = moves[moves.length - 1].code === 7
+      const objectToChange = acc[isMadeShot ? "madeShots" : "missedShots"]
+
+      // Skip last move, which is the shot
+      moves.slice(0, -1).forEach((move: any) => {
+        const code = move.code as moveIdKeys
+        if (!code) return
+
+        if (!objectToChange[code]) {
+          objectToChange[code] = 1
+        } else {
+          objectToChange[code] += 1
+        }
+      })
+
+      return acc
+    },
+    { madeShots: {}, missedShots: {} },
+  )
+
+  const isEmpty = Object.keys(moveCounts.madeShots).length === 0 && Object.keys(moveCounts.missedShots).length === 0
+
+  return !isEmpty ? moveCounts : null
+}
+
+const groupSequences = (data: DribbleChartApiData[]) => {
+  const sequenceCounts = [] as SequenceCombosData[]
+
+  for (const { report, move } of data) {
+    if (!report) continue
+
+    const movesCount = Math.min(move.length - 1, 3)
+
+    const dribbles = move
+      .slice(0, movesCount)
+      .map((m) => m.code)
+      .join("")
+    if (dribbles.length === 0) continue
+
+    const comboIndex = sequenceCounts.findIndex((combo) => combo.sequence === dribbles)
+    if (comboIndex === -1) {
+      sequenceCounts.push({ sequence: dribbles, count: 1 })
+    } else {
+      sequenceCounts[comboIndex].count += 1
+    }
+  }
+  return sequenceCounts.sort((a, b) => a.sequence.localeCompare(b.sequence))
 }
 
 const getAllPlayers = async () => {
@@ -110,34 +163,10 @@ const getDribblesCounts = async (id: string) => {
       return { error: "No data found" }
     }
 
-    const dribbleCounts = data.reduce(
-      (acc: Record<string, Record<string, number>>, report) => {
-        if (!report.report) return acc
-        const moves = report.move
+    const moveCounts = groupMoves(data)
+    const sequenceCounts = groupSequences(data)
 
-        const isMadeShot = moves[moves.length - 1].code === 7
-        const objectToChange = acc[isMadeShot ? "madeShots" : "missedShots"]
-
-        moves.slice(0, -1).forEach((move) => {
-          const code = move.code as moveIdKeys
-          if (!code) return
-
-          if (!objectToChange[code]) {
-            objectToChange[code] = 1
-          } else {
-            objectToChange[code] += 1
-          }
-        })
-
-        return acc
-      },
-      { madeShots: {}, missedShots: {} },
-    )
-
-    const isEmpty =
-      Object.keys(dribbleCounts.madeShots).length === 0 && Object.keys(dribbleCounts.missedShots).length === 0
-
-    return { data: !isEmpty ? dribbleCounts : null, error }
+    return { moveCounts, sequenceCounts, error }
   } catch (error: any) {
     return { error: typeof error === "string" ? error : error.message || "An error occurred" }
   }
@@ -155,28 +184,31 @@ export default async function PlayerDetailsView({ id }: Props) {
     getDribblesCounts(id),
   ])
 
-  const allDribbleCounts = { ...dribbleCounts.data?.madeShots, ...dribbleCounts.data?.missedShots }
+  const allDribbleCounts = { ...dribbleCounts.moveCounts?.madeShots, ...dribbleCounts.moveCounts?.missedShots }
 
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-10 lg:px-0">
       {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} />}
       <div>
-        {!!dribbleCounts.data && (
+        {!!dribbleCounts.moveCounts && (
           <div className="flex flex-col items-center py-10">
             <div className="flex flex-col items-center justify-center gap-10 lg:flex-row">
               <div>
                 <h2 className="pb-6 text-center text-2xl font-bold">Made Shots Count</h2>
-                <DribblePieChart data={dribbleCounts.data.madeShots} />
+                <DribblePieChart data={dribbleCounts.moveCounts.madeShots} />
               </div>
               <div>
                 <h2 className="pb-6 text-center text-2xl font-bold">Missed Shots Count</h2>
-                <DribblePieChart data={dribbleCounts.data.missedShots} />
+                <DribblePieChart data={dribbleCounts.moveCounts.missedShots} />
               </div>
             </div>
             <DribblePieChartLegend data={allDribbleCounts} />
           </div>
         )}
-        {!!comboPointsResponse.data?.length && <PointsComboBarChart data={comboPointsResponse.data} />}
+        <div className="flex flex-col items-center justify-center gap-10 lg:flex-row">
+          {!!comboPointsResponse.data?.length && <PointsComboBarChart data={comboPointsResponse.data} />}
+          {!!dribbleCounts.sequenceCounts?.length && <ComboTimesUsedChart data={dribbleCounts.sequenceCounts} />}
+        </div>
       </div>
       {reportsResponse.data?.length ? (
         <ReportsList data={reportsResponse.data} />

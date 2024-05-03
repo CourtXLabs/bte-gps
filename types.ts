@@ -225,8 +225,22 @@ export interface ComboToPointData {
   points: number
 }
 
+export interface SequenceCombosData {
+  sequence: string
+  count: number
+}
+
 export interface MoveApiData {
   code: number
   x: number
   y: number
+}
+
+export interface DribbleChartApiData {
+  move: {
+    code: any
+  }[]
+  report: {
+    player_id: any
+  }[]
 }

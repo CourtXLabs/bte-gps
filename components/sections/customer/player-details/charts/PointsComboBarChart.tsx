@@ -15,7 +15,7 @@ interface Props {
 
 export default function PointsComboBarChart({ data }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null)
-  // set the dimensions and margins of the graph
+  const maxPoint = Math.round(Math.max(...data.map((d) => d.points)) * 1.25)
 
   useEffect(() => {
     // append the svg object to the body of the page
@@ -49,7 +49,7 @@ export default function PointsComboBarChart({ data }: Props) {
       .style("font-size", "12px")
 
     // Add Y axis
-    const y = d3.scaleLinear().domain([0, 50]).range([height, 0])
+    const y = d3.scaleLinear().domain([0, maxPoint]).range([height, 0])
     svg.append("g").call(d3.axisLeft(y)).style("font-size", "12px")
 
     // Grid lines
