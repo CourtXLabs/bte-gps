@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { MoveIds } from "./constants"
+import { MoveIds } from "./constants/misc"
 
 export interface Coordinates {
   x: number

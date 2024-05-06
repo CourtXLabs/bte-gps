@@ -1,7 +1,7 @@
-import { options } from "@/constants"
+import { dribbleOptions as options } from "@/constants/sequence-options"
 import { Coordinates, Option } from "@/types"
 import Image from "next/image"
-import { useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 
 interface Props {
   onClose: () => void
@@ -18,20 +18,26 @@ export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props)
     onClose()
   }
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-      onClose()
-    }
-  }
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        onClose()
+      }
+    },
+    [onClose],
+  )
 
-  const handleKeyShortcut = (event: KeyboardEvent) => {
-    const key = event.key
-    const option = options.find((option) => option.keyShortcut.toUpperCase() === key.toUpperCase())
-    if (option) {
-      onSubmit(option)
-      onClose()
-    }
-  }
+  const handleKeyShortcut = useCallback(
+    (event: KeyboardEvent) => {
+      const key = event.key
+      const option = options.find((option) => option.keyShortcut.toUpperCase() === key.toUpperCase())
+      if (option) {
+        onSubmit(option)
+        onClose()
+      }
+    },
+    [onSubmit, onClose],
+  )
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside)
@@ -40,7 +46,7 @@ export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props)
       document.removeEventListener("mousedown", handleClickOutside)
       document.removeEventListener("keydown", handleKeyShortcut)
     }
-  }, [onClose])
+  }, [onClose, handleClickOutside, handleKeyShortcut])
 
   return (
     <div

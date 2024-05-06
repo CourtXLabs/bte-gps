@@ -1,4 +1,4 @@
-import { DEFAULT_PAGE_SIZE } from "@/constants"
+import { DEFAULT_PAGE_SIZE } from "@/constants/misc"
 import { createClient } from "@/lib/supabase/server"
 import { PlayerApiData } from "@/types"
 import { cookies } from "next/headers"

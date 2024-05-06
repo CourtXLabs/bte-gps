@@ -71,7 +71,7 @@ export default function PlayersTable({ data, count }: Props) {
     newSearchParams.set("pageSize", tablePagination.pageSize.toString())
 
     router.push(`?${newSearchParams.toString()}`)
-  }, [tablePagination])
+  }, [tablePagination, router, searchParams])
 
   return (
     <div className="mt-6 space-y-4 lg:min-w-[600px]">

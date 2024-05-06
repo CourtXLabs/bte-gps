@@ -10,7 +10,7 @@ import { Button } from "./ui/button"
 import { Calendar } from "./ui/calendar"
 
 import { saveGame } from "@/app/add-game/actions"
-import { INITIAL_GAME_TYPE } from "@/constants"
+import { INITIAL_GAME_TYPE } from "@/constants/misc"
 import { createClient } from "@/lib/supabase/client"
 import { uploadImages } from "@/utils/upload-image-data"
 import { zodResolver } from "@hookform/resolvers/zod"

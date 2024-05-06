@@ -1,8 +1,10 @@
-import { moveIdKeys } from "@/constants"
+import { moveIdKeys } from "@/constants/misc"
 import { createClient } from "@/lib/supabase/server"
 import { ComboToPointData, DribbleChartApiData, ReportApiData, SequenceCombosData, SimlePlayerData } from "@/types"
 import { getTotalPointsFromMoves } from "@/utils/get-sequence-data"
+import { ArrowLeftIcon } from "lucide-react"
 import { cookies } from "next/headers"
+import Link from "next/link"
 import PlayerDashboardToolbar from "./PlayerDashboardToolbar"
 import ReportsList from "./ReportsList"
 import ComboTimesUsedChart from "./charts/ComboTimesUsedChart"
@@ -187,7 +189,10 @@ export default async function PlayerDetailsView({ id }: Props) {
   const allDribbleCounts = { ...dribbleCounts.moveCounts?.madeShots, ...dribbleCounts.moveCounts?.missedShots }
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-10 lg:px-0">
+    <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-10">
+      <Link href="/" className="mb-2 flex items-center gap-1">
+        <ArrowLeftIcon /> Players List
+      </Link>
       {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} />}
       <div>
         {!!dribbleCounts.moveCounts && (

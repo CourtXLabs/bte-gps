@@ -1,4 +1,4 @@
-import { PERMANENT_MARKER_CLASS, TEMPORARY_SELECTION_MARKER_CLASS } from "@/constants"
+import { PERMANENT_MARKER_CLASS, TEMPORARY_SELECTION_MARKER_CLASS } from "@/constants/court"
 import * as d3 from "d3"
 
 export const setUpCanvas = (svgElement: SVGSVGElement) => {

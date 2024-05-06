@@ -2,7 +2,7 @@
 
 import Autocomplete from "@/components/Autocomplete"
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { EMPTY_AUTOCOMPLETE_VALUE } from "@/constants"
+import { EMPTY_AUTOCOMPLETE_VALUE } from "@/constants/misc"
 import fetcher from "@/lib/swr/fetcher"
 import { SimlePlayerData, SimpleTeamData, dashboardToolbarFormSchema } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"

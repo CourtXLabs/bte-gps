@@ -1,6 +1,6 @@
 "use client"
 
-import { gameTypesPeriods } from "@/constants"
+import { gameTypesPeriods } from "@/constants/misc"
 import useBteStore from "@/stores/bteDataStore"
 import { downloadCsv } from "@/utils/get-csv-data"
 import { Button } from "../ui/button"

@@ -1,6 +1,6 @@
 "use client"
 
-import { COURT_WIDTH } from "@/constants"
+import { COURT_WIDTH } from "@/constants/court"
 import useBteStore from "@/stores/bteDataStore"
 import { Coordinates, Option, sequenceFormSchema } from "@/types"
 import { convertPixelsToCoordinates } from "@/utils/get-moves-data"

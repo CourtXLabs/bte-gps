@@ -1,31 +1,64 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useToast } from "@/components/ui/use-toast"
 import { createClient } from "@/lib/supabase/client"
-import { GPSApiData, ReportApiData, Sequence, SequenceApiData, TeamData } from "@/types"
+import { GPSApiData, ReportApiData, Sequence, SequenceApiData } from "@/types"
 import { downloadCsv } from "@/utils/get-csv-data"
 import { getTotalPoints } from "@/utils/get-sequence-data"
-import { DownloadIcon } from "@radix-ui/react-icons"
-import { useState } from "react"
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getFacetedRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+import { DownloadIcon } from "lucide-react"
 
 interface Props {
   data: ReportApiData[]
 }
 
+const TABLE_COLUMNS: ColumnDef<any>[] = [
+  {
+    id: "player",
+    size: 200,
+    header: () => <div>Individual Dribble %</div>,
+    cell: ({ row }) => <div className="w-[80px]">{row.getValue("player")}</div>,
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    id: "jersey",
+    size: 50,
+    header: () => <div>Jersey</div>,
+    cell: ({ row }) => <div className="w-[80px]">{row.getValue("jersey")}</div>,
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    id: "team",
+    size: 200,
+    header: () => <div>Team</div>,
+    cell: ({ row }) => <div className="w-[80px]">{row.getValue("team")}</div>,
+    enableSorting: false,
+    enableHiding: false,
+  },
+]
+
 export default function ReportsList({ data }: Props) {
   const { toast } = useToast()
   const supabase = createClient()
-  const [searchInput, setSearchInput] = useState("")
-  const [filteredData, setFilteredData] = useState<ReportApiData[]>(data)
 
-  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setSearchInput(value)
-    setFilteredData(data.filter((report) => report.name?.toLowerCase().includes(value.toLowerCase())))
-  }
+  const table = useReactTable({
+    data,
+    columns: TABLE_COLUMNS,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+  })
 
   const onDownloadReport = (id: string) => async () => {
     try {
@@ -76,27 +109,26 @@ export default function ReportsList({ data }: Props) {
 
   return (
     <div>
-      <Input placeholder="Search report..." className="w-full" value={searchInput} onChange={onChangeInput} />
-
-      <Table className="mt-6">
+      <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead className="w-[60px]">ID</TableHead>
-            <TableHead className="w-[200px]">Report Name</TableHead>
-            <TableHead className="w-[150px]">Player</TableHead>
-            <TableHead className="w-[80px]">Jersey</TableHead>
-            <TableHead className="w-[150px]">Team</TableHead>
-            <TableHead className="w-[18px]"></TableHead>
-          </TableRow>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead key={header.id} colSpan={header.colSpan}>
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                )
+              })}
+            </TableRow>
+          ))}
         </TableHeader>
         <TableBody>
-          {filteredData.map((report) => (
-            <TableRow key={report.id}>
-              <TableCell>{report.id}</TableCell>
-              <TableCell>{report.name}</TableCell>
-              <TableCell>{report.player_id?.name}</TableCell>
-              <TableCell>{report.player_id?.jersey}</TableCell>
-              <TableCell>{(report.player_id?.team_id as TeamData)?.name}</TableCell>
+          {data.map((report) => (
+            <TableRow key={report.id} className="cursor-pointer">
+              <TableCell>sssss</TableCell>
+              <TableCell>aa</TableCell>
+              <TableCell>cc</TableCell>
               <TableCell>
                 <Button
                   variant="link"

@@ -1,7 +1,7 @@
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { sequenceOptions } from "@/constants"
+import { sequenceOptions } from "@/constants/sequence-options"
 import { cn } from "@/lib/utils"
 import { sequenceFormSchema } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -39,6 +39,7 @@ export default function SequenceOptionsDialog({ open, onOpenChange, onSubmit }: 
       form.setValue("defender_pick_and_roll", "")
       form.setValue("ball_handler_pick_and_roll", "")
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disableLastTwoOptions])
 
   return (

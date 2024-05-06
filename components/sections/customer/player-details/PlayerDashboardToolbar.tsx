@@ -42,29 +42,35 @@ export default function PlayerDashboardToolbar({ players }: Props) {
   }
 
   return (
-    <Form {...form}>
-      <form className="flex items-center gap-3">
-        <FormField
-          control={form.control}
-          name="player"
-          render={() => (
-            <FormItem className="flex w-48 flex-col">
-              <FormLabel>Player</FormLabel>
-              <Autocomplete
-                value={activePlayerName}
-                isOpen={isPlayerAutocompleteOpen}
-                options={playersOptions}
-                placeholder="Select player"
-                searchPlaceholder="Search player..."
-                noDataMessage="No player found."
-                onToggle={onTogglePlayerAutocomplete}
-                onSelect={onSelectPlayer}
-              />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </form>
-    </Form>
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
+      <Form {...form}>
+        <form>
+          <FormField
+            control={form.control}
+            name="player"
+            render={() => (
+              <FormItem className="flex w-full flex-col sm:w-48">
+                <FormLabel>Player</FormLabel>
+                <Autocomplete
+                  value={activePlayerName}
+                  isOpen={isPlayerAutocompleteOpen}
+                  options={playersOptions}
+                  placeholder="Select player"
+                  searchPlaceholder="Search player..."
+                  noDataMessage="No player found."
+                  onToggle={onTogglePlayerAutocomplete}
+                  onSelect={onSelectPlayer}
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </form>
+      </Form>
+      {/* <Button variant="outline" className="sm:ml-auto">
+        Download CSV
+      </Button>
+      <Button>Download PDF</Button> */}
+    </div>
   )
 }

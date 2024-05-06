@@ -1,4 +1,4 @@
-import { moveIdToNames } from "@/constants"
+import { moveIdToNames } from "@/constants/misc"
 import useBteStore from "@/stores/bteDataStore"
 import { MoveSequence } from "@/types"
 import { CheckIcon, EditIcon, TrashIcon, XIcon } from "lucide-react"

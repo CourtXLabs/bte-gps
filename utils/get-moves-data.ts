@@ -1,5 +1,5 @@
 import { Sequence } from "@/types"
-import { COURT_HEIGHT, COURT_HEIGHT_FEET, COURT_WIDTH, COURT_WIDTH_FEET } from "../constants"
+import { COURT_HEIGHT, COURT_HEIGHT_FEET, COURT_WIDTH, COURT_WIDTH_FEET } from "../constants/court"
 
 //////////////////////////////////
 interface ConvertCoordiantesInput {

@@ -1,6 +1,6 @@
 "use client"
 
-import { moveIdKeys, moveIdToNames } from "@/constants"
+import { moveIdKeys, moveIdToNames } from "@/constants/misc"
 import { Colors } from "@/types"
 import * as d3 from "d3"
 import { useEffect, useRef } from "react"

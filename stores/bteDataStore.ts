@@ -1,4 +1,4 @@
-import { INITIAL_GAME_TYPE, gameTypesPeriods } from "@/constants"
+import { INITIAL_GAME_TYPE, gameTypesPeriods } from "@/constants/misc"
 import { DeleteMoveInput, EditMoveInput, Game, GameSaveData, GameTypes, MoveSequence, Sequence } from "@/types"
 import { create } from "zustand"
 

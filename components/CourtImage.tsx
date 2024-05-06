@@ -2,7 +2,7 @@
 
 "use client"
 
-import { PERMANENT_MARKER_CLASS, TEMPORARY_SELECTION_MARKER_CLASS } from "@/constants"
+import { PERMANENT_MARKER_CLASS, TEMPORARY_SELECTION_MARKER_CLASS } from "@/constants/court"
 import useBteStore from "@/stores/bteDataStore"
 import { Coordinates } from "@/types"
 import {
@@ -73,7 +73,7 @@ const CourtImage = ({ onClick, tempMarkerCoordinates, setTempMarkerCoordinates }
     } else {
       drawTempMarker({ x: tempMarkerCoordinates.x, y: tempMarkerCoordinates.y, svgElement: svgRef.current! })
     }
-  }, [tempMarkerCoordinates, drawTempMarker, removeMarker])
+  }, [tempMarkerCoordinates])
 
   return (
     <svg
