@@ -1,8 +1,8 @@
 import { GameSaveData, MoveSequence, Sequence } from "@/types"
 
-type CsvSaveData = Omit<GameSaveData, "name">
+type CsvSaveData = Omit<GameSaveData, "name" | "imageInfo">
 
-const getCsvData = ({ sequences, playerInfo, imageInfo }: CsvSaveData) => {
+const getCsvData = ({ sequences, playerInfo }: CsvSaveData) => {
   if (sequences.length === 0) {
     return ""
   }
@@ -51,9 +51,7 @@ const getCsvData = ({ sequences, playerInfo, imageInfo }: CsvSaveData) => {
     "BTE Value",
     "BTE Score",
     "Period",
-    "Images",
   ]
-  const commasForImageAlignment = new Array(columnHeaders.length).fill("").join(",")
 
   const rows = sequences.map((sequence, index) => {
     // For the first row, include playerInfo values, for others include empty strings
@@ -76,13 +74,12 @@ const getCsvData = ({ sequences, playerInfo, imageInfo }: CsvSaveData) => {
     return [...prefix, ...sequenceValues].join(",")
   })
 
-  const imageRows = imageInfo.map((img) => `${commasForImageAlignment}${img.url}`)
-  return [columnHeaders.join(","), ...rows, ...imageRows].join("\n")
+  return [columnHeaders.join(","), ...rows].join("\n")
 }
 
 export const downloadCsv = (dataToSave: GameSaveData) => {
-  const { sequences, name, playerInfo, imageInfo } = dataToSave
-  const csvData = getCsvData({ sequences, playerInfo, imageInfo })
+  const { sequences, name, playerInfo } = dataToSave
+  const csvData = getCsvData({ sequences, playerInfo })
   const blob = new Blob([csvData], { type: "text/csv" })
   const url = URL.createObjectURL(blob)
   const a = document.createElement("a")
