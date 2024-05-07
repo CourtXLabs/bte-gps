@@ -1,10 +1,13 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useToast } from "@/components/ui/use-toast"
+import { dribbleOptions, laneOptions } from "@/constants/sequence-options"
 import { createClient } from "@/lib/supabase/client"
-import { GPSApiData, ReportApiData, Sequence, SequenceApiData } from "@/types"
+import { GPSApiData, ReportApiData, SequenceApiData } from "@/types"
+import { getDribblesData, getSequenceBoxscoreData } from "@/utils/calculate-boxscore-data"
 import { downloadCsv } from "@/utils/get-csv-data"
 import { getTotalPoints } from "@/utils/get-sequence-data"
 import {
@@ -16,41 +19,100 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { DownloadIcon } from "lucide-react"
+import { useState } from "react"
 
 interface Props {
   data: ReportApiData[]
 }
 
-const TABLE_COLUMNS: ColumnDef<any>[] = [
-  {
-    id: "player",
-    size: 200,
-    header: () => <div>Individual Dribble %</div>,
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("player")}</div>,
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    id: "jersey",
-    size: 50,
-    header: () => <div>Jersey</div>,
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("jersey")}</div>,
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    id: "team",
-    size: 200,
-    header: () => <div>Team</div>,
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("team")}</div>,
-    enableSorting: false,
-    enableHiding: false,
-  },
-]
+const getIndividualDribblePercent = (
+  dribbleCode: string,
+  dribbleTypes: Record<string, number>,
+  totalDribbles: number,
+) => {
+  return ((dribbleTypes[dribbleCode] || 0) / totalDribbles) * 100
+}
 
 export default function ReportsList({ data }: Props) {
   const { toast } = useToast()
   const supabase = createClient()
+
+  const { totalDribbles, dribbleTypes } = getDribblesData(data[0])
+  getSequenceBoxscoreData(data[0])
+
+  const [activeData, setActiveData] = useState({
+    individualDribble: dribbleOptions[0].keyShortcut,
+    lane: laneOptions[0].value,
+    playCode: "",
+    shootingOffDribbles: "",
+    shootingStationary: "",
+    frequency: "",
+    initialDirection: "",
+    counterDirection: "",
+    lastHand: "",
+  })
+
+  const onChangeActiveData = (key: string, value: string) => {
+    setActiveData((prev) => ({
+      ...prev,
+      [key]: value,
+    }))
+  }
+
+  const handleValueChange = (key: string) => (value: string) => {
+    onChangeActiveData(key, value)
+  }
+
+  const TABLE_COLUMNS: ColumnDef<any>[] = [
+    {
+      id: "individualDribble",
+      header: () => (
+        <div className="flex flex-col gap-1 py-4">
+          <span className="text-white">Individual Dribble %</span>
+          <Select value={activeData.individualDribble} onValueChange={handleValueChange("individualDribble")}>
+            <SelectTrigger className="h-10">
+              <SelectValue placeholder="Dribble Type" />
+            </SelectTrigger>
+            <SelectContent side="top">
+              {dribbleOptions.flatMap((dribbleOption) =>
+                dribbleOption.isFinalMove ? (
+                  []
+                ) : (
+                  <SelectItem key={dribbleOption.keyShortcut} value={`${dribbleOption.keyShortcut}`}>
+                    {dribbleOption.name}
+                  </SelectItem>
+                ),
+              )}
+            </SelectContent>
+          </Select>
+        </div>
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      id: "lane",
+      header: () => (
+        <div className="flex flex-col gap-1 py-4">
+          <span className="text-white">Lane Dribble %</span>
+          <Select value={activeData.lane} onValueChange={handleValueChange("lane")}>
+            <SelectTrigger className="h-10">
+              <SelectValue placeholder="Lane" />
+            </SelectTrigger>
+            <SelectContent side="top">
+              {laneOptions.map((laneOption) => (
+                <SelectItem key={laneOption.value} value={laneOption.value}>
+                  {laneOption.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+  ]
 
   const table = useReactTable({
     data,
@@ -80,7 +142,7 @@ export default function ReportsList({ data }: Props) {
         throw new Error("No sequences found")
       }
 
-      const formattedSequencesData: Sequence[] = sequencesData?.map((sequence) => ({
+      const formattedSequencesData = sequencesData?.map((sequence) => ({
         ...sequence,
         moves: sequence.move,
       }))
@@ -90,7 +152,7 @@ export default function ReportsList({ data }: Props) {
         name: report.name || `${report.game_id?.away_team_id?.name} @ ${report.game_id?.home_team_id?.name}`,
         playerInfo: {
           name: report.player_id?.name || "",
-          points: getTotalPoints(formattedSequencesData),
+          points: getTotalPoints(formattedSequencesData as any),
           game: `${report.game_id?.away_team_id?.name} @ ${report.game_id?.home_team_id?.name}`,
           date: report.game_id?.date?.split("T")[0] || "",
         },
@@ -98,7 +160,7 @@ export default function ReportsList({ data }: Props) {
         error: null,
       }
 
-      downloadCsv(dataToDownload)
+      downloadCsv(dataToDownload as any)
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -125,10 +187,11 @@ export default function ReportsList({ data }: Props) {
         </TableHeader>
         <TableBody>
           {data.map((report) => (
-            <TableRow key={report.id} className="cursor-pointer">
-              <TableCell>sssss</TableCell>
-              <TableCell>aa</TableCell>
-              <TableCell>cc</TableCell>
+            <TableRow key={report.id}>
+              <TableCell>
+                {getIndividualDribblePercent(activeData.individualDribble, dribbleTypes, totalDribbles).toFixed(1)}%
+              </TableCell>
+              <TableCell>0</TableCell>
               <TableCell>
                 <Button
                   variant="link"

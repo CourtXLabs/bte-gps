@@ -107,8 +107,11 @@ const getReports = async (id: string) => {
   try {
     const { data, error } = await supabase
       .from("report")
-      .select("id, name, player_id(name, jersey, team_id(name)), game_id(date, home_team_id(name), away_team_id(name))")
+      .select(
+        "id, name, player_id(name, jersey, team_id(name)), game_id(date, home_team_id(name), away_team_id(name)), sequence(*, move(code, x, y))",
+      )
       .eq("player_id", id)
+      .range(0, 0)
 
     return { data: data as unknown as ReportApiData[], error }
   } catch (error: any) {

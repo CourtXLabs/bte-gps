@@ -169,6 +169,7 @@ export interface ReportApiData {
   name?: string
   player_id: PlayerApiData
   game_id: GameApiData
+  sequence: SequenceApiData[]
 }
 
 export interface GameApiData {
@@ -179,7 +180,7 @@ export interface GameApiData {
 }
 
 export interface SequenceApiData extends Sequence {
-  move: MoveSequence[]
+  move: MoveApiData[]
 }
 
 export interface GPSApiData {

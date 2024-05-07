@@ -319,3 +319,9 @@ export const dribbleOptions = [
     isFinalMove: true,
   },
 ] as Option[]
+
+export const laneOptions = [
+  { value: "left", label: "Left" },
+  { value: "middle", label: "Middle" },
+  { value: "right", label: "Right" },
+]
