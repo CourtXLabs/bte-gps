@@ -136,6 +136,7 @@ const useBteStore = create<BteDataStore>()((set) => ({
   resetGame: () =>
     set({
       activePeriod: 1,
+      activeSequenceIndex: 0,
       activeSequenceMoves: [] as MoveSequence[],
       sequences: [] as Sequence[],
       game: {

@@ -1,7 +1,9 @@
 import * as d3 from "d3"
 
+import { COURT_HEIGHT, COURT_WIDTH } from "@/constants/court"
 import { MoveSequence, Sequence } from "@/types"
 import { drawLineBetweenMarkers, drawPermanentMarker } from "./draw-move-marker"
+import { convertCoordinatesToPixels } from "./get-moves-data"
 import { generateRandomString } from "./misc"
 
 function base64ToBlob(base64: string, contentType: string) {
@@ -40,24 +42,32 @@ const drawPeriodMovesToCanvas = (tempSvgElement: SVGSVGElement, periodMoves: Mov
   svg
     .append("image")
     .attr("href", "court.webp")
-    .attr("width", 850)
-    .attr("height", 458)
+    .attr("width", COURT_WIDTH)
+    .attr("height", COURT_HEIGHT)
     .attr("class", "background-image")
   periodMoves.forEach((moveSequence) => {
     moveSequence.forEach((move, index) => {
       const { x, y, uid, color, shape } = move
+      const { x: currentMovePixelsX, y: currentMovePixelsY } = convertCoordinatesToPixels({ x, y })
       if (index > 0) {
         const fromCoords = moveSequence[index - 1]
-        const toCoords = moveSequence[index]
+        const { x: fromCoordsPixelsX, y: fromCoordsPixelsY } = convertCoordinatesToPixels(fromCoords)
         drawLineBetweenMarkers({
           svgElement: tempSvgElement,
-          fromCoords,
-          toCoords,
+          fromCoords: { x: fromCoordsPixelsX, y: fromCoordsPixelsY },
+          toCoords: { x: currentMovePixelsX, y: currentMovePixelsY },
           uid: generateRandomString(),
         })
-        drawPermanentMarker({ svgElement: tempSvgElement, ...fromCoords })
+        drawPermanentMarker({ svgElement: tempSvgElement, ...fromCoords, x: fromCoordsPixelsX, y: fromCoordsPixelsY })
       }
-      drawPermanentMarker({ svgElement: tempSvgElement, x, y, uid, color, shape })
+      drawPermanentMarker({
+        svgElement: tempSvgElement,
+        uid,
+        color,
+        shape,
+        x: currentMovePixelsX,
+        y: currentMovePixelsY,
+      })
     })
   })
 }
@@ -127,8 +137,8 @@ export const constructSequencesSvg = async (sequences: Sequence[]) => {
   const movesByPeriods = getMovesByPeriods(sequences)
   const tempSvgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg")
   tempSvgElement.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink")
-  tempSvgElement.setAttribute("width", "850")
-  tempSvgElement.setAttribute("height", "458")
+  tempSvgElement.setAttribute("width", `${COURT_WIDTH}`)
+  tempSvgElement.setAttribute("height", `${COURT_HEIGHT}`)
   tempSvgElement.style.display = "none"
   document.body.appendChild(tempSvgElement)
 
