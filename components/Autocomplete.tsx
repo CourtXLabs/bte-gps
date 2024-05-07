@@ -18,6 +18,7 @@ interface Props {
   searchPlaceholder?: string
   noDataMessage?: string
   onAddNew?: (value: string) => void
+  className?: string
 }
 
 export default function Autocomplete({
@@ -30,6 +31,7 @@ export default function Autocomplete({
   searchPlaceholder,
   noDataMessage,
   onAddNew,
+  className,
 }: Props) {
   const handleSelect = (id: string) => () => onSelect(id)
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -47,14 +49,14 @@ export default function Autocomplete({
           <Button
             variant="outline"
             role="combobox"
-            className={cn("justify-between font-normal", !value && "text-muted-foreground")}
+            className={cn("justify-between font-normal", !value && "text-muted-foreground", className)}
           >
-            {value || placeholder || "Select data"}
+            <span className="overflow-hidden">{value || placeholder || "Select data"}</span>
             <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </FormControl>
       </PopoverTrigger>
-      <PopoverContent className="p-0">
+      <PopoverContent className="w-96 p-0">
         <Command>
           <CommandInput placeholder={searchPlaceholder || "Search..."} className="h-9" ref={searchInputRef} />
           <CommandEmpty>

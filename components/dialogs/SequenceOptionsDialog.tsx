@@ -1,14 +1,13 @@
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Form } from "@/components/ui/form"
 import { sequenceOptions } from "@/constants/sequence-options"
-import { cn } from "@/lib/utils"
 import { sequenceFormSchema } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "../ui/button"
+import SequenceOptionsItem from "./SequenceOptionsItem"
 
 interface Props {
   open: boolean
@@ -24,7 +23,7 @@ export default function SequenceOptionsDialog({ open, onOpenChange, onSubmit }: 
       initial_direction: "",
       counter_direction: "",
       last_dribble_type: "",
-      type_of_shot: "",
+      type_of_shot: "CS3",
       pick_and_roll: "",
       defender_pick_and_roll: "",
       ball_handler_pick_and_roll: "",
@@ -33,6 +32,10 @@ export default function SequenceOptionsDialog({ open, onOpenChange, onSubmit }: 
 
   const pickAndRollValue = form.watch("pick_and_roll")
   const disableLastTwoOptions = !pickAndRollValue || pickAndRollValue === "NPNR"
+
+  const onSelectValue = (key: any, value: string) => {
+    form.setValue(key, value)
+  }
 
   useEffect(() => {
     if (disableLastTwoOptions) {
@@ -52,38 +55,12 @@ export default function SequenceOptionsDialog({ open, onOpenChange, onSubmit }: 
             </DialogHeader>
             <div className="grid grid-cols-2 gap-x-8 gap-y-6 border-b-2 border-accent pb-6">
               {sequenceOptions.map((sequenceInput) => (
-                <FormField
+                <SequenceOptionsItem
                   key={sequenceInput.name}
+                  sequenceInput={sequenceInput}
                   control={form.control}
-                  name={sequenceInput.name}
-                  render={({ field }) => {
-                    const isDisabled =
-                      sequenceInput.name === "defender_pick_and_roll" ||
-                      sequenceInput.name === "ball_handler_pick_and_roll"
-                        ? disableLastTwoOptions
-                        : false
-
-                    return (
-                      <FormItem className={cn({ "opacity-50": isDisabled, "pointer-events-none": isDisabled })}>
-                        <FormLabel>{sequenceInput.label}</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder={sequenceInput.label} />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {sequenceInput.options.map((sequence) => (
-                              <SelectItem key={sequence.value} value={sequence.value} disabled={isDisabled}>
-                                {sequence.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )
-                  }}
+                  disableLastTwoOptions={disableLastTwoOptions}
+                  onSelectValue={onSelectValue}
                 />
               ))}
             </div>

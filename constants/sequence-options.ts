@@ -245,6 +245,7 @@ export const BALL_HANDLER_PICK_AND_ROLL = {
     { value: "split", label: "Split" },
     { value: "snake", label: "Snake" },
     { value: "twist", label: "Twist" },
+    { value: "switch", label: "Switch" },
     { value: "reject", label: "Reject" },
     { value: "re_screen", label: "Re-screen" },
   ],
