@@ -21,6 +21,7 @@ export const PLAY_CODE = {
     { value: "PASS", label: "Pass (PASS) - Attack movement directly off of the pass" },
     { value: "PNR", label: "Pick and Roll (PNR) - Screen set for the ball handler" },
     { value: "REB", label: "Rebound (REB) - Grabbing the ball off of a missed shot" },
+    { value: "PU", label: "Post Up (PU) - Setting up on offense near the lower block" },
   ],
 } as SequenceInput
 
@@ -264,11 +265,19 @@ export const sequenceOptions: SequenceInput[] = [
 
 export const dribbleOptions = [
   {
+    id: 0,
+    keyShortcut: "0",
+    name: "Start / Stand",
+    isFirstMove: true,
+    shape: "square",
+  },
+  {
     id: 1,
     image: "/DribbleTree1.png",
     keyShortcut: "1",
     name: "Pound",
     color: Colors.POUND,
+    shape: "circle",
   },
   {
     id: 2,
@@ -276,6 +285,7 @@ export const dribbleOptions = [
     keyShortcut: "2",
     name: "Cross",
     color: Colors.CROSSOVER,
+    shape: "circle",
   },
   {
     id: 3,
@@ -283,6 +293,7 @@ export const dribbleOptions = [
     keyShortcut: "3",
     name: "In + Out",
     color: Colors.IN_AND_OUT,
+    shape: "circle",
   },
   {
     id: 4,
@@ -290,6 +301,7 @@ export const dribbleOptions = [
     keyShortcut: "4",
     name: "Between The Legs",
     color: Colors.BETWEEN_THE_LEGS,
+    shape: "circle",
   },
   {
     id: 5,
@@ -297,6 +309,7 @@ export const dribbleOptions = [
     keyShortcut: "5",
     name: "Behind The Back",
     color: Colors.BEHIND_THE_BACK,
+    shape: "circle",
   },
   {
     id: 6,
@@ -304,6 +317,7 @@ export const dribbleOptions = [
     keyShortcut: "6",
     name: "Spin",
     color: Colors.SPIN,
+    shape: "circle",
   },
   {
     id: 7,
@@ -311,12 +325,14 @@ export const dribbleOptions = [
     name: "Made Shot",
     color: "#000",
     isFinalMove: true,
+    shape: "circle",
   },
   {
     id: 8,
     keyShortcut: "B",
     name: "Missed Shot",
     isFinalMove: true,
+    shape: "circle",
   },
 ] as Option[]
 

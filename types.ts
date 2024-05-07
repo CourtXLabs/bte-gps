@@ -21,7 +21,9 @@ export interface Option {
   keyShortcut: string
   name: string
   color?: string
+  shape?: "circle" | "square"
   isFinalMove?: boolean
+  isFirstMove?: boolean
 }
 
 export interface SequenceInput {
@@ -50,6 +52,7 @@ export interface MoveSequence {
   x: number
   y: number
   color?: string
+  shape?: "circle" | "square"
 }
 
 export interface Sequence {

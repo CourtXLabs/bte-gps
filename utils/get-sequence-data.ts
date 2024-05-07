@@ -1,4 +1,5 @@
 import { MoveApiData, MoveSequence, Sequence } from "@/types"
+import { getIsDribble } from "./get-is-dribble"
 import { getLanes } from "./get-moves-data"
 import {
   getIsInLeft3PointArea,
@@ -23,8 +24,12 @@ const getBteScore = (bteValue: number, moves: MoveSequence[]) => {
   const lastMove = moves[moves.length - 1]
   const isMadeShot = lastMove.moveId === 7
   if (!isMadeShot) return 0 // Missed shot -> view CourtDropdown.tsx options
-  const sumOfFirstThreeDribbles = moves.slice(0, moves.length - 1).reduce((currentScore, move, index) => {
-    if (index > 2 || index) return currentScore
+
+  let dribblesCounted = 0
+  const sumOfFirstThreeDribbles = moves.reduce((currentScore, move) => {
+    if (dribblesCounted > 2) return currentScore
+    if (!getIsDribble(move.moveId)) return currentScore
+    dribblesCounted++
     return currentScore + move.moveId
   }, 0)
   return sumOfFirstThreeDribbles * bteValue
@@ -53,17 +58,23 @@ export const getTotalPointsFromMoves = (moves: MoveApiData[]) => {
   }, 0)
 }
 
+const getBteCombo = (moves: MoveSequence[]) => {
+  const bteComboArray = []
+
+  for (const move of moves) {
+    if (bteComboArray.length === 3) break
+    if (!getIsDribble(move.moveId)) continue
+    bteComboArray.push(move.moveId)
+  }
+
+  return bteComboArray.join("")
+}
+
 export const getSequenceData = (sequences: Sequence[], addedReportId: number) => {
   return sequences.map((sequence) => {
     const { moves, ...rest } = sequence
-    const fullCombo = moves
-      .slice(0, moves.length - 1) // because the last move is the shot, which is not part of the dribble combo
-      .map((move) => move.moveId)
-      .join("")
-    const bteCombo = moves
-      .slice(0, Math.min(3, moves.length - 1))
-      .map((move) => move.moveId)
-      .join("")
+    const fullCombo = moves.flatMap((move) => (getIsDribble(move.moveId) ? move.moveId : [])).join("")
+    const bteCombo = getBteCombo(moves)
 
     const { leftLaneMoves, middleLaneMoves, rightLaneMoves } = getLanes(sequence)
     const lastMove = moves[moves.length - 1]

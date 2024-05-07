@@ -44,26 +44,30 @@ const CourtImage = ({ onClick, tempMarkerCoordinates, setTempMarkerCoordinates }
     const movesToShow =
       activeSequenceIndex === sequences.length ? activeSequenceMoves : sequences[activeSequenceIndex]?.moves
     movesToShow?.forEach((move, index) => {
-      const { color, uid } = move
+      const { color, uid, shape } = move
       const { x, y } = convertCoordinatesToPixels(move)
+
       if (index > 0) {
         const previousMove = movesToShow[index - 1]
         const { x: previousMoveX, y: previousMoveY } = convertCoordinatesToPixels(previousMove)
+
         drawLineBetweenMarkers({
           fromCoords: { x: previousMoveX, y: previousMoveY },
           toCoords: { x, y },
           uid,
           svgElement: svgRef.current,
         })
+
         drawPermanentMarker({
           x: previousMoveX,
           y: previousMoveY,
           color: previousMove.color,
           uid: previousMove.uid,
           svgElement: svgRef.current,
+          shape: previousMove.shape,
         }) // needs to be redrawn so that the marker stays on top of the line
       }
-      drawPermanentMarker({ x, y, color, uid, svgElement: svgRef.current })
+      drawPermanentMarker({ x, y, color, uid, svgElement: svgRef.current, shape })
     })
   }, [activeSequenceMoves, activeSequenceIndex, sequences])
 

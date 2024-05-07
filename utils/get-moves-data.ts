@@ -1,5 +1,6 @@
-import { Sequence } from "@/types"
+import { MoveApiData, Sequence } from "@/types"
 import { COURT_HEIGHT, COURT_HEIGHT_FEET, COURT_WIDTH, COURT_WIDTH_FEET } from "../constants/court"
+import { getIsDribble } from "./get-is-dribble"
 
 //////////////////////////////////
 interface ConvertCoordiantesInput {
@@ -57,7 +58,8 @@ export const getLanes = (sequence: Sequence) => {
   const rightLaneMoves: number[] = []
 
   const moves = sequence.moves
-  moves.slice(0, moves.length - 1).forEach(({ y, moveId }) => {
+  moves.forEach(({ y, moveId }) => {
+    if (!getIsDribble(moveId)) return
     if (getIsLeftLane(y)) {
       leftLaneMoves.push(moveId)
     } else if (getIsMiddleLane(y)) {
@@ -67,5 +69,20 @@ export const getLanes = (sequence: Sequence) => {
     }
   })
   return { leftLaneMoves, middleLaneMoves, rightLaneMoves }
+}
+
+export const getFirstThreeDribbles = (moves: MoveApiData[]) => {
+  const dribbles = []
+
+  for (const move of moves) {
+    if (getIsDribble(move.code)) {
+      dribbles.push(move.code)
+    }
+    if (dribbles.length === 3) {
+      break
+    }
+  }
+
+  return dribbles
 }
 //////////////////////////////////

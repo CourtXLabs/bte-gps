@@ -1,6 +1,69 @@
 import { PERMANENT_MARKER_CLASS, TEMPORARY_SELECTION_MARKER_CLASS } from "@/constants/court"
 import * as d3 from "d3"
 
+const drawCircle = ({
+  svg,
+  x,
+  y,
+  uid,
+  radius = 6,
+  fill = "transparent",
+  stroke = "black",
+  strokeWidth = 2,
+}: {
+  svg: d3.Selection<SVGSVGElement | null, unknown, null, undefined>
+  x: number
+  y: number
+  uid: string
+  radius?: number
+  fill?: string
+  stroke?: string
+  strokeWidth?: number
+}) => {
+  return svg
+    .append("circle")
+    .attr("cx", x)
+    .attr("cy", y)
+    .attr("r", radius)
+    .attr("fill", fill)
+    .attr("stroke", stroke)
+    .attr("stroke-width", strokeWidth)
+    .attr("id", `marker-${uid}`)
+    .attr("class", PERMANENT_MARKER_CLASS)
+}
+
+const drawSquare = ({
+  svg,
+  x,
+  y,
+  uid,
+  size = 12,
+  fill = "transparent",
+  stroke = "black",
+  strokeWidth = 2,
+}: {
+  svg: d3.Selection<SVGSVGElement | null, unknown, null, undefined>
+  x: number
+  y: number
+  uid: string
+  size?: number
+  fill?: string
+  stroke?: string
+  strokeWidth?: number
+}) => {
+  return svg
+    .append("rect")
+    .attr("x", x - size / 2) // Adjust x to center the square based on its size
+    .attr("y", y - size / 2) // Adjust y to center the square based on its size
+    .attr("width", size)
+    .attr("height", size)
+    .attr("fill", fill)
+    .attr("stroke", stroke)
+    .attr("stroke-width", strokeWidth)
+    .attr("id", `marker-${uid}`)
+    .attr("class", PERMANENT_MARKER_CLASS)
+}
+
 export const setUpCanvas = (svgElement: SVGSVGElement) => {
   const svg = d3.select(svgElement)
   svg.attr("width", 850).attr("height", 458)
@@ -19,24 +82,22 @@ export const drawPermanentMarker = ({
   y,
   uid,
   color,
+  shape = "circle",
 }: {
   svgElement: SVGSVGElement | null
   x: number
   y: number
   color?: string
   uid: string
+  shape?: "circle" | "square"
 }) => {
   const svg = d3.select(svgElement)
-  return svg
-    .append("circle")
-    .attr("cx", x)
-    .attr("cy", y)
-    .attr("r", 6)
-    .attr("fill", color || "transparent")
-    .attr("stroke", "black")
-    .attr("stroke-width", 2)
-    .attr("id", `marker-${uid}`)
-    .attr("class", PERMANENT_MARKER_CLASS)
+  if (shape === "circle") {
+    drawCircle({ svg, x, y, uid, fill: color || "transparent" })
+  }
+  if (shape === "square") {
+    drawSquare({ svg, x, y, uid, fill: color || "transparent" })
+  }
 }
 
 export const drawLineBetweenMarkers = ({

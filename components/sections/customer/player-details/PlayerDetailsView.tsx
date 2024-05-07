@@ -1,6 +1,15 @@
 import { moveIdKeys } from "@/constants/misc"
 import { createClient } from "@/lib/supabase/server"
-import { ComboToPointData, DribbleChartApiData, ReportApiData, SequenceCombosData, SimlePlayerData } from "@/types"
+import {
+  ComboToPointData,
+  DribbleChartApiData,
+  MoveApiData,
+  ReportApiData,
+  SequenceCombosData,
+  SimlePlayerData,
+} from "@/types"
+import { getIsDribble } from "@/utils/get-is-dribble"
+import { getFirstThreeDribbles } from "@/utils/get-moves-data"
 import { getTotalPointsFromMoves } from "@/utils/get-sequence-data"
 import { ArrowLeftIcon } from "lucide-react"
 import { cookies } from "next/headers"
@@ -41,10 +50,10 @@ const groupMoves = (data: DribbleChartApiData[]) => {
       const isMadeShot = moves[moves.length - 1].code === 7
       const objectToChange = acc[isMadeShot ? "madeShots" : "missedShots"]
 
-      // Skip last move, which is the shot
-      moves.slice(0, -1).forEach((move: any) => {
+      moves.forEach((move: any) => {
         const code = move.code as moveIdKeys
         if (!code) return
+        if (!getIsDribble(code)) return
 
         if (!objectToChange[code]) {
           objectToChange[code] = 1
@@ -69,12 +78,7 @@ const groupSequences = (data: DribbleChartApiData[]) => {
   for (const { report, move } of data) {
     if (!report) continue
 
-    const movesCount = Math.min(move.length - 1, 3)
-
-    const dribbles = move
-      .slice(0, movesCount)
-      .map((m) => m.code)
-      .join("")
+    const dribbles = getFirstThreeDribbles(move as MoveApiData[]).join("")
     if (dribbles.length === 0) continue
 
     const comboIndex = sequenceCounts.findIndex((combo) => combo.sequence === dribbles)

@@ -38,7 +38,7 @@ const CourtCanvas = () => {
   const onSubmitMove = (option: Option) => {
     const { x, y } = convertPixelsToCoordinates({ ...tempMarkerCoordinates! })
     const uid = generateRandomString()
-    addMoveToActiveSequence({ x, y, uid, moveId: option.id, color: option.color })
+    addMoveToActiveSequence({ x, y, uid, moveId: option.id, color: option.color, shape: option.shape })
 
     if (option.isFinalMove) {
       toggleSequenceOptionsDialog()

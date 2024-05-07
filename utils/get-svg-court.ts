@@ -45,7 +45,7 @@ const drawPeriodMovesToCanvas = (tempSvgElement: SVGSVGElement, periodMoves: Mov
     .attr("class", "background-image")
   periodMoves.forEach((moveSequence) => {
     moveSequence.forEach((move, index) => {
-      const { x, y, uid, color } = move
+      const { x, y, uid, color, shape } = move
       if (index > 0) {
         const fromCoords = moveSequence[index - 1]
         const toCoords = moveSequence[index]
@@ -57,7 +57,7 @@ const drawPeriodMovesToCanvas = (tempSvgElement: SVGSVGElement, periodMoves: Mov
         })
         drawPermanentMarker({ svgElement: tempSvgElement, ...fromCoords })
       }
-      drawPermanentMarker({ svgElement: tempSvgElement, x, y, uid, color })
+      drawPermanentMarker({ svgElement: tempSvgElement, x, y, uid, color, shape })
     })
   })
 }

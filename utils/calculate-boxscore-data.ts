@@ -1,5 +1,5 @@
 import { ReportApiData } from "@/types"
-import { getIsShot } from "./get-is-shot"
+import { getIsDribble } from "./get-is-dribble"
 
 export const getDribblesData = (data: ReportApiData) => {
   //   Percent of dribble type
@@ -8,7 +8,7 @@ export const getDribblesData = (data: ReportApiData) => {
 
   for (const sequence of data.sequence) {
     for (const move of sequence.move) {
-      if (!getIsShot(move.code)) {
+      if (getIsDribble(move.code)) {
         totalDribbles++
         if (!dribbleTypes[move.code]) {
           dribbleTypes[move.code] = 1
