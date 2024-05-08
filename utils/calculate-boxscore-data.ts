@@ -28,7 +28,7 @@ export const getSequenceBoxscoreData = (data: ReportApiData) => {
   let totalSequence = 0
 
   // const sequenceData = {
-  //     individualDribble: dribbleOptions[0].keyShortcut,
+  //     individualDribble: dribbleOptions[0].uid,
   //     lane: laneOptions[0].value,
   //     playCode: "",
   //     shootingOffDribbles: "",

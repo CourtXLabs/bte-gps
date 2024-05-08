@@ -36,8 +36,6 @@ export default function SequenceOptionsItem({ sequenceInput, control, disableLas
 
         const activeLabel = sequenceInput.options.find((option) => option.value === field.value)?.label
 
-        console.log({ activeLabel })
-
         return (
           <FormItem className={cn({ "opacity-50": isDisabled, "pointer-events-none": isDisabled })}>
             <FormLabel>{sequenceInput.label}</FormLabel>

@@ -1,6 +1,6 @@
 "use client"
 
-import { moveIdKeys, moveIdToNames } from "@/constants/misc"
+import { MoveIds, moveIdToNames } from "@/constants/misc"
 import { Colors } from "@/types"
 import * as d3 from "d3"
 import { useEffect, useRef } from "react"
@@ -17,19 +17,22 @@ const colors = [
   Colors.IN_AND_OUT,
   Colors.BETWEEN_THE_LEGS,
   Colors.BEHIND_THE_BACK,
+  Colors.HALF_SPIN,
   Colors.SPIN,
 ]
 
 interface Props {
-  data: Record<moveIdKeys, number>
+  data: Record<string, number>
 }
 
 export default function DribblePieChart({ data }: Props) {
-  const formattedData = Object.entries(data).flatMap(([key, value]) => ({
-    key,
-    name: moveIdToNames[key as moveIdKeys],
-    value,
-  }))
+  const formattedData = Object.entries(data)
+    .flatMap(([key, value]) => ({
+      key,
+      name: moveIdToNames[key as MoveIds],
+      value,
+    }))
+    .sort((a, b) => a.key.localeCompare(b.key))
 
   const svgRef = useRef<SVGSVGElement | null>(null)
 
@@ -73,6 +76,7 @@ export default function DribblePieChart({ data }: Props) {
       })
       .attr("text-anchor", "middle") // Center text horizontally
       .each(function (d: any) {
+        if (d.data.value === 0) return
         const el = d3.select(this)
         const percent = ((d.endAngle - d.startAngle) / (2 * Math.PI)) * 100
         // Append first line (value)
@@ -96,6 +100,7 @@ export default function DribblePieChart({ data }: Props) {
       .attr("fill", "none")
       // @ts-ignore
       .attr("points", function (d: any) {
+        if (d.data.value === 0) return
         const pos = arrowArc.centroid(d)
         const posInner = arc.centroid(d)
         const midAngle = (d.startAngle + d.endAngle) / 2

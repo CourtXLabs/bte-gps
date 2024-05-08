@@ -1,4 +1,4 @@
-import { moveIdKeys } from "@/constants/misc"
+import { MoveIds, idToUid, moveUids } from "@/constants/misc"
 import { createClient } from "@/lib/supabase/server"
 import {
   ComboToPointData,
@@ -50,21 +50,20 @@ const groupMoves = (data: DribbleChartApiData[]) => {
       const isMadeShot = moves[moves.length - 1].code === 7
       const objectToChange = acc[isMadeShot ? "madeShots" : "missedShots"]
 
-      moves.forEach((move: any) => {
-        const code = move.code as moveIdKeys
+      moves.forEach((move: { code: MoveIds }) => {
+        const code = idToUid[move.code] as moveUids
         if (!code) return
         if (!getIsDribble(code)) return
 
-        if (!objectToChange[code]) {
-          objectToChange[code] = 1
-        } else {
-          objectToChange[code] += 1
-        }
+        objectToChange[code] += 1
       })
 
       return acc
     },
-    { madeShots: {}, missedShots: {} },
+    {
+      madeShots: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, "5.5": 0, 6: 0 },
+      missedShots: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, "5.5": 0, 6: 0 },
+    },
   )
 
   const isEmpty = Object.keys(moveCounts.madeShots).length === 0 && Object.keys(moveCounts.missedShots).length === 0

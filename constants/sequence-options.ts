@@ -267,6 +267,7 @@ export const sequenceOptions: SequenceInput[] = [
 export const dribbleOptions = [
   {
     id: 0,
+    uid: "0",
     keyShortcut: "0",
     name: "Start / Stand",
     isFirstMove: true,
@@ -274,6 +275,7 @@ export const dribbleOptions = [
   },
   {
     id: 1,
+    uid: "1",
     image: "/DribbleTree1.png",
     keyShortcut: "1",
     name: "Pound",
@@ -282,6 +284,7 @@ export const dribbleOptions = [
   },
   {
     id: 2,
+    uid: "2",
     image: "/DribbleTree2.png",
     keyShortcut: "2",
     name: "Cross",
@@ -290,6 +293,7 @@ export const dribbleOptions = [
   },
   {
     id: 3,
+    uid: "3",
     image: "/DribbleTree3.png",
     keyShortcut: "3",
     name: "In + Out",
@@ -298,6 +302,7 @@ export const dribbleOptions = [
   },
   {
     id: 4,
+    uid: "4",
     image: "/DribbleTree4.png",
     keyShortcut: "4",
     name: "Between The Legs",
@@ -306,6 +311,7 @@ export const dribbleOptions = [
   },
   {
     id: 5,
+    uid: "5",
     image: "/DribbleTree5.png",
     keyShortcut: "5",
     name: "Behind The Back",
@@ -313,7 +319,17 @@ export const dribbleOptions = [
     shape: "circle",
   },
   {
+    id: 55,
+    uid: "5.5",
+    image: "/DribbleTree5_5.png",
+    keyShortcut: "T",
+    name: "Half Spin",
+    color: Colors.HALF_SPIN,
+    shape: "circle",
+  },
+  {
     id: 6,
+    uid: "6",
     image: "/DribbleTree6.png",
     keyShortcut: "6",
     name: "Spin",
@@ -322,6 +338,7 @@ export const dribbleOptions = [
   },
   {
     id: 7,
+    uid: "7",
     keyShortcut: "A",
     name: "Made Shot",
     color: "#000",
@@ -330,6 +347,7 @@ export const dribbleOptions = [
   },
   {
     id: 8,
+    uid: "8",
     keyShortcut: "B",
     name: "Missed Shot",
     isFinalMove: true,

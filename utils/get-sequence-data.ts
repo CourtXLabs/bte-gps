@@ -1,3 +1,4 @@
+import { idToUid, moveIdToValue } from "@/constants/misc"
 import { MoveApiData, MoveSequence, Sequence } from "@/types"
 import { getIsDribble } from "./get-is-dribble"
 import { getLanes } from "./get-moves-data"
@@ -30,7 +31,7 @@ const getBteScore = (bteValue: number, moves: MoveSequence[]) => {
     if (dribblesCounted > 2) return currentScore
     if (!getIsDribble(move.moveId)) return currentScore
     dribblesCounted++
-    return currentScore + move.moveId
+    return currentScore + moveIdToValue[move.moveId]
   }, 0)
   return sumOfFirstThreeDribbles * bteValue
 }
@@ -64,7 +65,7 @@ const getBteCombo = (moves: MoveSequence[]) => {
   for (const move of moves) {
     if (bteComboArray.length === 3) break
     if (!getIsDribble(move.moveId)) continue
-    bteComboArray.push(move.moveId)
+    bteComboArray.push(idToUid[move.moveId])
   }
 
   return bteComboArray.join("")
@@ -73,7 +74,7 @@ const getBteCombo = (moves: MoveSequence[]) => {
 export const getSequenceData = (sequences: Sequence[], addedReportId: number) => {
   return sequences.map((sequence) => {
     const { moves, ...rest } = sequence
-    const fullCombo = moves.flatMap((move) => (getIsDribble(move.moveId) ? move.moveId : [])).join("")
+    const fullCombo = moves.flatMap((move) => (getIsDribble(move.moveId) ? idToUid[move.moveId] : [])).join("")
     const bteCombo = getBteCombo(moves)
 
     const { leftLaneMoves, middleLaneMoves, rightLaneMoves } = getLanes(sequence)

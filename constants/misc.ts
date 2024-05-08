@@ -7,12 +7,42 @@ export const moveIdToNames = {
   3: "In + Out",
   4: "Between The Legs",
   5: "Behind The Back",
+  55: "Half Spin",
+  "5.5": "Half Spin",
   6: "Spin",
   7: "Made Shot",
   8: "Missed Shot",
 }
 export type MoveIds = keyof typeof moveIdToNames
-export type moveIdKeys = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8"
+export type moveUids = "0" | "1" | "2" | "3" | "4" | "5" | "5.5" | "6" | "7" | "8"
+
+export const idToUid = {
+  0: "0",
+  1: "1",
+  2: "2",
+  3: "3",
+  4: "4",
+  5: "5",
+  55: "5.5",
+  "5.5": "5.5",
+  6: "6",
+  7: "7",
+  8: "8",
+} as Record<MoveIds, moveUids>
+
+export const moveIdToValue = {
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
+  "5.5": 5.5,
+  55: 5.5,
+  6: 6,
+  7: 0,
+  8: 0,
+  0: 0,
+}
 
 export const INITIAL_GAME_TYPE = GameTypes.COLLEGE
 

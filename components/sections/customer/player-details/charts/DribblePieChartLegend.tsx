@@ -1,6 +1,6 @@
 "use client"
 
-import { moveIdKeys, moveIdToNames } from "@/constants/misc"
+import { moveIdToNames } from "@/constants/misc"
 import { Colors } from "@/types"
 import * as d3 from "d3"
 import { useEffect, useRef } from "react"
@@ -17,6 +17,7 @@ const colors = [
   Colors.IN_AND_OUT,
   Colors.BETWEEN_THE_LEGS,
   Colors.BEHIND_THE_BACK,
+  Colors.HALF_SPIN,
   Colors.SPIN,
 ]
 
@@ -27,11 +28,14 @@ interface Props {
 export default function DribblePieChartLegend({ data }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null)
 
-  const formattedData = Object.entries(data).flatMap(([key, value]) => ({
-    key,
-    name: moveIdToNames[key as moveIdKeys],
-    value,
-  }))
+  const formattedData = Object.entries(data)
+    .flatMap(([key, value]) => ({
+      key,
+      // @ts-ignore
+      name: moveIdToNames[key],
+      value,
+    }))
+    .sort((a, b) => a.key.localeCompare(b.key))
 
   useEffect(() => {
     const svg = d3.select(svgRef.current)

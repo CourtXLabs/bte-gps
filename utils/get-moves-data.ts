@@ -1,3 +1,4 @@
+import { idToUid, moveUids } from "@/constants/misc"
 import { MoveApiData, Sequence } from "@/types"
 import { COURT_HEIGHT, COURT_HEIGHT_FEET, COURT_WIDTH, COURT_WIDTH_FEET } from "../constants/court"
 import { getIsDribble } from "./get-is-dribble"
@@ -53,19 +54,19 @@ export const getLanes = (sequence: Sequence) => {
   const getIsMiddleLane = (y: number) => y >= -halfCourtLength / 3 && y <= halfCourtLength / 3
   const getIsRightLane = (y: number) => (attackingHalf === "left" ? y > halfCourtLength / 3 : y < -halfCourtLength / 3)
 
-  const leftLaneMoves: number[] = []
-  const middleLaneMoves: number[] = []
-  const rightLaneMoves: number[] = []
+  const leftLaneMoves: moveUids[] = []
+  const middleLaneMoves: moveUids[] = []
+  const rightLaneMoves: moveUids[] = []
 
   const moves = sequence.moves
   moves.forEach(({ y, moveId }) => {
     if (!getIsDribble(moveId)) return
     if (getIsLeftLane(y)) {
-      leftLaneMoves.push(moveId)
+      leftLaneMoves.push(idToUid[moveId])
     } else if (getIsMiddleLane(y)) {
-      middleLaneMoves.push(moveId)
+      middleLaneMoves.push(idToUid[moveId])
     } else if (getIsRightLane(y)) {
-      rightLaneMoves.push(moveId)
+      rightLaneMoves.push(idToUid[moveId])
     }
   })
   return { leftLaneMoves, middleLaneMoves, rightLaneMoves }

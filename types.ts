@@ -12,11 +12,13 @@ export enum Colors {
   IN_AND_OUT = "#186D38",
   BETWEEN_THE_LEGS = "#814198",
   BEHIND_THE_BACK = "#FCD407",
+  HALF_SPIN = "#EE5BA0",
   SPIN = "#FF9E1F",
 }
 
 export interface Option {
   id: MoveIds
+  uid: string
   image?: string
   keyShortcut: string
   name: string

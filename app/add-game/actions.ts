@@ -113,6 +113,7 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
 
     return dataToDownload
   } catch (error) {
+    console.log(error)
     return { error }
   }
 }

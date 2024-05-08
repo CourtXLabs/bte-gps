@@ -41,7 +41,7 @@ export default function ReportsList({ data }: Props) {
   getSequenceBoxscoreData(data[0])
 
   const [activeData, setActiveData] = useState({
-    individualDribble: dribbleOptions[1].keyShortcut,
+    individualDribble: dribbleOptions[1].uid,
     lane: laneOptions[0].value,
     playCode: "",
     shootingOffDribbles: "",
@@ -78,7 +78,7 @@ export default function ReportsList({ data }: Props) {
                 dribbleOption.isFinalMove || dribbleOption.isFirstMove ? (
                   []
                 ) : (
-                  <SelectItem key={dribbleOption.keyShortcut} value={`${dribbleOption.keyShortcut}`}>
+                  <SelectItem key={dribbleOption.uid} value={`${dribbleOption.uid}`}>
                     {dribbleOption.name}
                   </SelectItem>
                 ),
