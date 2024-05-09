@@ -15,7 +15,7 @@ interface Props {
 
 export default function PointsComboBarChart({ data }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null)
-  const maxPoint = Math.round(Math.max(...data.map((d) => d.points)) * 1.25)
+  const maxPoint = Math.round(Math.max(...data.map((d) => Math.max(d.points, d.comboCount))) * 1.25)
 
   useEffect(() => {
     // append the svg object to the body of the page

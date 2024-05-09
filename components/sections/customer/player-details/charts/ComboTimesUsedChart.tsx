@@ -5,8 +5,8 @@ import * as d3 from "d3"
 import { useEffect, useRef } from "react"
 
 const PRIMARY_COLOR = "#FCBE22"
-const margin = { top: 48, right: 30, bottom: 70, left: 40 }
-const width = 600 - margin.left - margin.right
+const margin = { top: 48, right: 30, bottom: 70, left: 50 }
+const width = 700 - margin.left - margin.right
 const height = 500 - margin.top - margin.bottom
 
 interface Props {
@@ -74,7 +74,7 @@ export default function ComboTimesUsedChart({ data }: Props) {
       .attr("text-anchor", "middle")
       .attr("transform", "rotate(-90)")
       .attr("x", -(height / 2))
-      .attr("y", -margin.left + 20) // Adjust this value to position the label to the left of the Y-axis
+      .attr("y", -margin.left + 14) // Adjust this value to position the label to the left of the Y-axis
       .text("Number of times used")
       .style("font-weight", "500")
       .style("fill", "#fff")
@@ -132,7 +132,7 @@ export default function ComboTimesUsedChart({ data }: Props) {
     <svg
       id="combo-to-point"
       ref={svgRef}
-      className="h-[500px] w-[500px]"
+      className="h-[500px] w-[600px]"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
     />
