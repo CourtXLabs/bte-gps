@@ -114,7 +114,7 @@ const getReports = async (id: string) => {
         "id, name, player_id(name, jersey, team_id(name)), game_id(date, home_team_id(name), away_team_id(name)), sequence(*, move(code, x, y))",
       )
       .eq("player_id", id)
-      .range(0, 0)
+      .order("id", { ascending: false })
 
     return { data: data as unknown as ReportApiData[], error }
   } catch (error: any) {
@@ -146,7 +146,7 @@ const getComboPointsRatio = async (id: string) => {
     const chartData = [] as ComboToPointData[]
     for (const { report, moves } of Object.values(groupedData)) {
       const date = report.game_id.date.split("T")[0]
-      const comboCount = moves.length - 1 // Assuming all moves are dribbles except the last one, which is the shot
+      const comboCount = moves.filter((move: MoveApiData) => getIsDribble(move.code)).length // Assuming all moves are dribbles except the last one, which is the shot TODO: fix this
       const points = getTotalPointsFromMoves(moves)
       chartData.push({ date, comboCount, points })
     }
@@ -195,8 +195,8 @@ export default async function PlayerDetailsView({ id }: Props) {
   const allDribbleCounts = { ...dribbleCounts.moveCounts?.madeShots, ...dribbleCounts.moveCounts?.missedShots }
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-10">
-      <Link href="/" className="mb-2 flex items-center gap-1">
+    <div className="mx-auto flex w-full flex-col gap-6 px-4 py-10">
+      <Link href="/" className="mx-auto mb-2 flex w-full max-w-7xl items-center gap-1">
         <ArrowLeftIcon /> Players List
       </Link>
       {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} />}

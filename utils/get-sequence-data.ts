@@ -9,7 +9,7 @@ import {
   getIsRightInShortrangeArea,
 } from "./get-moves-positions"
 
-const getBteValue = (move: MoveSequence, hasDribbles: boolean): number => {
+export const getBteValue = (move: MoveSequence, hasDribbles: boolean): number => {
   const direction = move.x > 0 ? "right" : "left"
 
   const isIn3PointArea = direction === "right" ? getIsInRight3PointArea(move) : getIsInLeft3PointArea(move)
@@ -21,7 +21,7 @@ const getBteValue = (move: MoveSequence, hasDribbles: boolean): number => {
   return hasDribbles ? 10 : 2 // layup (near the basket)
 }
 
-const getBteScore = (bteValue: number, moves: MoveSequence[]) => {
+export const getBteScore = (bteValue: number, moves: MoveSequence[]) => {
   const lastMove = moves[moves.length - 1]
   const isMadeShot = lastMove.moveId === 7
   if (!isMadeShot) return 0 // Missed shot -> view CourtDropdown.tsx options

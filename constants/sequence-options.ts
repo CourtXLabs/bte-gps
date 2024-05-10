@@ -360,3 +360,80 @@ export const laneOptions = [
   { value: "middle", label: "Middle" },
   { value: "right", label: "Right" },
 ]
+
+export const shotsOffDribbleOptions = [
+  {
+    value: "PU2",
+    label: "Pull up 2 pointer (PU2) - A player shoots off of the dribble from inside of the 3-point line",
+  },
+  {
+    value: "PU3",
+    label: "Pull up 3 pointer (PU3) - A player shoots off of the dribble from behind of the 3-point line",
+  },
+  { value: "RU", label: "Runner (RU) - Similar to a floater but more of a horizontal jump from dribbling at pace" },
+  {
+    value: "SB2",
+    label:
+      "Step-back 2 (SB2) - When a player gathers to shoot while taking a step backward to create space for a shot inside the 3-point line",
+  },
+  {
+    value: "SB3",
+    label:
+      "Step-back 3 (SB3) - When a player gathers to shoot while taking a step backward to create space for a shot behind the 3-point line",
+  },
+  {
+    value: "SS2",
+    label:
+      "Side-step 2 (SS2) - When a player gathers to shoot while taking a side step to create space for a shot inside the 3-point line",
+  },
+  {
+    value: "SS3",
+    label:
+      "Side-step 3 (SS3) - When a player gathers to shoot while taking a side step to create space for a shot behind the 3-point line",
+  },
+]
+
+export const shotsStationaryOptions = [
+  { value: "BS", label: "Blocked Shot (BS) - The defender knocks this shot out of the air" },
+  {
+    value: "CS2",
+    label: "Catch and Shoot (CS2) - A player catches the ball inside of the 3-point line and shoots without dribbling",
+  },
+  {
+    value: "CS3",
+    label: "Catch and Shoot (CS3) - A player catches the ball behind the 3-point line and shoots without dribbling",
+  },
+  {
+    value: "DK",
+    label: "Dunk (DK) - The player scores at the rim and hand hits the rim while throwing the ball into the hoop",
+  },
+  {
+    value: "FA2",
+    label: "Fadeaway 2 pointer (FA2) - A player jumps away from the basket while shooting inside the 3-point line",
+  },
+  {
+    value: "FA3",
+    label: "Fadeaway 3 pointer (FA3) - A player jumps away from the basket while shooting from behind the 3-point line",
+  },
+  {
+    value: "FLT",
+    label:
+      "Floater (FLT) - Extended lay-up/shot from close, but not directly at the basket, lofting the ball into the air",
+  },
+  {
+    value: "LU",
+    label:
+      "Layup (LU) - Shooting a shot right at the basket and the player's hand is near the rim, but not touching it",
+  },
+  { value: "TO", label: "Turnover (TO) - When the defense takes the ball from the offense" },
+  {
+    value: "TU",
+    label: "Tie up (TU) - An offensive and defensive players are struggling over the ball resulting in a jump ball",
+  },
+]
+
+export const frequencyOptions = [
+  { value: "1", label: "1 dribble combo" },
+  { value: "2", label: "2 dribble combo" },
+  { value: "3", label: "3 dribble combo" },
+]
