@@ -1,43 +1,13 @@
 "use client"
 
+import { OVERTIME, gameTypePeriodName, halvesPeriodNumberToWord, quartersPeriodNumberToWord } from "@/constants/periods"
 import useBteStore from "@/stores/bteDataStore"
-import { GameTypes } from "@/types"
+import { PeriodName } from "@/types"
 import { useMemo } from "react"
 import { Button } from "../ui/button"
 
-const OVERTIME = "Overtime"
-
-enum PeriodName {
-  HALF = "Half",
-  QUARTER = "Quarter",
-}
-
-const gameTypePeriodName = {
-  [GameTypes.HIGH_SCHOOL]: PeriodName.QUARTER,
-  [GameTypes.PROFESSIONAL]: PeriodName.QUARTER,
-  [GameTypes.COLLEGE]: PeriodName.HALF,
-}
-
-interface PeriodToWord {
-  [key: number]: string
-}
-
-const quartersPeriodNumberToWord = {
-  1: "First",
-  2: "Second",
-  3: "Third",
-  4: "Fourth",
-  5: OVERTIME,
-} as PeriodToWord
-
-const halvesPeriodNumberToWord = {
-  1: "First",
-  2: "Second",
-  3: OVERTIME,
-} as PeriodToWord
-
 export default function SequencesListSection() {
-  const { sequences, activePeriod, game, updateActiveSequenceIndex, activeSequenceIndex } = useBteStore()
+  const { sequences, game, updateActiveSequenceIndex, activeSequenceIndex } = useBteStore()
   const gameType = game?.gameType
 
   const sequencesContent = useMemo(() => {
@@ -86,10 +56,5 @@ export default function SequencesListSection() {
     return elements
   }, [sequences, gameType, updateActiveSequenceIndex, activeSequenceIndex])
 
-  return (
-    <div className="pt-2">
-      <p className="font-semibold text-primary">Current Period: {activePeriod}</p>
-      {sequencesContent}
-    </div>
-  )
+  return <div className="pt-2">{sequencesContent}</div>
 }

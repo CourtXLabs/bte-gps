@@ -134,6 +134,15 @@ export const playerDashboardToolbarFormSchema = z.object({
   game: z.string().optional(),
 })
 
+export enum PeriodName {
+  HALF = "Half",
+  QUARTER = "Quarter",
+}
+
+export interface PeriodToWord {
+  [key: number]: string
+}
+
 export interface TeamData {
   id?: string
   name: string

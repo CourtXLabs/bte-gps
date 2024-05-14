@@ -3,6 +3,7 @@
 import { COURT_WIDTH } from "@/constants/court"
 import useBteStore from "@/stores/bteDataStore"
 import { Coordinates, Option, sequenceFormSchema } from "@/types"
+import { formatPeriod } from "@/utils/format-period"
 import { convertPixelsToCoordinates } from "@/utils/get-moves-data"
 import { generateRandomString } from "@/utils/misc"
 import { useState } from "react"
@@ -28,6 +29,7 @@ const CourtCanvas = () => {
     addNewSequence,
     resetActiveSequence,
     updateActiveSequenceIndex,
+    game: { gameType },
   } = useBteStore()
 
   const closeDropdown = () => {
@@ -66,6 +68,8 @@ const CourtCanvas = () => {
 
   return (
     <div className="relative w-max">
+      <p className="mb-2 text-lg font-semibold text-primary">Current Period: {formatPeriod(activePeriod, gameType)}</p>
+
       <CourtImage
         onClick={onClickCanvas}
         tempMarkerCoordinates={tempMarkerCoordinates}
