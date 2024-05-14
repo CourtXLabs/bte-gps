@@ -38,7 +38,7 @@ const getCsvData = ({ sequences, playerInfo }: CsvSaveData) => {
     "Initial Direction",
     "Counter Direction",
     "Moves",
-    "Last Dribble Type",
+    "Last Hand + Dribble Type",
     "Lanes Left",
     "Lanes Middle",
     "Lanes Right",

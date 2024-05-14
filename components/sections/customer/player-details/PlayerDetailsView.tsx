@@ -146,7 +146,7 @@ const getComboPointsRatio = async (id: string) => {
     const chartData = [] as ComboToPointData[]
     for (const { report, moves } of Object.values(groupedData)) {
       const date = report.game_id.date.split("T")[0]
-      const comboCount = moves.filter((move: MoveApiData) => getIsDribble(move.code)).length // Assuming all moves are dribbles except the last one, which is the shot TODO: fix this
+      const comboCount = moves.filter((move: MoveApiData) => getIsDribble(move.code)).length
       const points = getTotalPointsFromMoves(moves)
       chartData.push({ date, comboCount, points })
     }

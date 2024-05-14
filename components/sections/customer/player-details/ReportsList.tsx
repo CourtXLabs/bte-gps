@@ -324,7 +324,7 @@ export default function ReportsList({ data }: Props) {
                   {getCounterDirectionPercent(report, activeData.counterDirection).toFixed(1)}%
                 </TableCell>
                 <TableCell className="text-center">
-                  {getLastHandPercent(report, activeData.counterDirection).toFixed(1)}%
+                  {getLastHandPercent(report, activeData.lastHand).toFixed(1)}%
                 </TableCell>
                 <TableCell className="text-center">{getEfficiencyScore(report).toFixed(1)}</TableCell>
                 <TableCell className="text-center">
