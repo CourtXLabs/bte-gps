@@ -1,13 +1,16 @@
 "use client"
 
 import { gameTypesPeriods } from "@/constants/misc"
+import useBoolean from "@/hooks/useBoolean"
 import useBteStore from "@/stores/bteDataStore"
 import { downloadCsv } from "@/utils/get-csv-data"
+import ConfirmResetDialog from "../dialogs/ConfirmResetDialog"
 import { Button } from "../ui/button"
 
 const CourtOptionsSection = () => {
   const { incrementPeriod, decrementPeriod, resetGame, activePeriod, game, dataToSave, isLoading, isSaved, sequences } =
     useBteStore()
+  const isResetting = useBoolean()
 
   const onClickNextPeriod = () => {
     incrementPeriod()
@@ -31,6 +34,11 @@ const CourtOptionsSection = () => {
         <Button type="submit" form="game-form" disabled={saveDisabled}>
           Save Game
         </Button>
+        {!isSaved && (
+          <Button type="button" variant="outline" form="game-form" onClick={isResetting.onTrue}>
+            Reset Game
+          </Button>
+        )}
         {isSaved && (
           <Button type="button" form="game-form" onClick={() => downloadCsv(dataToSave)}>
             Download CSV
@@ -50,6 +58,7 @@ const CourtOptionsSection = () => {
           Next Period
         </Button>
       </div>
+      <ConfirmResetDialog open={isResetting.value} onOpenChange={isResetting.onToggle} onSubmit={resetGame} />
     </div>
   )
 }
