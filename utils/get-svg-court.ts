@@ -29,7 +29,7 @@ const getMovesByPeriods = (sequences: Sequence[]) => {
       if (!acc[sequence.period]) {
         acc[sequence.period] = []
       }
-      acc[sequence.period].push(sequence.moves)
+      acc[sequence.period].push(sequence.moves!)
       return acc
     },
     {} as Record<number, MoveSequence[][]>,
