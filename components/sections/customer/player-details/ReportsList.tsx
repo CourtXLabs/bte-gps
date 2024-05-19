@@ -30,7 +30,6 @@ import {
   getShootingStationaryPercent,
 } from "@/utils/calculate-boxscore-data"
 import { downloadCsv } from "@/utils/get-csv-data"
-import { getIsDribble } from "@/utils/get-is-dribble"
 import { getTotalPoints } from "@/utils/get-sequence-data"
 import {
   ColumnDef,
@@ -83,9 +82,7 @@ export default function ReportsList({ data }: Props) {
           value={activeData.individualDribble}
           title="Individual Dribble %"
           placeholder="Dribble Type"
-          options={dribbleOptions.flatMap((option) =>
-            getIsDribble(option.id) ? { value: option.uid, label: option.name } : [],
-          )}
+          options={dribbleOptions.map((option) => ({ value: option.uid, label: option.name }))}
           onValueChange={handleValueChange("individualDribble")}
         />
       ),

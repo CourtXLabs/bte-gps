@@ -26,6 +26,8 @@ export interface Option {
   shape?: "circle" | "square"
   isFinalMove?: boolean
   isFirstMove?: boolean
+  isStartCombo?: boolean
+  isLastCombo?: boolean
 }
 
 export interface SequenceInput {
@@ -59,6 +61,7 @@ export interface MoveSequence {
 
 export interface Sequence {
   moves: MoveSequence[]
+  combos: MoveSequence[][]
   play_code: string | null
   initial_direction: string | null
   counter_direction: string | null

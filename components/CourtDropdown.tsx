@@ -1,4 +1,4 @@
-import { dribbleOptions as options } from "@/constants/sequence-options"
+import { dribbleOptions, nonDribbleMoves } from "@/constants/sequence-options"
 import { Coordinates, Option } from "@/types"
 import Image from "next/image"
 import { useCallback, useEffect, useRef } from "react"
@@ -30,7 +30,7 @@ export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props)
   const handleKeyShortcut = useCallback(
     (event: KeyboardEvent) => {
       const key = event.key
-      const option = options.find((option) => option.keyShortcut.toUpperCase() === key.toUpperCase())
+      const option = dribbleOptions.find((option) => option.keyShortcut.toUpperCase() === key.toUpperCase())
       if (option) {
         onSubmit(option)
         onClose()
@@ -51,21 +51,35 @@ export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props)
   return (
     <div
       ref={dropdownRef}
-      className="background-dark-foreground absolute z-10 flex w-max -translate-x-1/2 items-center gap-2 rounded-sm bg-background-dark px-4 py-3"
+      className="background-dark-foreground absolute z-10 flex w-max -translate-x-1/2 flex-col items-center gap-8 rounded-sm bg-background-dark p-4"
       style={positionStyle}
     >
-      {options.map((option) =>
-        option.image ? (
-          <Image
-            key={option.id}
-            src={option.image}
-            alt={option.name}
-            width={100}
-            height={129}
-            className="cursor-pointer"
-            onClick={onSelectOption(option)}
-          />
-        ) : (
+      <div className="flex items-center">
+        {dribbleOptions.map((option) =>
+          option.image ? (
+            <Image
+              key={option.id}
+              src={option.image}
+              alt={option.name}
+              width={100}
+              height={129}
+              className="cursor-pointer"
+              onClick={onSelectOption(option)}
+            />
+          ) : (
+            <p
+              key={option.id}
+              className="m-0 flex w-[100px] cursor-pointer flex-col items-center gap-1 text-center text-2xl font-semibold"
+              onClick={onSelectOption(option)}
+            >
+              <span>{option.keyShortcut} </span>
+              <span>{option.name}</span>
+            </p>
+          ),
+        )}
+      </div>
+      <div className="flex items-center">
+        {nonDribbleMoves.map((option) => (
           <p
             key={option.id}
             className="m-0 flex w-[100px] cursor-pointer flex-col items-center gap-1 text-center text-2xl font-semibold"
@@ -74,8 +88,8 @@ export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props)
             <span>{option.keyShortcut} </span>
             <span>{option.name}</span>
           </p>
-        ),
-      )}
+        ))}
+      </div>
     </div>
   )
 }

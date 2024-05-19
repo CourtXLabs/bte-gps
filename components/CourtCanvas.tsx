@@ -17,7 +17,7 @@ const CourtCanvas = () => {
   const [tempMarkerCoordinates, setTempMarkerCoordinates] = useState<Coordinates | null>(null)
   const [isSequenceOptionsDialogOpen, setIsSequenceOptionsDialogOpen] = useState(false)
   const dropdownCoordinates: Coordinates | null = tempMarkerCoordinates
-    ? { x: COURT_WIDTH / 2, y: tempMarkerCoordinates.y + 20 }
+    ? { x: COURT_WIDTH / 2, y: tempMarkerCoordinates.y + 60 }
     : null
 
   const {
@@ -29,6 +29,7 @@ const CourtCanvas = () => {
     addNewSequence,
     resetActiveSequence,
     updateActiveSequenceIndex,
+    activeSequenceCombos,
     game: { gameType },
   } = useBteStore()
 
@@ -38,6 +39,14 @@ const CourtCanvas = () => {
   }
 
   const onSubmitMove = (option: Option) => {
+    if (option.isStartCombo) {
+      return
+    }
+
+    if (option.isLastCombo) {
+      return
+    }
+
     const { x, y } = convertPixelsToCoordinates({ ...tempMarkerCoordinates! })
     const uid = generateRandomString()
     addMoveToActiveSequence({ x, y, uid, moveId: option.id, color: option.color, shape: option.shape })
@@ -49,7 +58,7 @@ const CourtCanvas = () => {
 
   const onSubmitSequence = (values: z.infer<typeof sequenceFormSchema>) => {
     setIsSequenceOptionsDialogOpen(false)
-    addNewSequence({ ...values, moves: activeSequenceMoves, period: activePeriod })
+    addNewSequence({ ...values, moves: activeSequenceMoves, period: activePeriod, combos: activeSequenceCombos })
     updateActiveSequenceIndex(activeSequenceIndex + 1)
     resetActiveSequence()
   }
@@ -68,7 +77,12 @@ const CourtCanvas = () => {
 
   return (
     <div className="relative w-max">
-      <p className="mb-2 text-lg font-semibold text-primary">Current Period: {formatPeriod(activePeriod, gameType)}</p>
+      <div className="flex justify-between">
+        <p className="mb-2 text-lg font-semibold text-primary">
+          Current Period: {formatPeriod(activePeriod, gameType)}
+        </p>
+        {activeSequenceCombos.length > 0 && <p>Attacking combo #{activeSequenceCombos.length}</p>}
+      </div>
 
       <CourtImage
         onClick={onClickCanvas}

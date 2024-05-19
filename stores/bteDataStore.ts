@@ -6,6 +6,7 @@ import { persist } from "zustand/middleware"
 interface BteDataStore {
   activePeriod: number
   activeSequenceMoves: MoveSequence[]
+  activeSequenceCombos: MoveSequence[][]
   sequences: Sequence[]
   activeSequenceIndex: number
   game: Game
@@ -34,6 +35,7 @@ const useBteStore = create<BteDataStore>()(
     (set) => ({
       activePeriod: 1,
       activeSequenceMoves: [] as MoveSequence[],
+      activeSequenceCombos: [] as MoveSequence[][],
       sequences: [] as Sequence[],
       activeSequenceIndex: 0,
       game: {
@@ -142,6 +144,7 @@ const useBteStore = create<BteDataStore>()(
           activeSequenceIndex: 0,
           activeSequenceMoves: [] as MoveSequence[],
           sequences: [] as Sequence[],
+          activeSequenceCombos: [] as MoveSequence[][],
           game: {
             gameType: INITIAL_GAME_TYPE,
           } as Game,

@@ -266,14 +266,6 @@ export const sequenceOptions: SequenceInput[] = [
 
 export const dribbleOptions = [
   {
-    id: 0,
-    uid: "0",
-    keyShortcut: "0",
-    name: "Start / Stand",
-    isFirstMove: true,
-    shape: "square",
-  },
-  {
     id: 1,
     uid: "1",
     image: "/DribbleTree1.png",
@@ -336,6 +328,31 @@ export const dribbleOptions = [
     color: Colors.SPIN,
     shape: "circle",
   },
+] as Option[]
+
+export const nonDribbleMoves = [
+  {
+    id: 0,
+    uid: "0",
+    keyShortcut: "0",
+    name: "Start / Stand",
+    isFirstMove: true,
+    shape: "square",
+  },
+  {
+    id: 9,
+    uid: "9",
+    keyShortcut: "N",
+    name: "New Combo",
+    isStartCombo: true,
+  },
+  {
+    id: 10,
+    uid: "10",
+    keyShortcut: "E",
+    name: "End Combo",
+    isLastCombo: true,
+  },
   {
     id: 7,
     uid: "7",
@@ -354,6 +371,8 @@ export const dribbleOptions = [
     shape: "circle",
   },
 ] as Option[]
+
+export const moveOptions = [...dribbleOptions, ...nonDribbleMoves]
 
 export const laneOptions = [
   { value: "left", label: "Left" },
