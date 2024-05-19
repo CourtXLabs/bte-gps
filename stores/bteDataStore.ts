@@ -139,25 +139,11 @@ const useBteStore = create<BteDataStore>()(
 
           return {
             moves: newMoves,
-            activeSequenceMoveUids: newMoves.map((move) => move.uid),
-            activeSequenceCombos: state.activeSequenceCombos.map((combo) =>
-              combo.map((uid) => newMoves.find((move) => move.uid === uid)?.uid || ""),
-            ),
-            sequences: state.sequences.map((sequence) => ({
-              ...sequence,
-              moveUids: sequence.moveUids?.map((uid) => (uid === newMove.uid ? newMove.uid : uid)),
-            })),
           }
         }),
       deleteMove: (moveUid: string) =>
         set((state: BteDataStore) => ({
           moves: state.moves.filter((move) => move.uid !== moveUid),
-          activeSequenceMoveUids: state.activeSequenceMoveUids.filter((uid) => uid !== moveUid),
-          activeSequenceCombos: state.activeSequenceCombos.map((combo) => combo.filter((uid) => uid !== moveUid)),
-          sequences: state.sequences.map((sequence) => ({
-            ...sequence,
-            moveUids: sequence.moveUids?.filter((uid) => uid !== moveUid),
-          })),
         })),
       resetSequences: () => set({ sequences: [] }),
       changeGameType: (gameType: GameTypes) =>
