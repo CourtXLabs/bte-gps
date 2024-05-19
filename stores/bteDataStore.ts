@@ -1,12 +1,13 @@
 import { INITIAL_GAME_TYPE, gameTypesPeriods } from "@/constants/misc"
-import { DeleteMoveInput, EditMoveInput, Game, GameSaveData, GameTypes, MoveSequence, Sequence } from "@/types"
+import { Game, GameSaveData, GameTypes, MoveSequence, Sequence } from "@/types"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
 interface BteDataStore {
+  moves: MoveSequence[]
   activePeriod: number
-  activeSequenceMoves: MoveSequence[]
-  activeSequenceCombos: MoveSequence[][]
+  activeSequenceMoveUids: string[]
+  activeSequenceCombos: string[][]
   sequences: Sequence[]
   activeSequenceIndex: number
   game: Game
@@ -16,7 +17,6 @@ interface BteDataStore {
   getSequences: () => Sequence[]
   getActiveSequnceMoves: () => MoveSequence[]
   getActiveSequenceCombos: () => MoveSequence[][]
-  getGame: () => Game
   toggleLoading: () => void
   toggleIsSaved: () => void
   addMoveToActiveSequence: (newSequence: MoveSequence) => void
@@ -26,8 +26,8 @@ interface BteDataStore {
   addNewSequence: (newSequence: Sequence) => void
   incrementPeriod: () => void
   decrementPeriod: () => void
-  editMove: (data: EditMoveInput) => void
-  deleteMove: (data: DeleteMoveInput) => void
+  editMove: (newMove: MoveSequence) => void
+  deleteMove: (moveUid: string) => void
   resetSequences: () => void
   changeGameType: (gameType: GameTypes) => void
   setDatatoSave: (data: GameSaveData) => void
@@ -37,9 +37,10 @@ interface BteDataStore {
 const useBteStore = create<BteDataStore>()(
   persist(
     (set, get) => ({
+      moves: [] as MoveSequence[],
       activePeriod: 1,
-      activeSequenceMoves: [] as MoveSequence[],
-      activeSequenceCombos: [] as MoveSequence[][],
+      activeSequenceMoveUids: [] as string[],
+      activeSequenceCombos: [] as string[][],
       sequences: [] as Sequence[],
       activeSequenceIndex: 0,
       game: {
@@ -52,36 +53,57 @@ const useBteStore = create<BteDataStore>()(
         const state = get()
         return state.sequences.map((sequence) => ({
           ...sequence,
-          modified: true,
+          moves:
+            sequence.moveUids?.flatMap((uid) => {
+              const move = state.moves.find((m) => m.uid === uid)
+              if (!move) {
+                return []
+              }
+              return {
+                ...move,
+              }
+            }) || [],
         }))
       },
       getActiveSequnceMoves: () => {
         const state = get()
-        return state.activeSequenceMoves.map((move) => ({
-          ...move,
-          modified: true,
-        }))
+        return state.activeSequenceMoveUids.flatMap((uid) => {
+          const move = state.moves.find((m) => m.uid === uid)
+          if (!move) {
+            return []
+          }
+          return {
+            ...move,
+          }
+        })
       },
       getActiveSequenceCombos: () => {
         const state = get()
-        return state.activeSequenceCombos.map((combo) => combo.map((move) => ({ ...move, modified: true })))
-      },
-      getGame: () => {
-        const state = get()
-        return {
-          ...state.game,
-          modified: true,
-        }
+        return state.activeSequenceCombos.map((combo) =>
+          combo.flatMap((uid) => {
+            const move = state.moves.find((m) => m.uid === uid)
+            if (!move) {
+              return []
+            }
+            return {
+              ...move,
+            }
+          }),
+        )
       },
       toggleLoading: () => set((state: BteDataStore) => ({ isLoading: !state.isLoading })),
       toggleIsSaved: () => set((state: BteDataStore) => ({ isSaved: !state.isSaved })),
       addMoveToActiveSequence: (newSequence: MoveSequence) =>
-        set((state: BteDataStore) => ({ activeSequenceMoves: [...state.activeSequenceMoves, newSequence] })),
+        set((state: BteDataStore) => ({
+          activeSequenceMoveUids: [...state.activeSequenceMoveUids, newSequence.uid],
+          moves: [...state.moves, newSequence],
+        })),
       undoLastMove: () =>
         set((state: BteDataStore) => ({
-          activeSequenceMoves: state.activeSequenceMoves.slice(0, state.activeSequenceMoves.length - 1),
+          activeSequenceMoveUids: state.activeSequenceMoveUids.slice(0, state.activeSequenceMoveUids.length - 1),
+          moves: state.moves.slice(0, state.moves.length - 1),
         })),
-      resetActiveSequence: () => set({ activeSequenceMoves: [] }),
+      resetActiveSequence: () => set({ activeSequenceMoveUids: [] }),
       updateActiveSequenceIndex: (index: number) => set({ activeSequenceIndex: index }),
       addNewSequence: (newSequence: Sequence) =>
         set((state: BteDataStore) => ({ sequences: [...state.sequences, newSequence] })),
@@ -109,55 +131,34 @@ const useBteStore = create<BteDataStore>()(
 
           return { activePeriod: newPeriod }
         }),
-      editMove: ({ moveIndex, sequenceIndex, newMove }: EditMoveInput) =>
+      editMove: (newMove: MoveSequence) =>
         set((state: BteDataStore) => {
-          const isActiveSequence = sequenceIndex === state.sequences.length
-          if (isActiveSequence) {
-            const newActiveSequenceMoves = state.activeSequenceMoves.map((move, index) => {
-              if (index !== moveIndex) {
-                return move
-              }
-              return { ...move, ...newMove }
-            })
+          const moveIndex = state.moves.findIndex((move) => move.uid === newMove.uid)
+          const newMoves = [...state.moves]
+          newMoves[moveIndex] = newMove
 
-            return { activeSequenceMoves: newActiveSequenceMoves }
-          }
-          const newSequences = state.sequences.map((sequence, iterationSequenceIndex) => {
-            if (iterationSequenceIndex !== sequenceIndex) {
-              return sequence
-            }
-            return {
+          return {
+            moves: newMoves,
+            activeSequenceMoveUids: newMoves.map((move) => move.uid),
+            activeSequenceCombos: state.activeSequenceCombos.map((combo) =>
+              combo.map((uid) => newMoves.find((move) => move.uid === uid)?.uid || ""),
+            ),
+            sequences: state.sequences.map((sequence) => ({
               ...sequence,
-              moves: sequence.moves.map((move, interationMoveIndex) => {
-                if (interationMoveIndex !== moveIndex) {
-                  return move
-                }
-                return { ...move, ...newMove }
-              }),
-            }
-          })
-
-          return { sequences: newSequences }
-        }),
-      deleteMove: ({ moveIndex, sequenceIndex }: DeleteMoveInput) =>
-        set((state: BteDataStore) => {
-          const isActiveSequence = sequenceIndex === state.sequences.length
-          if (isActiveSequence) {
-            return { activeSequenceMoves: state.activeSequenceMoves.filter((_, index) => index !== moveIndex) }
+              moveUids: sequence.moveUids?.map((uid) => (uid === newMove.uid ? newMove.uid : uid)),
+            })),
           }
-
-          const newSequences = state.sequences.map((sequence, iterationSequenceIndex) => {
-            if (iterationSequenceIndex !== sequenceIndex) {
-              return sequence
-            }
-            return {
-              ...sequence,
-              moves: sequence.moves.filter((_, interationMoveIndex) => interationMoveIndex !== moveIndex),
-            }
-          })
-
-          return { sequences: newSequences }
         }),
+      deleteMove: (moveUid: string) =>
+        set((state: BteDataStore) => ({
+          moves: state.moves.filter((move) => move.uid !== moveUid),
+          activeSequenceMoveUids: state.activeSequenceMoveUids.filter((uid) => uid !== moveUid),
+          activeSequenceCombos: state.activeSequenceCombos.map((combo) => combo.filter((uid) => uid !== moveUid)),
+          sequences: state.sequences.map((sequence) => ({
+            ...sequence,
+            moveUids: sequence.moveUids?.filter((uid) => uid !== moveUid),
+          })),
+        })),
       resetSequences: () => set({ sequences: [] }),
       changeGameType: (gameType: GameTypes) =>
         set((state: BteDataStore) => {
@@ -169,11 +170,12 @@ const useBteStore = create<BteDataStore>()(
       setDatatoSave: (data: GameSaveData) => set({ dataToSave: data }),
       resetGame: () =>
         set({
+          moves: [] as MoveSequence[],
           activePeriod: 1,
           activeSequenceIndex: 0,
-          activeSequenceMoves: [] as MoveSequence[],
+          activeSequenceMoveUids: [] as string[],
           sequences: [] as Sequence[],
-          activeSequenceCombos: [] as MoveSequence[][],
+          activeSequenceCombos: [] as string[][],
           game: {
             gameType: INITIAL_GAME_TYPE,
           } as Game,

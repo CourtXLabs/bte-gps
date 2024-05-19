@@ -46,6 +46,7 @@ export const convertCoordinatesToPixels = ({
 }
 
 export const getLanes = (sequence: Sequence) => {
+  if (!sequence.moves?.length) return { leftLaneMoves: [], middleLaneMoves: [], rightLaneMoves: [] }
   const lastMove = sequence.moves[sequence.moves.length - 1]
   const attackingHalf = lastMove.x > 0 ? "right" : "left"
   const halfCourtLength = COURT_HEIGHT_FEET / 2

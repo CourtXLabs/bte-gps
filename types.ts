@@ -60,8 +60,8 @@ export interface MoveSequence {
 }
 
 export interface Sequence {
-  moves: MoveSequence[]
-  move_uids?: string[]
+  moves?: MoveSequence[]
+  moveUids?: string[]
   combos: MoveSequence[][]
   play_code: string | null
   initial_direction: string | null
@@ -213,11 +213,6 @@ export interface EditMoveInput {
   sequenceIndex: number
   moveIndex: number
   newMove: MoveSequence
-}
-
-export interface DeleteMoveInput {
-  sequenceIndex: number
-  moveIndex: number
 }
 
 export interface Pagination {

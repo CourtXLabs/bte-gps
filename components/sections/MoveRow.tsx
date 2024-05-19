@@ -14,7 +14,7 @@ type Props = {
 
 const MoveRow = ({ move, moveIndex }: Props) => {
   const { x: initialX, y: initialY } = { x: move.x, y: move.y }
-  const { editMove, deleteMove, activeSequenceIndex } = useBteStore()
+  const { editMove, deleteMove } = useBteStore()
   const [isEditing, setIsEditing] = useState(false)
   const [xCoordinate, setXCoordinate] = useState(initialX)
   const [yCoordinate, setYCoordinate] = useState(initialY)
@@ -35,7 +35,7 @@ const MoveRow = ({ move, moveIndex }: Props) => {
 
   const onUpdate = () => {
     setIsEditing(false)
-    editMove({ moveIndex, sequenceIndex: activeSequenceIndex, newMove: { ...move, x: xCoordinate, y: yCoordinate } })
+    editMove({ ...move, x: xCoordinate, y: yCoordinate })
   }
 
   const onStartEditing = () => {
@@ -43,7 +43,7 @@ const MoveRow = ({ move, moveIndex }: Props) => {
   }
 
   const onDelete = () => {
-    deleteMove({ moveIndex, sequenceIndex: activeSequenceIndex })
+    deleteMove(move.uid)
   }
 
   const tableRowContents = isEditing ? (

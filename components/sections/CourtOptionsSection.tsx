@@ -13,14 +13,13 @@ const CourtOptionsSection = () => {
     decrementPeriod,
     resetGame,
     activePeriod,
-    getGame,
+    game: { gameType },
     dataToSave,
     isLoading,
     isSaved,
     getSequences,
   } = useBteStore()
   const sequences = getSequences()
-  const game = getGame()
 
   const isResetting = useBoolean()
 
@@ -33,7 +32,6 @@ const CourtOptionsSection = () => {
   }
 
   const currentActivePeriod = activePeriod
-  const gameType = game.gameType
   const maxPeriod = gameTypesPeriods[gameType]
   const canHaveNextPeriod = currentActivePeriod < maxPeriod
   const canHavePreviousPeriod = currentActivePeriod > 1

@@ -61,7 +61,12 @@ const CourtCanvas = () => {
 
   const onSubmitSequence = (values: z.infer<typeof sequenceFormSchema>) => {
     setIsSequenceOptionsDialogOpen(false)
-    addNewSequence({ ...values, moves: activeSequenceMoves, period: activePeriod, combos: activeSequenceCombos })
+    addNewSequence({
+      ...values,
+      moveUids: activeSequenceMoves.map((move) => move.uid),
+      period: activePeriod,
+      combos: activeSequenceCombos,
+    })
     updateActiveSequenceIndex(activeSequenceIndex + 1)
     resetActiveSequence()
   }

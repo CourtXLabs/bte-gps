@@ -38,6 +38,7 @@ export const getBteScore = (bteValue: number, moves: MoveSequence[]) => {
 
 export const getTotalPoints = (sequences: Sequence[]) => {
   return sequences.reduce((totalPoints, sequence) => {
+    if (!sequence.moves?.length) return totalPoints
     const lastMove = sequence.moves[sequence.moves.length - 1]
     const isMadeShot = lastMove.moveId === 7
     if (!isMadeShot) return totalPoints
@@ -74,6 +75,7 @@ const getBteCombo = (moves: MoveSequence[]) => {
 export const getSequenceData = (sequences: Sequence[], addedReportId: number) => {
   return sequences.map((sequence) => {
     const { moves, ...rest } = sequence
+    if (!moves) return rest
     const fullCombo = moves.flatMap((move) => (getIsDribble(move.moveId) ? idToUid[move.moveId] : [])).join("")
     const bteCombo = getBteCombo(moves)
 
