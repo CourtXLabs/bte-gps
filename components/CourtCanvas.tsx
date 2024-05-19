@@ -21,7 +21,8 @@ const CourtCanvas = () => {
     : null
 
   const {
-    activeSequenceMoves,
+    getActiveSequnceMoves,
+    getActiveSequenceCombos,
     activePeriod,
     activeSequenceIndex,
     addMoveToActiveSequence,
@@ -29,9 +30,11 @@ const CourtCanvas = () => {
     addNewSequence,
     resetActiveSequence,
     updateActiveSequenceIndex,
-    activeSequenceCombos,
     game: { gameType },
   } = useBteStore()
+
+  const activeSequenceMoves = getActiveSequnceMoves()
+  const activeSequenceCombos = getActiveSequenceCombos()
 
   const closeDropdown = () => {
     setDropdownOpen(false)

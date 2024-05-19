@@ -22,7 +22,9 @@ interface Props {
 }
 
 const CourtImage = ({ onClick, tempMarkerCoordinates, setTempMarkerCoordinates }: Props) => {
-  const { activeSequenceIndex, sequences, activeSequenceMoves } = useBteStore()
+  const { activeSequenceIndex, getSequences, getActiveSequnceMoves } = useBteStore()
+  const sequences = getSequences()
+  const activeSequenceMoves = getActiveSequnceMoves()
   const svgRef = useRef<SVGSVGElement | null>(null)
 
   const handleClick: MouseEventHandler<SVGSVGElement> = (event) => {

@@ -61,6 +61,7 @@ export interface MoveSequence {
 
 export interface Sequence {
   moves: MoveSequence[]
+  move_uids?: string[]
   combos: MoveSequence[][]
   play_code: string | null
   initial_direction: string | null

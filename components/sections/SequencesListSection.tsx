@@ -7,8 +7,13 @@ import { useMemo } from "react"
 import { Button } from "../ui/button"
 
 export default function SequencesListSection() {
-  const { sequences, game, updateActiveSequenceIndex, activeSequenceIndex } = useBteStore()
-  const gameType = game?.gameType
+  const {
+    getSequences,
+    game: { gameType },
+    updateActiveSequenceIndex,
+    activeSequenceIndex,
+  } = useBteStore()
+  const sequences = getSequences()
 
   const sequencesContent = useMemo(() => {
     const onClickSequence = (index: number) => () => {

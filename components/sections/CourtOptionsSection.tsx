@@ -8,8 +8,20 @@ import ConfirmResetDialog from "../dialogs/ConfirmResetDialog"
 import { Button } from "../ui/button"
 
 const CourtOptionsSection = () => {
-  const { incrementPeriod, decrementPeriod, resetGame, activePeriod, game, dataToSave, isLoading, isSaved, sequences } =
-    useBteStore()
+  const {
+    incrementPeriod,
+    decrementPeriod,
+    resetGame,
+    activePeriod,
+    getGame,
+    dataToSave,
+    isLoading,
+    isSaved,
+    getSequences,
+  } = useBteStore()
+  const sequences = getSequences()
+  const game = getGame()
+
   const isResetting = useBoolean()
 
   const onClickNextPeriod = () => {

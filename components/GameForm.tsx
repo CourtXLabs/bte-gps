@@ -43,7 +43,8 @@ export default function GameForm({ players, teams }: Props) {
 
   const supabase = createClient()
   const { toast } = useToast()
-  const { sequences, changeGameType, toggleLoading, toggleIsSaved, setDatatoSave } = useBteStore()
+  const { getSequences, changeGameType, toggleLoading, toggleIsSaved, setDatatoSave } = useBteStore()
+  const sequences = getSequences()
   const form = useForm<z.infer<typeof gameFormSchema>>({
     resolver: zodResolver(gameFormSchema),
     defaultValues: {

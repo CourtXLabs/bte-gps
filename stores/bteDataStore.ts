@@ -13,6 +13,10 @@ interface BteDataStore {
   isLoading: boolean
   isSaved: boolean
   dataToSave: GameSaveData
+  getSequences: () => Sequence[]
+  getActiveSequnceMoves: () => MoveSequence[]
+  getActiveSequenceCombos: () => MoveSequence[][]
+  getGame: () => Game
   toggleLoading: () => void
   toggleIsSaved: () => void
   addMoveToActiveSequence: (newSequence: MoveSequence) => void
@@ -32,7 +36,7 @@ interface BteDataStore {
 
 const useBteStore = create<BteDataStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       activePeriod: 1,
       activeSequenceMoves: [] as MoveSequence[],
       activeSequenceCombos: [] as MoveSequence[][],
@@ -44,6 +48,31 @@ const useBteStore = create<BteDataStore>()(
       isSaved: false,
       isLoading: false,
       dataToSave: {} as GameSaveData,
+      getSequences: () => {
+        const state = get()
+        return state.sequences.map((sequence) => ({
+          ...sequence,
+          modified: true,
+        }))
+      },
+      getActiveSequnceMoves: () => {
+        const state = get()
+        return state.activeSequenceMoves.map((move) => ({
+          ...move,
+          modified: true,
+        }))
+      },
+      getActiveSequenceCombos: () => {
+        const state = get()
+        return state.activeSequenceCombos.map((combo) => combo.map((move) => ({ ...move, modified: true })))
+      },
+      getGame: () => {
+        const state = get()
+        return {
+          ...state.game,
+          modified: true,
+        }
+      },
       toggleLoading: () => set((state: BteDataStore) => ({ isLoading: !state.isLoading })),
       toggleIsSaved: () => set((state: BteDataStore) => ({ isSaved: !state.isSaved })),
       addMoveToActiveSequence: (newSequence: MoveSequence) =>

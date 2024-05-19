@@ -4,7 +4,9 @@ import { Table, TableBody, TableHead, TableHeader, TableRow } from "../ui/table"
 import MoveRow from "./MoveRow"
 
 const MovesList = () => {
-  const { activeSequenceIndex, sequences, activeSequenceMoves } = useBteStore()
+  const { activeSequenceIndex, getSequences, getActiveSequnceMoves } = useBteStore()
+  const activeSequenceMoves = getActiveSequnceMoves()
+  const sequences = getSequences()
 
   const viewedSequenceMoves =
     activeSequenceIndex === sequences.length ? activeSequenceMoves : sequences?.[activeSequenceIndex]?.moves
