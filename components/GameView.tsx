@@ -1,7 +1,9 @@
+import dynamic from "next/dynamic"
+
 import CourtCanvas from "./CourtCanvas"
 import GameSidebar from "./GameSidebar"
 import CourtOptionsSection from "./sections/CourtOptionsSection"
-import MovesList from "./sections/MovesList"
+const MovesList = dynamic(() => import("./sections/MovesList"), { ssr: false })
 
 export default function GameView() {
   return (

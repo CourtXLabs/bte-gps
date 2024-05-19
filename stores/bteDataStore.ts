@@ -55,7 +55,7 @@ const useBteStore = create<BteDataStore>()(
           ...sequence,
           moves:
             sequence.moveUids?.flatMap((uid) => {
-              const move = state.moves.find((m) => m.uid === uid)
+              const move = state.moves.find((move) => move.uid === uid)
               if (!move) {
                 return []
               }
