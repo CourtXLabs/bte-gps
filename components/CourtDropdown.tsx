@@ -1,4 +1,5 @@
-import { dribbleOptions, nonDribbleMoves } from "@/constants/sequence-options"
+import { dribbleOptions, moveOptions, nonDribbleMoves } from "@/constants/sequence-options"
+import useBteStore from "@/stores/bteDataStore"
 import { Coordinates, Option } from "@/types"
 import Image from "next/image"
 import { useCallback, useEffect, useRef } from "react"
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props) {
+  const { isActiveCombo } = useBteStore()
   const dropdownRef = useRef<HTMLDivElement>(null) // Ref for the dropdown div
 
   const positionStyle = { left: `${coordinates.x}px`, top: `${coordinates.y}px` }
@@ -30,7 +32,7 @@ export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props)
   const handleKeyShortcut = useCallback(
     (event: KeyboardEvent) => {
       const key = event.key
-      const option = dribbleOptions.find((option) => option.keyShortcut.toUpperCase() === key.toUpperCase())
+      const option = moveOptions.find((option) => option.keyShortcut.toUpperCase() === key.toUpperCase())
       if (option) {
         onSubmit(option)
         onClose()
@@ -79,16 +81,26 @@ export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props)
         )}
       </div>
       <div className="flex items-center">
-        {nonDribbleMoves.map((option) => (
-          <p
-            key={option.id}
-            className="m-0 flex w-[100px] cursor-pointer flex-col items-center gap-1 text-center text-2xl font-semibold"
-            onClick={onSelectOption(option)}
-          >
-            <span>{option.keyShortcut} </span>
-            <span>{option.name}</span>
-          </p>
-        ))}
+        {nonDribbleMoves.flatMap((option) => {
+          if (isActiveCombo && option.isStartCombo) {
+            return []
+          }
+
+          if (!isActiveCombo && option.isLastCombo) {
+            return []
+          }
+
+          return (
+            <p
+              key={option.id}
+              className="m-0 flex w-[100px] cursor-pointer flex-col items-center gap-1 text-center text-2xl font-semibold"
+              onClick={onSelectOption(option)}
+            >
+              <span>{option.keyShortcut} </span>
+              <span>{option.name}</span>
+            </p>
+          )
+        })}
       </div>
     </div>
   )

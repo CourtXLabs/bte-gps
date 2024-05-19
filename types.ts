@@ -57,6 +57,7 @@ export interface MoveSequence {
   y: number
   color?: string
   shape?: "circle" | "square"
+  combo?: number | null
 }
 
 export interface Sequence {
@@ -198,6 +199,7 @@ export interface GameApiData {
 }
 
 export interface SequenceApiData extends Sequence {
+  id?: number
   move: MoveApiData[]
 }
 

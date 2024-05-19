@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/actionts"
 import { Sequence, gameFormSchema } from "@/types"
+import { getComboIdsMap, getCombosData } from "@/utils/get-combos-data"
 import { getSequenceData, getTotalPoints } from "@/utils/get-sequence-data"
 import { uploadGame, uploadReport } from "@/utils/upload-db-data"
 import { cookies } from "next/headers"
@@ -71,12 +72,26 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
     const sequencesData = getSequenceData(sequences, addedReportId!)
     const addedSequences = await supabase.from("sequence").insert(sequencesData).select("id")
 
+    const combosData = getCombosData(sequences, addedSequences.data as any)
+    const adddedCombos = await supabase.from("combo").insert(combosData).select("id, sequence_id")
+    const comboIdMap = getComboIdsMap(sequences, addedSequences.data as any, adddedCombos.data as any)
+
     const movesData = [] as any
     for (let i = 0; i < sequences.length; i++) {
       const moves = sequences[i]?.moves
-      moves.forEach((move) => {
+      const sequenceId = addedSequences.data?.[i].id
+
+      moves?.forEach((move) => {
+        let comboId = null
+        // Find the combo ID for this move
+        sequences[i]?.combos.forEach((combo, comboIndex) => {
+          if (combo.find((comboMove) => comboMove.uid === move.uid)) {
+            comboId = comboIdMap.get(`${sequenceId}_${comboIndex}`)
+          }
+        })
         movesData.push({
-          sequence_id: addedSequences.data?.[i].id,
+          sequence_id: sequenceId,
+          combo_id: comboId,
           code: move.moveId,
           x: move.x,
           y: move.y,

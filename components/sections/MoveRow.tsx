@@ -87,6 +87,7 @@ const MoveRow = ({ move, moveIndex }: Props) => {
       <TableCell>{xCoordinate}</TableCell>
       <TableCell>{yCoordinate}</TableCell>
       <TableCell>{moveIdToNames[move.moveId]}</TableCell>
+      <TableCell>{move.combo || "-"}</TableCell>
       <TableCell>
         <Button className="p-2" variant="ghost" onClick={onStartEditing}>
           <EditIcon size={20} className="stroke-primary" />

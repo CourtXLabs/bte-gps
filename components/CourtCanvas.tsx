@@ -30,6 +30,10 @@ const CourtCanvas = () => {
     addNewSequence,
     resetActiveSequence,
     updateActiveSequenceIndex,
+    addMoveToActiveCombo,
+    addComboToActiveSequence,
+    isActiveCombo,
+    toggleIsActiveCombo,
     game: { gameType },
   } = useBteStore()
 
@@ -43,16 +47,22 @@ const CourtCanvas = () => {
 
   const onSubmitMove = (option: Option) => {
     if (option.isStartCombo) {
+      addComboToActiveSequence([])
+      toggleIsActiveCombo()
       return
     }
 
     if (option.isLastCombo) {
+      toggleIsActiveCombo()
       return
     }
 
     const { x, y } = convertPixelsToCoordinates({ ...tempMarkerCoordinates! })
     const uid = generateRandomString()
     addMoveToActiveSequence({ x, y, uid, moveId: option.id, color: option.color, shape: option.shape })
+    if (isActiveCombo) {
+      addMoveToActiveCombo({ x, y, uid, moveId: option.id, color: option.color, shape: option.shape })
+    }
 
     if (option.isFinalMove) {
       toggleSequenceOptionsDialog()
@@ -89,7 +99,7 @@ const CourtCanvas = () => {
         <p className="mb-2 text-lg font-semibold text-primary">
           Current Period: {formatPeriod(activePeriod, gameType)}
         </p>
-        {activeSequenceCombos.length > 0 && <p>Attacking combo #{activeSequenceCombos.length}</p>}
+        {isActiveCombo && <p>Attacking combo #{activeSequenceCombos.length}</p>}
       </div>
 
       <CourtImage

@@ -74,7 +74,7 @@ const getBteCombo = (moves: MoveSequence[]) => {
 
 export const getSequenceData = (sequences: Sequence[], addedReportId: number) => {
   return sequences.map((sequence) => {
-    const { moves, ...rest } = sequence
+    const { moves, combos, moveUids, ...rest } = sequence
     if (!moves) return rest
     const fullCombo = moves.flatMap((move) => (getIsDribble(move.moveId) ? idToUid[move.moveId] : [])).join("")
     const bteCombo = getBteCombo(moves)
