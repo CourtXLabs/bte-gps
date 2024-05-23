@@ -3,12 +3,14 @@
 import { OVERTIME, gameTypePeriodName, halvesPeriodNumberToWord, quartersPeriodNumberToWord } from "@/constants/periods"
 import useBteStore from "@/stores/bteDataStore"
 import { PeriodName } from "@/types"
+import { TrashIcon } from "lucide-react"
 import { useMemo } from "react"
 import { Button } from "../ui/button"
 
 export default function SequencesListSection() {
   const {
     getSequences,
+    deleteSequence,
     game: { gameType },
     updateActiveSequenceIndex,
     activeSequenceIndex,
@@ -18,6 +20,10 @@ export default function SequencesListSection() {
   const sequencesContent = useMemo(() => {
     const onClickSequence = (index: number) => () => {
       updateActiveSequenceIndex(index)
+    }
+
+    const onDelete = (index: number) => () => {
+      deleteSequence(index)
     }
 
     const periodName = gameTypePeriodName[gameType]
@@ -38,14 +44,19 @@ export default function SequencesListSection() {
         previousPeriod = period
       }
       elements.push(
-        <Button
-          variant="link"
-          key={sequenceIndex}
-          className={`block ${activeSequenceIndex === sequenceIndex ? "text-primary" : "text-foreground"}`}
-          onClick={onClickSequence(sequenceIndex)}
-        >
-          Sequence {sequenceIndex + 1}
-        </Button>,
+        <div className="flex items-center gap-2">
+          <Button
+            variant="link"
+            key={sequenceIndex}
+            className={`block w-24 ${activeSequenceIndex === sequenceIndex ? "text-primary" : "text-foreground"}`}
+            onClick={onClickSequence(sequenceIndex)}
+          >
+            Sequence {sequenceIndex + 1}
+          </Button>
+          <Button className="p-2" variant="ghost" onClick={onDelete(sequenceIndex)}>
+            <TrashIcon size={20} className="stroke-destructive" />
+          </Button>
+        </div>,
       )
     }
     elements.push(
@@ -59,7 +70,7 @@ export default function SequencesListSection() {
       </Button>,
     )
     return elements
-  }, [sequences, gameType, updateActiveSequenceIndex, activeSequenceIndex])
+  }, [sequences, gameType, updateActiveSequenceIndex, activeSequenceIndex, deleteSequence])
 
   return <div className="pt-2">{sequencesContent}</div>
 }

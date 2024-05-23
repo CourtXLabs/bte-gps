@@ -45,6 +45,7 @@ const CourtImage = ({ onClick, tempMarkerCoordinates, setTempMarkerCoordinates }
     removeMarker({ selector: `.${PERMANENT_MARKER_CLASS}`, svgElement: svgRef.current! })
     const movesToShow =
       activeSequenceIndex === sequences.length ? activeSequenceMoves : sequences[activeSequenceIndex]?.moves
+    // @ts-ignore
     movesToShow?.forEach((move, index) => {
       const { color, uid, shape } = move
       const { x, y } = convertCoordinatesToPixels(move)

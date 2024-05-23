@@ -28,6 +28,7 @@ interface BteDataStore {
   resetActiveSequence: () => void
   updateActiveSequenceIndex: (index: number) => void
   addNewSequence: (newSequence: Sequence) => void
+  deleteSequence: (sequenceIndex: number) => void
   incrementPeriod: () => void
   decrementPeriod: () => void
   editMove: (newMove: MoveSequence) => void
@@ -125,6 +126,10 @@ const useBteStore = create<BteDataStore>()(
       updateActiveSequenceIndex: (index: number) => set({ activeSequenceIndex: index }),
       addNewSequence: (newSequence: Sequence) =>
         set((state: BteDataStore) => ({ sequences: [...state.sequences, newSequence] })),
+      deleteSequence: (sequenceIndex: number) =>
+        set((state: BteDataStore) => ({
+          sequences: state.sequences.filter((_, index) => index !== sequenceIndex),
+        })),
       decrementPeriod: () =>
         set((state: BteDataStore) => {
           const currentActivePeriod = state.activePeriod

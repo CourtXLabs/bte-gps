@@ -1,6 +1,7 @@
 import { idToUid, moveIdToValue } from "@/constants/misc"
 import { MoveApiData, MoveSequence, Sequence } from "@/types"
 import { getIsDribble } from "./get-is-dribble"
+import { getIsShot } from "./get-is-shot"
 import { getLanes } from "./get-moves-data"
 import {
   getIsInLeft3PointArea,
@@ -81,8 +82,8 @@ export const getSequenceData = (sequences: Sequence[], addedReportId: number) =>
 
     const { leftLaneMoves, middleLaneMoves, rightLaneMoves } = getLanes(sequence)
     const lastMove = moves[moves.length - 1]
-    const bteValue = getBteValue(lastMove, moves.length > 1)
-    const bteScore = getBteScore(bteValue, moves)
+    const bteValue = lastMove && getIsShot(lastMove.moveId as number) ? getBteValue(lastMove, moves.length > 1) : 0
+    const bteScore = bteValue ? getBteScore(bteValue, moves) : 0
 
     return {
       report_id: addedReportId,

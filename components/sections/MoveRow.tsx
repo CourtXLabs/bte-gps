@@ -5,6 +5,7 @@ import { CheckIcon, EditIcon, TrashIcon, XIcon } from "lucide-react"
 import { useState } from "react"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { TableCell, TableRow } from "../ui/table"
 
 type Props = {
@@ -18,6 +19,7 @@ const MoveRow = ({ move, moveIndex }: Props) => {
   const [isEditing, setIsEditing] = useState(false)
   const [xCoordinate, setXCoordinate] = useState(initialX)
   const [yCoordinate, setYCoordinate] = useState(initialY)
+  const [moveType, setMoveType] = useState(typeof move.moveId == "string" ? move.moveId : move.moveId.toString())
 
   const onChangeXCoordinate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setXCoordinate(Number(e.target.value))
@@ -25,6 +27,10 @@ const MoveRow = ({ move, moveIndex }: Props) => {
 
   const onChangeYCoordinate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setYCoordinate(Number(e.target.value))
+  }
+
+  const onChangeMoveType = (value: string) => {
+    setMoveType(value as any)
   }
 
   const onCancelEditing = () => {
@@ -45,6 +51,8 @@ const MoveRow = ({ move, moveIndex }: Props) => {
   const onDelete = () => {
     deleteMove(move.uid)
   }
+
+  console.log(moveIdToNames)
 
   const tableRowContents = isEditing ? (
     <>
@@ -69,7 +77,21 @@ const MoveRow = ({ move, moveIndex }: Props) => {
           onChange={onChangeYCoordinate}
         />
       </TableCell>
-      <TableCell>{moveIdToNames[move.moveId]}</TableCell>
+      <TableCell>
+        <Select value={moveType} onValueChange={onChangeMoveType}>
+          <SelectTrigger>
+            <SelectValue placeholder="Move type" />
+          </SelectTrigger>
+          <SelectContent side="top">
+            {Object.entries(moveIdToNames).map(([id, label]) => (
+              <SelectItem key={id} value={`${id}`}>
+                {label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </TableCell>
+      <TableCell>{move.combo || "-"}</TableCell>
       <TableCell>
         <Button className="p-2" variant="ghost" onClick={onUpdate}>
           <CheckIcon size={20} className="stroke-primary" />

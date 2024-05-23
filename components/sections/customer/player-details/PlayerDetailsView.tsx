@@ -9,7 +9,6 @@ import {
   SimlePlayerData,
 } from "@/types"
 import { getIsDribble } from "@/utils/get-is-dribble"
-import { getFirstThreeDribbles } from "@/utils/get-moves-data"
 import { getTotalPointsFromMoves } from "@/utils/get-sequence-data"
 import { ArrowLeftIcon } from "lucide-react"
 import { cookies } from "next/headers"
@@ -30,10 +29,12 @@ function groupByReportId(data: Record<string, any>[]) {
       acc[reportId] = {
         report: item.report,
         moves: [],
+        combos: [],
       }
     }
 
     acc[reportId].moves = acc[reportId].moves.concat(item.move)
+    acc[reportId].combos = acc[reportId].combos.concat(item.combo)
 
     return acc
   }, {})
@@ -71,23 +72,25 @@ const groupMoves = (data: DribbleChartApiData[]) => {
   return !isEmpty ? moveCounts : null
 }
 
-const groupSequences = (data: DribbleChartApiData[]) => {
-  const sequenceCounts = [] as SequenceCombosData[]
+const groupCombos = (data: DribbleChartApiData[]) => {
+  const comboCounts = [] as SequenceCombosData[]
 
-  for (const { report, move } of data) {
+  for (const { report, combo } of data) {
     if (!report) continue
 
-    const dribbles = getFirstThreeDribbles(move as MoveApiData[]).join("")
-    if (dribbles.length === 0) continue
+    combo.forEach((comboMoves) => {
+      const comboCode = comboMoves.move.map((move) => move.code).join("")
+      const comboIndex = comboCounts.findIndex((comboCount) => comboCount.sequence === comboCode)
 
-    const comboIndex = sequenceCounts.findIndex((combo) => combo.sequence === dribbles)
-    if (comboIndex === -1) {
-      sequenceCounts.push({ sequence: dribbles, count: 1 })
-    } else {
-      sequenceCounts[comboIndex].count += 1
-    }
+      if (comboIndex === -1) {
+        comboCounts.push({ sequence: comboCode, count: 1 })
+      } else {
+        comboCounts[comboIndex].count += 1
+      }
+    })
   }
-  return sequenceCounts.sort((a, b) => a.sequence.localeCompare(b.sequence))
+
+  return comboCounts
 }
 
 const getAllPlayers = async () => {
@@ -133,6 +136,7 @@ const getComboPointsRatio = async (id: string) => {
       .select(
         `
           move (code, x, y),
+          combo (id, move (code, x, y)),
           report:report_id (id, player_id, game_id (date))
         `,
       )
@@ -141,14 +145,14 @@ const getComboPointsRatio = async (id: string) => {
     if (!data) {
       return { error: "No data found" }
     }
-    const groupedData: Record<string, { report: any; moves: any }> = groupByReportId(data)
+    const groupedData: Record<string, { report: any; moves: any; combos: any }> = groupByReportId(data)
 
     const chartData = [] as ComboToPointData[]
-    for (const { report, moves } of Object.values(groupedData)) {
+    for (const { report, combos, moves } of Object.values(groupedData)) {
       const date = report.game_id.date.split("T")[0]
-      const comboCount = moves.filter((move: MoveApiData) => getIsDribble(move.code)).length
+      const comboCount = moves.filter((move: MoveApiData) => getIsDribble(move.code)).length // TODO: This should be removed?
       const points = getTotalPointsFromMoves(moves)
-      chartData.push({ date, comboCount, points })
+      chartData.push({ date, comboCount: combos.length || comboCount, points })
     }
 
     return { data: chartData, error }
@@ -164,7 +168,7 @@ const getDribblesCounts = async (id: string) => {
   try {
     const { data, error } = await supabase
       .from("sequence")
-      .select("move (code), report:report_id (player_id)")
+      .select("move (code), combo (move (code)), report:report_id (player_id)")
       .eq("report.player_id", id)
 
     if (!data) {
@@ -172,9 +176,9 @@ const getDribblesCounts = async (id: string) => {
     }
 
     const moveCounts = groupMoves(data)
-    const sequenceCounts = groupSequences(data)
+    const comboCounts = groupCombos(data)
 
-    return { moveCounts, sequenceCounts, error }
+    return { moveCounts, comboCounts, error }
   } catch (error: any) {
     return { error: typeof error === "string" ? error : error.message || "An error occurred" }
   }
@@ -218,7 +222,7 @@ export default async function PlayerDetailsView({ id }: Props) {
         )}
         <div className="flex flex-col items-center justify-center gap-10 lg:flex-row">
           {!!comboPointsResponse.data?.length && <PointsComboBarChart data={comboPointsResponse.data} />}
-          {!!dribbleCounts.sequenceCounts?.length && <ComboTimesUsedChart data={dribbleCounts.sequenceCounts} />}
+          {!!dribbleCounts.comboCounts?.length && <ComboTimesUsedChart data={dribbleCounts.comboCounts} />}
         </div>
       </div>
       {reportsResponse.data?.length ? (

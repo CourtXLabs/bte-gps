@@ -128,7 +128,6 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
 
     return dataToDownload
   } catch (error) {
-    console.log(error)
-    return { error }
+    return { error: "Could not save data. Please contact the app developer" }
   }
 }

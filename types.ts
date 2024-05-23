@@ -256,7 +256,12 @@ export interface DribbleChartApiData {
   move: {
     code: any
   }[]
+  combo: {
+    move: {
+      code: any
+    }[]
+  }[]
   report: {
-    player_id: any
+    player_id: number
   }[]
 }
