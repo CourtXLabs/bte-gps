@@ -47,6 +47,7 @@ const MovesList = () => {
               <TableHead>Combo</TableHead>
               <TableHead className="w-[20px]"></TableHead>
               <TableHead className="w-[20px]"></TableHead>
+              <TableHead className="w-[20px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

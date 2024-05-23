@@ -41,7 +41,7 @@ const CourtOptionsSection = () => {
   return (
     <div className="flex justify-between">
       <div className="flex items-center gap-3">
-        <Button type="submit" form="game-form" disabled={saveDisabled}>
+        <Button type="submit" form="game-form" disabled={false}>
           Save Game
         </Button>
         {!isSaved && (

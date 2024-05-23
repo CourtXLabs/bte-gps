@@ -32,6 +32,7 @@ interface BteDataStore {
   incrementPeriod: () => void
   decrementPeriod: () => void
   editMove: (newMove: MoveSequence) => void
+  duplicateMove: (newMove: MoveSequence) => void
   deleteMove: (moveUid: string) => void
   resetSequences: () => void
   changeGameType: (gameType: GameTypes) => void
@@ -163,6 +164,16 @@ const useBteStore = create<BteDataStore>()(
           return {
             moves: newMoves,
           }
+        }),
+      duplicateMove: (newMove: MoveSequence) =>
+        set((state: BteDataStore) => {
+          const newMoves = [...state.moves, newMove]
+          const currentSequence = state.sequences[state.activeSequenceIndex]
+          currentSequence.moveUids?.push(newMove.uid)
+          const newSequences = [...state.sequences]
+          newSequences[state.activeSequenceIndex] = currentSequence
+
+          return { moves: newMoves, sequences: newSequences }
         }),
       deleteMove: (moveUid: string) =>
         set((state: BteDataStore) => ({

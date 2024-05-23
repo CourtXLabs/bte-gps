@@ -1,7 +1,8 @@
 import { moveIdToNames } from "@/constants/misc"
 import useBteStore from "@/stores/bteDataStore"
 import { MoveSequence } from "@/types"
-import { CheckIcon, EditIcon, TrashIcon, XIcon } from "lucide-react"
+import { generateRandomString } from "@/utils/misc"
+import { CheckIcon, CopyIcon, EditIcon, TrashIcon, XIcon } from "lucide-react"
 import { useState } from "react"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
@@ -15,7 +16,7 @@ type Props = {
 
 const MoveRow = ({ move, moveIndex }: Props) => {
   const { x: initialX, y: initialY } = { x: move.x, y: move.y }
-  const { editMove, deleteMove } = useBteStore()
+  const { editMove, deleteMove, duplicateMove } = useBteStore()
   const [isEditing, setIsEditing] = useState(false)
   const [xCoordinate, setXCoordinate] = useState(initialX)
   const [yCoordinate, setYCoordinate] = useState(initialY)
@@ -41,7 +42,7 @@ const MoveRow = ({ move, moveIndex }: Props) => {
 
   const onUpdate = () => {
     setIsEditing(false)
-    editMove({ ...move, x: xCoordinate, y: yCoordinate })
+    editMove({ ...move, x: xCoordinate, y: yCoordinate, moveId: moveType as any })
   }
 
   const onStartEditing = () => {
@@ -52,7 +53,9 @@ const MoveRow = ({ move, moveIndex }: Props) => {
     deleteMove(move.uid)
   }
 
-  console.log(moveIdToNames)
+  const onDuplicate = () => {
+    duplicateMove({ ...move, uid: generateRandomString() })
+  }
 
   const tableRowContents = isEditing ? (
     <>
@@ -92,13 +95,14 @@ const MoveRow = ({ move, moveIndex }: Props) => {
         </Select>
       </TableCell>
       <TableCell>{move.combo || "-"}</TableCell>
+      <TableCell></TableCell>
       <TableCell>
-        <Button className="p-2" variant="ghost" onClick={onUpdate}>
+        <Button title="confirm" className="p-2" variant="ghost" onClick={onUpdate}>
           <CheckIcon size={20} className="stroke-primary" />
         </Button>
       </TableCell>
       <TableCell>
-        <Button className="p-2" variant="ghost" onClick={onCancelEditing}>
+        <Button title="cancel" className="p-2" variant="ghost" onClick={onCancelEditing}>
           <XIcon size={20} className="stroke-destructive" />
         </Button>
       </TableCell>
@@ -111,12 +115,17 @@ const MoveRow = ({ move, moveIndex }: Props) => {
       <TableCell>{moveIdToNames[move.moveId]}</TableCell>
       <TableCell>{move.combo || "-"}</TableCell>
       <TableCell>
-        <Button className="p-2" variant="ghost" onClick={onStartEditing}>
+        <Button title="copy" className="p-2" variant="ghost" onClick={onDuplicate}>
+          <CopyIcon size={20} className="stroke-primary" />
+        </Button>
+      </TableCell>
+      <TableCell>
+        <Button title="edit" className="p-2" variant="ghost" onClick={onStartEditing}>
           <EditIcon size={20} className="stroke-primary" />
         </Button>
       </TableCell>
       <TableCell>
-        <Button className="p-2" variant="ghost" onClick={onDelete}>
+        <Button title="delete" className="p-2" variant="ghost" onClick={onDelete}>
           <TrashIcon size={20} className="stroke-destructive" />
         </Button>
       </TableCell>

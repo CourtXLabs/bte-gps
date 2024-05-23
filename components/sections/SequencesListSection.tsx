@@ -53,7 +53,7 @@ export default function SequencesListSection() {
           >
             Sequence {sequenceIndex + 1}
           </Button>
-          <Button className="p-2" variant="ghost" onClick={onDelete(sequenceIndex)}>
+          <Button title="delete" className="p-2" variant="ghost" onClick={onDelete(sequenceIndex)}>
             <TrashIcon size={20} className="stroke-destructive" />
           </Button>
         </div>,
