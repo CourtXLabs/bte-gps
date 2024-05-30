@@ -150,6 +150,7 @@ export interface PeriodToWord {
 
 export interface TeamData {
   id?: string
+  code?: string
   name: string
 }
 
@@ -189,6 +190,7 @@ export interface ReportApiData {
   player_id: PlayerApiData
   game_id: GameApiData
   sequence: SequenceApiData[]
+  points?: number
 }
 
 export interface GameApiData {

@@ -153,6 +153,7 @@ export const getEfficiencyScore = (data: ReportApiData) => {
 
   for (const sequence of data.sequence) {
     const lastMove = sequence.move[sequence.move.length - 1]
+    if (!lastMove) return 0
     const bteValue = getBteValue(
       { ...lastMove, moveId: lastMove.code as unknown as any, uid: "" },
       sequence.move.length > 1,

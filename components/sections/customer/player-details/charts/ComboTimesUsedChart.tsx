@@ -64,7 +64,7 @@ export default function ComboTimesUsedChart({ data }: Props) {
         d3
           .axisLeft(y)
           .tickFormat(d3.format("d"))
-          .tickValues(d3.range(0, maxPoint + 1, 1)),
+          .tickValues(d3.range(0, maxPoint + 1, 2)),
       ) // This will ensure ticks at every integer
       .style("font-size", "12px")
 

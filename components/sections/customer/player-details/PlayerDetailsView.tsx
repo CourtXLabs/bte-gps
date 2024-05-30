@@ -79,7 +79,8 @@ const groupCombos = (data: DribbleChartApiData[]) => {
     if (!report) continue
 
     combo.forEach((comboMoves) => {
-      const comboCode = comboMoves.move.map((move) => move.code).join("")
+      const comboCode = comboMoves.move.flatMap((move) => (getIsDribble(move.code) ? move.code : [])).join("")
+      if (!comboCode) return
       const comboIndex = comboCounts.findIndex((comboCount) => comboCount.sequence === comboCode)
 
       if (comboIndex === -1) {
