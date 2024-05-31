@@ -1,3 +1,4 @@
+import { JWTPayload } from "jose"
 import { z } from "zod"
 import { MoveIds } from "./constants/misc"
 
@@ -268,4 +269,12 @@ export interface DribbleChartApiData {
   report: {
     player_id: number
   }[]
+}
+
+export enum Roles {
+  ADMIN = "ADMIN",
+}
+
+export interface CustomJWTPayload extends JWTPayload {
+  user_roles: Roles[]
 }
