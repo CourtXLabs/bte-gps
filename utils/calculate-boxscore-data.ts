@@ -100,9 +100,16 @@ export const getComboToPointRatio = (data: ReportApiData) => {
   if (!data.sequence.length) return "-"
   let totalCombos = 0
   let totalPoints = 0
+  const pointsFromDb = data.points
+  if (typeof pointsFromDb === "number") {
+    totalPoints = pointsFromDb
+  }
+
   for (const sequence of data.sequence) {
-    const points = getTotalPointsFromMoves(sequence.move)
-    totalPoints += points
+    if (typeof pointsFromDb !== "number") {
+      const points = getTotalPointsFromMoves(sequence.move)
+      totalPoints += points
+    }
 
     for (const move of sequence.move) {
       if (getIsDribble(move.code)) {
@@ -110,6 +117,7 @@ export const getComboToPointRatio = (data: ReportApiData) => {
       }
     }
   }
+
   return `${totalCombos} | ${totalPoints}`
 }
 

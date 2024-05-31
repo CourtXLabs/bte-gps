@@ -76,6 +76,13 @@ export default function ReportsList({ data }: Props) {
 
   const TABLE_COLUMNS: ColumnDef<any>[] = [
     {
+      id: "date",
+      header: () => <div className="py-4 text-center text-white">Date</div>,
+      enableSorting: false,
+      enableHiding: false,
+      size: 180,
+    },
+    {
       id: "individualDribble",
       header: () => (
         <BoxscoreColumnSelect
@@ -297,6 +304,7 @@ export default function ReportsList({ data }: Props) {
           {data.map((report) => {
             return (
               <TableRow key={report.id}>
+                <TableCell className="text-center">{report.game_id?.date.split("T")[0] || "N/A"}</TableCell>
                 <TableCell className="text-center">
                   {getIndividualDribblePercent(report, activeData.individualDribble).toFixed(1)}%
                 </TableCell>

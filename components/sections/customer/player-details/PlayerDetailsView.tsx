@@ -115,12 +115,15 @@ const getReports = async (id: string) => {
     const { data, error } = await supabase
       .from("report")
       .select(
-        "id, name, player_id(name, jersey, team_id(name)), game_id(date, home_team_id(name), away_team_id(name)), sequence(*, move(code, x, y))",
+        "id, name, points, player_id(name, jersey, team_id(name)), game_id(date, home_team_id(name), away_team_id(name)), sequence(*, move(code, x, y))",
       )
       .eq("player_id", id)
-      .order("id", { ascending: false })
 
-    return { data: data as unknown as ReportApiData[], error }
+    return {
+      // @ts-ignore
+      data: data?.sort((a, b) => new Date(b.game_id.date) - new Date(a.game_id.date)) as unknown as ReportApiData[],
+      error,
+    }
   } catch (error: any) {
     return { error: typeof error === "string" ? error : error.message || "An error occurred" }
   }
@@ -138,7 +141,7 @@ const getComboPointsRatio = async (id: string) => {
         `
           move (code, x, y),
           combo (id, move (code, x, y)),
-          report:report_id (id, player_id, game_id (date))
+          report:report_id (id, player_id, points, game_id (date))
         `,
       )
       .eq("report.player_id", id)
@@ -152,7 +155,7 @@ const getComboPointsRatio = async (id: string) => {
     for (const { report, combos, moves } of Object.values(groupedData)) {
       const date = report.game_id.date.split("T")[0]
       const comboCount = moves.filter((move: MoveApiData) => getIsDribble(move.code)).length // TODO: This should be removed?
-      const points = getTotalPointsFromMoves(moves)
+      const points = report.points !== null ? report.points : getTotalPointsFromMoves(moves)
       chartData.push({ date, comboCount: combos.length || comboCount, points })
     }
 

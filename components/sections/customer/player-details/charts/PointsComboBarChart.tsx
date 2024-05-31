@@ -173,7 +173,7 @@ export default function PointsComboBarChart({ data }: Props) {
       const offset = (width - margin.left - margin.right) / 2 + (i - (legendData.length - 1) / 2) * 90
       return `translate(${offset}, -40)` // Adjust y-position to move above the chart
     })
-  }, [data])
+  }, [data, maxPoint])
 
   return (
     <svg
