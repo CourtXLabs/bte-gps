@@ -181,6 +181,8 @@ const getDribblesCounts = async (id: string) => {
 
     const moveCounts = groupMoves(data)
     const comboCounts = groupCombos(data)
+      .filter((combo) => combo.count > 1)
+      .sort((a, b) => b.count - a.count)
 
     return { moveCounts, comboCounts, error }
   } catch (error: any) {

@@ -126,7 +126,7 @@ export default function ComboTimesUsedChart({ data }: Props) {
       .delay(function (d, i) {
         return i * 100
       })
-  }, [data])
+  }, [data, maxPoint])
 
   return (
     <svg
