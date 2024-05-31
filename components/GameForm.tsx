@@ -235,6 +235,19 @@ export default function GameForm({ players, teams }: Props) {
         />
         <FormField
           control={form.control}
+          name="points"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Points</FormLabel>
+              <FormControl>
+                <Input placeholder="Points" type="number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="date"
           render={({ field }) => (
             <FormItem className="flex flex-col">

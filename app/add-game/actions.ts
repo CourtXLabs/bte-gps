@@ -21,8 +21,9 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
   const supabase = createClient(cookieStore)
   try {
     const date = values.date.toISOString()
-    let { playerName, teamName, gameType, jersey, opponentName, playerId, teamId, opponentTeamId } = values
+    let { playerName, teamName, gameType, jersey, opponentName, playerId, teamId, opponentTeamId, points } = values
     const reportName = `${playerName} - ${date.split("T")[0]}`
+    const totalPoints = Number(points) || getTotalPoints(sequences)
 
     if (!teamId) {
       const teamData = [
@@ -66,6 +67,7 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
     const addedReportId = await uploadReport(supabase, {
       game_id: addedGameId,
       name: reportName,
+      points: totalPoints,
       player_id: playerId,
     })
 
@@ -118,7 +120,7 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
       name: reportName,
       playerInfo: {
         name: playerName,
-        points: getTotalPoints(sequences),
+        points: totalPoints,
         game: `${teamName} @ ${opponentName}`,
         date: values.date.toISOString().split("T")[0],
       },

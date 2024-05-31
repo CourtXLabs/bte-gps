@@ -115,6 +115,7 @@ export const gameFormSchema = z.object({
   opponentName: z.string().min(1, { message: errorMessage }),
   opponentTeamId: z.number().optional(),
   jersey: z.string().min(1, { message: errorMessage }),
+  points: z.string(),
   date: z.date(),
 })
 
@@ -173,6 +174,7 @@ export interface GameInput {
 export interface ReportInput {
   game_id: number | string
   name: string
+  points?: number
   player_id: number | string
 }
 
