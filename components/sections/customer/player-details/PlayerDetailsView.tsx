@@ -141,9 +141,10 @@ const getComboPointsRatio = async (id: string) => {
         `
           move (code, x, y),
           combo (id, move (code, x, y)),
-          report:report_id (id, player_id, points, game_id (date))
+          report: report_id (id, player_id, points, game_id (date))
         `,
       )
+      .not("report", "is", null) // Check that report_id is not null
       .eq("report.player_id", id)
 
     if (!data) {
