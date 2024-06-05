@@ -203,9 +203,14 @@ export interface GameApiData {
   away_team_id: TeamData
 }
 
+export interface ComboApiData {
+  id?: number
+  move?: MoveApiData[]
+}
 export interface SequenceApiData extends Sequence {
   id?: number
   move: MoveApiData[]
+  combo: MoveApiData[]
 }
 
 export interface GPSApiData {

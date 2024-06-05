@@ -47,6 +47,7 @@ const groupMoves = (data: DribbleChartApiData[]) => {
     (acc: Record<string, Record<string, number>>, report) => {
       if (!report.report) return acc
       const moves = report.move
+      if (!moves.length) return acc
 
       const isMadeShot = moves[moves.length - 1].code === 7
       const objectToChange = acc[isMadeShot ? "madeShots" : "missedShots"]
@@ -115,7 +116,7 @@ const getReports = async (id: string) => {
     const { data, error } = await supabase
       .from("report")
       .select(
-        "id, name, points, player_id(name, jersey, team_id(name)), game_id(date, home_team_id(name), away_team_id(name)), sequence(*, move(code, x, y))",
+        "id, name, points, player_id(name, jersey, team_id(name)), game_id(date, home_team_id(name), away_team_id(name)), sequence(*, combo(id), move(code, x, y))",
       )
       .eq("player_id", id)
 
@@ -144,7 +145,7 @@ const getComboPointsRatio = async (id: string) => {
           report: report_id (id, player_id, points, game_id (date))
         `,
       )
-      .not("report", "is", null) // Check that report_id is not null
+      .not("report", "is", null)
       .eq("report.player_id", id)
 
     if (!data) {
@@ -174,6 +175,7 @@ const getDribblesCounts = async (id: string) => {
     const { data, error } = await supabase
       .from("sequence")
       .select("move (code), combo (move (code)), report:report_id (player_id)")
+      .not("report", "is", null)
       .eq("report.player_id", id)
 
     if (!data) {

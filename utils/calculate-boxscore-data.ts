@@ -111,11 +111,7 @@ export const getComboToPointRatio = (data: ReportApiData) => {
       totalPoints += points
     }
 
-    for (const move of sequence.move) {
-      if (getIsDribble(move.code)) {
-        totalCombos++
-      }
-    }
+    totalCombos += sequence.combo?.length || 0
   }
 
   return `${totalCombos} | ${totalPoints}`
