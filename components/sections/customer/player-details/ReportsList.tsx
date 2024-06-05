@@ -31,6 +31,7 @@ import {
 } from "@/utils/calculate-boxscore-data"
 import { downloadCsv } from "@/utils/get-csv-data"
 import { getTotalPoints } from "@/utils/get-sequence-data"
+import { formatDate } from "@/utils/misc"
 import {
   ColumnDef,
   flexRender,
@@ -80,7 +81,7 @@ export default function ReportsList({ data }: Props) {
       header: () => <div className="py-4 text-center text-white">Date</div>,
       enableSorting: false,
       enableHiding: false,
-      size: 180,
+      size: 250,
     },
     {
       id: "individualDribble",
@@ -304,7 +305,7 @@ export default function ReportsList({ data }: Props) {
           {data.map((report) => {
             return (
               <TableRow key={report.id}>
-                <TableCell className="text-center">{report.game_id?.date.split("T")[0] || "N/A"}</TableCell>
+                <TableCell className="text-center">{formatDate(report.game_id?.date)}</TableCell>
                 <TableCell className="text-center">
                   {getIndividualDribblePercent(report, activeData.individualDribble).toFixed(1)}%
                 </TableCell>
