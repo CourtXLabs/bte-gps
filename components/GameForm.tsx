@@ -7,7 +7,6 @@ import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { Button } from "./ui/button"
-import { Calendar } from "./ui/calendar"
 
 import { saveGame } from "@/app/add-game/actions"
 import { INITIAL_GAME_TYPE } from "@/constants/misc"
@@ -17,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { z } from "zod"
 import Autocomplete from "./Autocomplete"
+import { CalendarWithoutTimezone } from "./ui/calendar-without-timezone"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -265,8 +265,7 @@ export default function GameForm({ players, teams }: Props) {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
+                  <CalendarWithoutTimezone
                     selected={field.value}
                     onSelect={field.onChange}
                     disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
