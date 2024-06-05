@@ -32,7 +32,6 @@ export const getIndividualDribblePercent = (data: ReportApiData, dribbleCode: st
 }
 
 export const getLaneDribblePercent = (data: ReportApiData, lane: string) => {
-  console.log(data, lane)
   let totalMoves = 0
   let laneMoves = 0
   for (const sequence of data.sequence) {

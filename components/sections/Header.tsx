@@ -10,6 +10,9 @@ export default async function Header() {
         <Link href="/">
           <Image src="/logo.jpeg" alt="logo" width={200} height={60} />
         </Link>
+        <Link href="/about-us" className="text-lg font-medium">
+          About Us
+        </Link>
         {isAdmin && (
           <Link href="/add-game" className="text-lg font-medium">
             Add Game
