@@ -1,6 +1,5 @@
 import { ReportApiData } from "@/types"
 import { getIsDribble } from "./get-is-dribble"
-import { getLanes } from "./get-moves-data"
 import { getBteScore, getBteValue, getTotalPointsFromMoves } from "./get-sequence-data"
 
 // Helpers ///////////////////////////////
@@ -33,11 +32,16 @@ export const getIndividualDribblePercent = (data: ReportApiData, dribbleCode: st
 }
 
 export const getLaneDribblePercent = (data: ReportApiData, lane: string) => {
+  console.log(data, lane)
   let totalMoves = 0
   let laneMoves = 0
   for (const sequence of data.sequence) {
     // @ts-ignore
-    const { leftLaneMoves, middleLaneMoves, rightLaneMoves } = getLanes({ ...sequence, moves: sequence.move })
+    const { leftLaneMoves, middleLaneMoves, rightLaneMoves } = {
+      leftLaneMoves: sequence.lanes_left || "",
+      middleLaneMoves: sequence.lanes_middle || "",
+      rightLaneMoves: sequence.lanes_right || "",
+    }
     totalMoves += leftLaneMoves.length + middleLaneMoves.length + rightLaneMoves.length
     if (lane === "left") {
       laneMoves += leftLaneMoves.length

@@ -73,6 +73,9 @@ export interface Sequence {
   pick_and_roll: string | null
   defender_pick_and_roll?: string | null
   ball_handler_pick_and_roll?: string
+  lanes_left?: string | null
+  lanes_middle?: string | null
+  lanes_right?: string | null
   period: number
 }
 
