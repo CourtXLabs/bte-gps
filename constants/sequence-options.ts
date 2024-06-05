@@ -86,7 +86,7 @@ export const LAST_DRIBBLE_TYPE = {
   name: "last_dribble_type",
   label: "Last Hand + Dribble Type",
   options: [
-    { value: "0", label: "No counter direction dribble (0)" },
+    { value: "0", label: "No dribble (0)" },
     { value: "LH1", label: "Pound dribble left (LH1)" },
     { value: "RH1", label: "Pound dribble right (RH1)" },
     { value: "LH2", label: "Crossover going left (LH2)" },
