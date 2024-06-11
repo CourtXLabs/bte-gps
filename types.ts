@@ -266,6 +266,9 @@ export interface MoveApiData {
 }
 
 export interface DribbleChartApiData {
+  initial_direction: string
+  counter_direction: string
+  last_dribble_type: string
   move: {
     code: any
   }[]
@@ -285,4 +288,22 @@ export enum Roles {
 
 export interface CustomJWTPayload extends JWTPayload {
   user_roles: Roles[]
+}
+
+export interface SeuqenceGraphData {
+  moveCounts: Record<string, Record<string, number>> | null
+  comboCounts: SequenceCombosData[]
+  seuqenceInfoCounts: {
+    initialDirectionCounts: Record<string, Record<string, number>>
+    counterDirectionCounts: Record<string, Record<string, number>>
+    lastDribbleTypeCounts: Record<string, Record<string, number>>
+  }
+  error: null
+}
+
+export interface IGraphFilters {
+  dribbles: boolean
+  initialDirection: boolean
+  counterDirection: boolean
+  lastHand: boolean
 }
