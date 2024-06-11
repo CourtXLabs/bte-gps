@@ -15,7 +15,17 @@ interface Props {
 
 export default function ComboTimesUsedChart({ data }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null)
-  const maxPoint = Math.round(Math.max(...data.map((d) => d.count)) * 1.25)
+
+  // Sort data and take the top 25 values
+  const sortedData = data.sort((a, b) => b.count - a.count).slice(0, 25)
+  const maxPoint = Math.round(Math.max(...sortedData.map((d) => d.count)) * 1.25)
+
+  const calculateTickStep = (maxValue: number): number => {
+    if (maxValue <= 100) return 10
+    if (maxValue <= 500) return 25
+    if (maxValue <= 1000) return 50
+    return 100
+  }
 
   useEffect(() => {
     const svg = d3
@@ -26,12 +36,23 @@ export default function ComboTimesUsedChart({ data }: Props) {
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
+    // Title
+    svg
+      .append("text")
+      .attr("x", (width - margin.left - margin.right) / 2)
+      .attr("y", -margin.top / 2)
+      .attr("text-anchor", "middle")
+      .text("Dribble Combos Used")
+      .style("font-size", "16px")
+      .style("font-weight", "bold")
+      .style("fill", "#fff")
+
     // X axis
     const x = d3
       .scaleBand()
       .range([0, width - margin.left - margin.right])
       .domain(
-        data.map(function (d) {
+        sortedData.map(function (d) {
           return d.sequence
         }),
       )
@@ -58,14 +79,16 @@ export default function ComboTimesUsedChart({ data }: Props) {
 
     // Add Y axis
     const y = d3.scaleLinear().domain([0, maxPoint]).range([height, 0])
+    const tickStep = calculateTickStep(maxPoint)
+
     svg
       .append("g")
       .call(
         d3
           .axisLeft(y)
           .tickFormat(d3.format("d"))
-          .tickValues(d3.range(0, maxPoint + 1, 2)),
-      ) // This will ensure ticks at every integer
+          .tickValues(d3.range(0, maxPoint + 1, tickStep)),
+      )
       .style("font-size", "12px")
 
     // Adding Y-axis Label
@@ -96,7 +119,7 @@ export default function ComboTimesUsedChart({ data }: Props) {
     // Bars
     svg
       .selectAll("mybar")
-      .data(data)
+      .data(sortedData)
       .enter()
       .append("rect")
       .attr("x", function (d) {
@@ -126,7 +149,7 @@ export default function ComboTimesUsedChart({ data }: Props) {
       .delay(function (d, i) {
         return i * 100
       })
-  }, [data, maxPoint])
+  }, [data, sortedData, maxPoint])
 
   return (
     <svg

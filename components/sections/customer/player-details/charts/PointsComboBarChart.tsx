@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react"
 
 const PRIMARY_COLOR = "#FCBE22"
 
-const margin = { top: 48, right: 30, bottom: 70, left: 40 }
+const margin = { top: 80, right: 30, bottom: 70, left: 40 } // Adjusted top margin to make space for the title
 const width = 600 - margin.left - margin.right
 const height = 500 - margin.top - margin.bottom
 interface Props {
@@ -18,7 +18,6 @@ export default function PointsComboBarChart({ data }: Props) {
   const maxPoint = Math.round(Math.max(...data.map((d) => Math.max(d.points, d.comboCount))) * 1.25)
 
   useEffect(() => {
-    // append the svg object to the body of the page
     const svg = d3
       .select(svgRef.current)
       .append("svg")
@@ -29,20 +28,33 @@ export default function PointsComboBarChart({ data }: Props) {
 
     svg.selectAll("*").remove()
 
+    // Add Title
+    svg
+      .append("text")
+      .attr("x", width / 2)
+      .attr("y", 0 - margin.top + 20)
+      .attr("text-anchor", "middle")
+      .style("font-size", "16px")
+      .style("fill", "white")
+      .style("font-weight", "bold")
+      .text("Sample Title")
+
     // X axis
     const x = d3
       .scaleBand()
       .range([0, width])
-      .domain(
-        data.map(function (d) {
-          return d.date
-        }),
-      )
+      .domain(data.map((d) => d.date))
       .padding(0.2)
+
+    const numTicks = Math.min(20, data.length)
+    const tickValues = data.filter((_, i) => i % Math.ceil(data.length / numTicks) === 0).map((d) => d.date)
+
+    const xAxis = d3.axisBottom(x).tickValues(tickValues)
+
     svg
       .append("g")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x))
+      .call(xAxis)
       .selectAll("text")
       .attr("transform", "translate(-10,0)rotate(-45)")
       .style("text-anchor", "end")
@@ -56,7 +68,6 @@ export default function PointsComboBarChart({ data }: Props) {
     svg
       .append("g")
       .attr("class", "grid")
-
       .call(
         d3
           .axisLeft(y)
@@ -72,28 +83,18 @@ export default function PointsComboBarChart({ data }: Props) {
       .data(data)
       .enter()
       .append("rect")
-      .attr("x", function (d) {
-        return x(d.date)!
-      })
+      .attr("x", (d) => x(d.date)!)
       .attr("width", x.bandwidth())
       .attr("fill", PRIMARY_COLOR)
-      // no bar at the beginning thus:
-      .attr("height", function (d) {
-        return height - y(0)
-      }) // always equal to 0
-      .attr("y", function (d) {
-        return y(0)
-      })
+      .attr("height", (d) => height - y(0))
+      .attr("y", (d) => y(0))
 
     // Line
     const line = d3
       .line()
-      .x(function (d: any) {
-        return x(d.date)! + x.bandwidth() / 2
-      }) // Center line in each band
-      .y(function (d: any) {
-        return y(d.points!)
-      })
+      .x((d: any) => x(d.date)! + x.bandwidth() / 2)
+      .y((d: any) => y(d.points))
+
     svg
       .append("path")
       .attr("fill", "none")
@@ -107,15 +108,9 @@ export default function PointsComboBarChart({ data }: Props) {
       .selectAll("rect")
       .transition()
       .duration(800)
-      .attr("y", function (d: any) {
-        return y(d.comboCount)
-      })
-      .attr("height", function (d: any) {
-        return height - y(d.comboCount)
-      })
-      .delay(function (d, i) {
-        return i * 100
-      })
+      .attr("y", (d: any) => y(d.comboCount))
+      .attr("height", (d: any) => height - y(d.comboCount))
+      .delay((d, i) => i * 100)
 
     const legendData = [
       { name: "Points", color: "red", type: "line" },
@@ -127,13 +122,12 @@ export default function PointsComboBarChart({ data }: Props) {
       .attr("font-size", 14)
       .attr("font-weight", 500)
       .style("fill", "white")
-      .attr("text-anchor", "middle") // Center alignment
+      .attr("text-anchor", "middle")
       .selectAll("g")
       .data(legendData)
       .enter()
       .append("g")
-      .attr("transform", function (d, i) {
-        // Calculate offset for each legend item to be centered
+      .attr("transform", (d, i) => {
         const offset = width / 2 + (i - (legendData.length - 1) / 2) * 90
         return `translate(${offset}, 0)`
       })
@@ -141,12 +135,7 @@ export default function PointsComboBarChart({ data }: Props) {
     legend.each(function (d) {
       const sel = d3.select(this)
       if (d.type === "rect") {
-        sel
-          .append("rect")
-          .attr("x", -9) // Centered relative to the text
-          .attr("width", 18)
-          .attr("height", 18)
-          .attr("fill", d.color)
+        sel.append("rect").attr("x", -9).attr("width", 18).attr("height", 18).attr("fill", d.color)
       } else if (d.type === "line") {
         sel
           .append("line")
@@ -161,17 +150,14 @@ export default function PointsComboBarChart({ data }: Props) {
 
     legend
       .append("text")
-      .attr("x", 40) // Offset text to the right of the shape
-      .attr("y", 9) // Vertically center text with the shape
-      .attr("dy", "0.35em") // Small vertical adjustment
-      .text(function (d) {
-        return d.name
-      })
+      .attr("x", 40)
+      .attr("y", 9)
+      .attr("dy", "0.35em")
+      .text((d) => d.name)
 
-    // Move the entire legend group up to place it above the chart
     legend.attr("transform", (d, i) => {
       const offset = (width - margin.left - margin.right) / 2 + (i - (legendData.length - 1) / 2) * 90
-      return `translate(${offset}, -40)` // Adjust y-position to move above the chart
+      return `translate(${offset}, -40)`
     })
   }, [data, maxPoint])
 
