@@ -222,8 +222,8 @@ export const PICK_AND_ROLL = {
   ],
 } as SequenceInput
 
-export const DEFENDER_PICK_AND_ROLL = {
-  name: "defender_pick_and_roll",
+export const ON_BALL_DEFENDER_PICK_AND_ROLL = {
+  name: "on_ball_defender_pick_and_roll",
   label: "On Ball Defender Pick & Roll",
   options: [
     { value: "over", label: "Over" },
@@ -234,8 +234,8 @@ export const DEFENDER_PICK_AND_ROLL = {
   ],
 } as SequenceInput
 
-export const BALL_HANDLER_PICK_AND_ROLL = {
-  name: "ball_handler_pick_and_roll",
+export const SCREENER_DEFENDER_PICK_AND_ROLL = {
+  name: "screener_defender_pick_and_roll",
   label: "Screener Defender Pick & Roll",
   options: [
     { value: "turn_the_corner", label: "Turn the corner" },
@@ -260,8 +260,8 @@ export const sequenceOptions: SequenceInput[] = [
   TYPE_OF_SHOT,
   PICK_AND_ROLL,
   // Optional
-  DEFENDER_PICK_AND_ROLL,
-  BALL_HANDLER_PICK_AND_ROLL,
+  ON_BALL_DEFENDER_PICK_AND_ROLL,
+  SCREENER_DEFENDER_PICK_AND_ROLL,
 ]
 
 export const dribbleOptions = [

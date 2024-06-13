@@ -30,7 +30,8 @@ export default function SequenceOptionsItem({ sequenceInput, control, disableLas
       name={sequenceInput.name}
       render={({ field }) => {
         const isDisabled =
-          sequenceInput.name === "defender_pick_and_roll" || sequenceInput.name === "ball_handler_pick_and_roll"
+          sequenceInput.name === "on_ball_defender_pick_and_roll" ||
+          sequenceInput.name === "screener_defender_pick_and_roll"
             ? disableLastTwoOptions
             : false
 

@@ -25,8 +25,8 @@ export default function SequenceOptionsDialog({ open, onOpenChange, onSubmit }: 
       last_dribble_type: "",
       type_of_shot: "CS3",
       pick_and_roll: "",
-      defender_pick_and_roll: "",
-      ball_handler_pick_and_roll: "",
+      on_ball_defender_pick_and_roll: "",
+      screener_defender_pick_and_roll: "",
     },
   })
 
@@ -39,8 +39,8 @@ export default function SequenceOptionsDialog({ open, onOpenChange, onSubmit }: 
 
   useEffect(() => {
     if (disableLastTwoOptions) {
-      form.setValue("defender_pick_and_roll", "")
-      form.setValue("ball_handler_pick_and_roll", "")
+      form.setValue("on_ball_defender_pick_and_roll", "")
+      form.setValue("screener_defender_pick_and_roll", "")
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disableLastTwoOptions])
