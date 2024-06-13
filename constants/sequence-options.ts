@@ -224,7 +224,7 @@ export const PICK_AND_ROLL = {
 
 export const DEFENDER_PICK_AND_ROLL = {
   name: "defender_pick_and_roll",
-  label: "Defender Pick & Roll",
+  label: "On Ball Defender Pick & Roll",
   options: [
     { value: "over", label: "Over" },
     { value: "under", label: "Under" },
@@ -236,7 +236,7 @@ export const DEFENDER_PICK_AND_ROLL = {
 
 export const BALL_HANDLER_PICK_AND_ROLL = {
   name: "ball_handler_pick_and_roll",
-  label: "Ball Handler Pick & Roll",
+  label: "Screener Defender Pick & Roll",
   options: [
     { value: "turn_the_corner", label: "Turn the corner" },
     { value: "drag", label: "Drag" },
