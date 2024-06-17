@@ -1,4 +1,5 @@
 import { MoveIds, idToUid, moveUids } from "@/constants/misc"
+import { getIsAdmin } from "@/lib/auth"
 import { createClient } from "@/lib/supabase/server"
 import {
   ComboToPointData,
@@ -19,6 +20,7 @@ import ReportsList from "./ReportsList"
 import ComboTimesUsedChart from "./charts/ComboTimesUsedChart"
 import PointsComboBarChart from "./charts/PointsComboBarChart"
 import SequencesGraphs from "./charts/SequencesGraphs"
+import InsightsButton from "./insights/InsightsButton"
 
 function groupByReportId(data: Record<string, any>[]) {
   const grouped = data.reduce((acc: any, item: any) => {
@@ -230,12 +232,15 @@ export default async function PlayerDetailsView({ id }: Props) {
     getDribblesCounts(id),
   ])
 
+  const isAdmin = await getIsAdmin()
+
   return (
     <div className="mx-auto flex w-full flex-col gap-6 px-4 py-10">
       <Link href="/" className="mx-auto mb-2 flex w-full max-w-7xl items-center gap-1">
         <ArrowLeftIcon /> Players List
       </Link>
       {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} />}
+      <InsightsButton id={id} canEdit={isAdmin} />
       <div>
         <SequencesGraphs dribbleCounts={dribbleCounts as SeuqenceGraphData} />
         <div className="flex flex-col items-center justify-center gap-10 lg:flex-row">

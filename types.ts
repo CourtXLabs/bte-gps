@@ -307,3 +307,7 @@ export interface IGraphFilters {
   counterDirection: boolean
   lastHand: boolean
 }
+
+export interface Insights {
+  insights: string
+}

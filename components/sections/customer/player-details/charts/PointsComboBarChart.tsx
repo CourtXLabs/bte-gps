@@ -37,7 +37,7 @@ export default function PointsComboBarChart({ data }: Props) {
       .style("font-size", "16px")
       .style("fill", "white")
       .style("font-weight", "bold")
-      .text("Sample Title")
+      .text("Points & Combos")
 
     // X axis
     const x = d3
