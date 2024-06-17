@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import useBoolean from "@/hooks/useBoolean"
 import { Insights } from "@/types"
 import { Pencil } from "lucide-react"
 import sanitizeHtml from "sanitize-html"
@@ -14,7 +13,6 @@ interface Props {
 
 export default function InsightsDialog({ open, onOpenChange, data, canEdit }: Props) {
   const cleanHtml = sanitizeHtml(data?.insights || "")
-  const isEditing = useBoolean(false)
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
