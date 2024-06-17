@@ -2,10 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import useBoolean from "@/hooks/useBoolean"
-import fetcher from "@/lib/swr/fetcher"
-import { Insights } from "@/types"
 import { LightbulbIcon } from "lucide-react"
-import useSWR from "swr"
 import InsightsDialog from "./InsightsDialog"
 
 interface Props {
@@ -14,8 +11,6 @@ interface Props {
 }
 
 export default function InsightsButton({ id, canEdit }: Props) {
-  const { data } = useSWR<Insights>(`/api/players/insights/${id}`, fetcher)
-
   const isDialogOpen = useBoolean(false)
 
   return (
@@ -26,7 +21,7 @@ export default function InsightsButton({ id, canEdit }: Props) {
           <span>Insights</span>
         </Button>
       </div>
-      <InsightsDialog canEdit={canEdit} open={isDialogOpen.value} onOpenChange={isDialogOpen.onToggle} data={data} />
+      <InsightsDialog canEdit={canEdit} open={isDialogOpen.value} onOpenChange={isDialogOpen.onToggle} id={id} />
     </>
   )
 }
