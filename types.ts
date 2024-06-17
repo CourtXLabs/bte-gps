@@ -38,9 +38,9 @@ export interface SequenceInput {
     | "counter_direction"
     | "last_dribble_type"
     | "type_of_shot"
-    | "pick_and_roll"
+    | "screener_pick_and_roll"
     | "on_ball_defender_pick_and_roll"
-    | "screener_defender_pick_and_roll"
+    | "ball_handler_pick_and_roll"
   label: string
   options: { value: string; label: string }[]
 }
@@ -70,9 +70,9 @@ export interface Sequence {
   counter_direction: string | null
   last_dribble_type: string | null
   type_of_shot: string | null
-  pick_and_roll: string | null
+  screener_pick_and_roll: string | null
   on_ball_defender_pick_and_roll?: string | null
-  screener_defender_pick_and_roll?: string
+  ball_handler_pick_and_roll?: string
   lanes_left?: string | null
   lanes_middle?: string | null
   lanes_right?: string | null
@@ -129,9 +129,9 @@ export const sequenceFormSchema = z.object({
   counter_direction: z.string().min(1, { message: errorMessage }),
   last_dribble_type: z.string().min(1, { message: errorMessage }),
   type_of_shot: z.string().min(1, { message: errorMessage }),
-  pick_and_roll: z.string().min(1, { message: errorMessage }),
+  screener_pick_and_roll: z.string().min(1, { message: errorMessage }),
   on_ball_defender_pick_and_roll: z.string().optional(),
-  screener_defender_pick_and_roll: z.string().optional(),
+  ball_handler_pick_and_roll: z.string().optional(),
 })
 
 export const dashboardToolbarFormSchema = z.object({
