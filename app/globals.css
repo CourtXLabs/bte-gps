@@ -47,3 +47,40 @@
     @apply bg-background text-foreground;
   }
 }
+
+.tiptap {
+  padding: 0.5rem;
+  border: 1px solid #c2ccd6;
+  border-radius: 4px;
+  min-height: 5.8rem;
+}
+
+.tiptap ol,
+ul,
+menu {
+  padding-left: 1.5rem;
+}
+
+.tiptap ol {
+  list-style-type: decimal;
+}
+
+.tiptap ul {
+  list-style-type: disc;
+}
+
+.tiptap h1 {
+  @apply text-3xl font-bold;
+}
+
+.tiptap h2 {
+  @apply text-2xl font-bold;
+}
+
+.tiptap h3 {
+  @apply text-xl font-bold;
+}
+
+.tiptap h4 {
+  @apply text-lg font-bold;
+}

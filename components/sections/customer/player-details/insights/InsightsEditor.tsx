@@ -1,3 +1,4 @@
+import Tiptap from "@/components/ui/wysiwyg/tiptap"
 import { Insights } from "@/types"
 import { useState } from "react"
 
@@ -12,5 +13,5 @@ export default function InsightsEditor({ initialData }: Props) {
     setData(editorState)
   }
 
-  return <div>Editor!</div>
+  return <Tiptap />
 }
