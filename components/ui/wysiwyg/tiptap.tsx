@@ -1,14 +1,17 @@
 "use client"
 
-import Bold from "@tiptap/extension-bold"
 import Heading from "@tiptap/extension-heading"
-import Italic from "@tiptap/extension-italic"
 import Underline from "@tiptap/extension-underline"
 import { EditorProvider } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import Toolbar from "./toolbar"
 
-const Tiptap = () => {
+interface Props {
+  content?: string
+  onUpdate: any
+}
+
+const Tiptap = ({ content, onUpdate }: Props) => {
   return (
     <EditorProvider
       autofocus
@@ -25,11 +28,10 @@ const Tiptap = () => {
           },
         }),
         Heading.configure({ levels: [1, 2, 3, 4] }),
-        Bold,
-        Italic,
         Underline,
       ]}
-      content={"<p>Hello World 🌎️</p>"}
+      content={content}
+      onUpdate={onUpdate}
     ></EditorProvider>
   )
 }

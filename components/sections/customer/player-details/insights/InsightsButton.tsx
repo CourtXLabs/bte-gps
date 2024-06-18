@@ -21,7 +21,9 @@ export default function InsightsButton({ id, canEdit }: Props) {
           <span>Insights</span>
         </Button>
       </div>
-      <InsightsDialog canEdit={canEdit} open={isDialogOpen.value} onOpenChange={isDialogOpen.onToggle} id={id} />
+      {isDialogOpen.value && (
+        <InsightsDialog canEdit={canEdit} open={isDialogOpen.value} onOpenChange={isDialogOpen.onToggle} id={id} />
+      )}
     </>
   )
 }

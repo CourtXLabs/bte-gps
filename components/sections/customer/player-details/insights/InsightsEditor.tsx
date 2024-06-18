@@ -1,17 +1,21 @@
-import Tiptap from "@/components/ui/wysiwyg/tiptap"
-import { Insights } from "@/types"
-import { useState } from "react"
+import { Button } from "@/components/ui/button"
 
 interface Props {
-  initialData?: Insights
+  children?: React.ReactNode
+  withSaveBtn?: boolean
+  onSave: () => void
+  isBtnDisabled: boolean
 }
 
-export default function InsightsEditor({ initialData }: Props) {
-  const [data, setData] = useState(initialData)
-
-  const onChange = (editorState: any) => {
-    setData(editorState)
-  }
-
-  return <Tiptap />
+export default function InsightsEditor({ children, withSaveBtn, onSave, isBtnDisabled }: Props) {
+  return (
+    <div className="space-y-4">
+      {children}
+      {withSaveBtn && (
+        <Button disabled={isBtnDisabled} onClick={onSave}>
+          Save
+        </Button>
+      )}
+    </div>
+  )
 }
