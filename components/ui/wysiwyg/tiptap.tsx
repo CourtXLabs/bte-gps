@@ -1,6 +1,7 @@
 "use client"
 
 import Heading from "@tiptap/extension-heading"
+import Image from "@tiptap/extension-image"
 import Underline from "@tiptap/extension-underline"
 import { EditorProvider } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
@@ -29,6 +30,7 @@ const Tiptap = ({ content, onUpdate }: Props) => {
         }),
         Heading.configure({ levels: [1, 2, 3, 4] }),
         Underline,
+        Image,
       ]}
       content={content}
       onUpdate={onUpdate}

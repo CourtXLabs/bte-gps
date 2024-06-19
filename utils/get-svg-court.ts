@@ -6,7 +6,7 @@ import { drawLineBetweenMarkers, drawPermanentMarker } from "./draw-move-marker"
 import { convertCoordinatesToPixels } from "./get-moves-data"
 import { generateRandomString } from "./misc"
 
-function base64ToBlob(base64: string, contentType: string) {
+export function base64ToBlob(base64: string, contentType: string) {
   const byteCharacters = atob(base64.split(",")[1])
   const byteArrays = []
 

@@ -1,4 +1,7 @@
+import { createClient } from "@/lib/supabase/client"
 import { cn } from "@/lib/utils"
+import { base64ToBlob } from "@/utils/get-svg-court"
+import { generateRandomString } from "@/utils/misc"
 import { useCurrentEditor } from "@tiptap/react"
 import {
   BoldIcon,
@@ -6,6 +9,7 @@ import {
   Heading2Icon,
   Heading3Icon,
   Heading4Icon,
+  ImageIcon,
   ItalicIcon,
   ListIcon,
   ListOrderedIcon,
@@ -13,15 +17,52 @@ import {
   Type,
   UnderlineIcon,
 } from "lucide-react"
+import { useRef } from "react"
+import { toast } from "../use-toast"
 
 const itemClassname = "border p-1 border-gray-400 rounded-sm"
 const activeItemClassname = "border-primary border"
 
 const Toolbar = () => {
+  const supabase = createClient()
   const { editor } = useCurrentEditor()
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   if (!editor) {
     return null
+  }
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target!.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = async () => {
+        const type = file.type
+        const imageBase64 = reader.result as string
+        const imageBlob = base64ToBlob(imageBase64, type)
+        const imageName = `${file.name}-${generateRandomString()}`
+
+        await supabase.storage.from("Player Insights").upload(imageName, imageBlob, {
+          contentType: type,
+        })
+        const { error, data: imageUrlData } = await supabase.storage
+          .from("Player Insights")
+          .createSignedUrls([imageName], 3153600000)
+
+        if (error) {
+          toast({ variant: "destructive", title: "Failed to upload image" })
+        }
+
+        editor
+          .chain()
+          .focus()
+          .setImage({
+            src: imageUrlData?.[0].signedUrl!,
+          })
+          .run()
+      }
+      reader.readAsDataURL(file)
+    }
   }
 
   return (
@@ -98,6 +139,16 @@ const Toolbar = () => {
         >
           <ListOrderedIcon />
         </button>
+        <button onClick={() => fileInputRef.current!.click()} className={itemClassname}>
+          <ImageIcon />
+        </button>
+        <input
+          type="file"
+          accept="image/*"
+          ref={fileInputRef}
+          style={{ display: "none" }}
+          onChange={handleImageUpload}
+        />
       </div>
     </div>
   )

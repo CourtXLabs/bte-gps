@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { toast } from "@/components/ui/use-toast"
 import Tiptap from "@/components/ui/wysiwyg/tiptap"
+import { ALLOWED_TAGS } from "@/constants/wysiwyg"
 import useBoolean from "@/hooks/useBoolean"
 import { createClient } from "@/lib/supabase/client"
 import fetcher from "@/lib/swr/fetcher"
@@ -26,7 +27,7 @@ export default function InsightsDialog({ open, onOpenChange, canEdit, id }: Prop
   const [data, setData] = useState(initialData?.insights || "")
 
   const hasChanges = (initialData?.insights || "") !== data
-  const cleanHtml = sanitizeHtml(data)
+  const cleanHtml = sanitizeHtml(data, { allowedTags: ALLOWED_TAGS })
   const isEditing = useBoolean(false)
   const isLoading = useBoolean(false)
 
@@ -49,6 +50,8 @@ export default function InsightsDialog({ open, onOpenChange, canEdit, id }: Prop
   useEffect(() => {
     setData(initialData?.insights || "")
   }, [initialData])
+
+  console.log({ data })
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
