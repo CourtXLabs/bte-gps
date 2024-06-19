@@ -226,11 +226,21 @@ export const ON_BALL_DEFENDER_PICK_AND_ROLL = {
   name: "on_ball_defender_pick_and_roll",
   label: "On Ball Defender Pick & Roll",
   options: [
-    { value: "over", label: "Over" },
-    { value: "under", label: "Under" },
+    { value: "over", label: "Over - Defender follows ball handler over the screener" },
+    { value: "under", label: "Under - Defender separates from the ball handler and goes under the player screening" },
     { value: "hold_pick", label: "Hold Pick" },
     { value: "show", label: "Show" },
-    { value: "blitz", label: "Blitz" },
+    { value: "switch", label: "Switch - On ball defender switches players with the screener's defender" },
+    {
+      value: "ice",
+      label:
+        "Ice - On ball defender 'sits in the lap' of the screener and forces the ball handler to go in one direction (typically towards the sideline or the short side of the court)",
+    },
+    {
+      value: "blitz",
+      label:
+        "Blitz - Defender traps or aggressively defends the pick and roll and forces the ball handler to move further from the basket and retreat dribble",
+    },
   ],
 } as SequenceInput
 
@@ -238,16 +248,47 @@ export const ball_handler_pick_and_roll = {
   name: "ball_handler_pick_and_roll",
   label: "Ball Handler Pick and Roll",
   options: [
-    { value: "turn_the_corner", label: "Turn the corner" },
-    { value: "drag", label: "Drag" },
-    { value: "behind", label: "Behind" },
-    { value: "dribble_hold", label: "Dribble Hold" },
-    { value: "split", label: "Split" },
-    { value: "snake", label: "Snake" },
-    { value: "twist", label: "Twist" },
-    { value: "switch", label: "Switch" },
-    { value: "reject", label: "Reject" },
-    { value: "re_screen", label: "Re-screen" },
+    {
+      value: "turn_the_corner",
+      label:
+        "Turn the Corner - Ball handler comes off the screen and dribbles aggressively towards the hoop to shoot (attacks downhill)",
+    },
+    {
+      value: "drag",
+      label:
+        "Drag - Ball handler extends the dribble away from the screen and moves side to side, not attacking the basket",
+    },
+    { value: "behind", label: "Behind - Ball handler stops behind the screen and shoots the ball" },
+    {
+      value: "dribble_hold",
+      label:
+        "Dribble Hold - Ball handler pauses and holds dribble in one place, defender goes over screen, keeps defender on back, then continues to score",
+    },
+    {
+      value: "split",
+      label:
+        "Split - Ball handler uses the screen and attacks the gap between defenders (usually in 'Hard Hedge' or 'Blitz' coverage)",
+    },
+    {
+      value: "snake",
+      label:
+        "Snake - Ball handler uses the screen, goes in one direction, then dribbles in the opposite direction (usually in 'Drop' coverage)",
+    },
+    {
+      value: "twist",
+      label:
+        "Twist - Ball handler comes off a screen, screener twists and sets another screen for a shot (changing angle while handler stays stationary)",
+    },
+    {
+      value: "reject",
+      label:
+        "Reject - Ball handler refuses the screen and goes in the opposite direction (when defender cheats over screen early)",
+    },
+    {
+      value: "re_screen",
+      label:
+        "Re-screen - Ball handler uses the screen, reads defenders, screener sets another screen for the ball handler to use to score (typically in 'Drop' coverage)",
+    },
   ],
 } as SequenceInput
 
