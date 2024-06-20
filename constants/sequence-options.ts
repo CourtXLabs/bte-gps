@@ -241,6 +241,11 @@ export const ON_BALL_DEFENDER_PICK_AND_ROLL = {
       label:
         "Blitz - Defender traps or aggressively defends the pick and roll and forces the ball handler to move further from the basket and retreat dribble",
     },
+    {
+      value: "stay",
+      label:
+        "Stay - Defender just stays with the ball handler. Typically done when ball handler rejects the ball screen.",
+    },
   ],
 } as SequenceInput
 
