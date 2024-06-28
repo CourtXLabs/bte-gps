@@ -15,6 +15,7 @@ interface Props {
 const Tiptap = ({ content, onUpdate }: Props) => {
   return (
     <EditorProvider
+    
       autofocus
       slotBefore={<Toolbar />}
       extensions={[

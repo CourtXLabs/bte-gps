@@ -51,11 +51,9 @@ export default function InsightsDialog({ open, onOpenChange, canEdit, id }: Prop
     setData(initialData?.insights || "")
   }, [initialData])
 
-  console.log({ data })
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-h-[80vh] max-w-3xl overflow-scroll">
         <DialogHeader>
           <DialogTitle className="border-b-2 border-accent pb-6">Player Data Insights</DialogTitle>
         </DialogHeader>
