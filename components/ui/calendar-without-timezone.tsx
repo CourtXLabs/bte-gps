@@ -1,35 +1,37 @@
 "use client"
 
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { DayPicker } from "react-day-picker"
-
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { DateTime } from "luxon"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import { useState } from "react"
+import { DayPicker } from "react-day-picker"
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  onSelect?: (date: Date | undefined) => void
+}
 
-// @ts-ignore
 function CalendarWithoutTimezone({ className, classNames, showOutsideDays = true, onSelect, ...props }: CalendarProps) {
   const [selected, setSelected] = useState<Date>()
 
-  const myTz = "UTC"
+  const handleSelect = (day: Date | undefined) => {
+    if (!day) {
+      setSelected(undefined)
+      onSelect?.(undefined)
+      return
+    }
 
-  const handleSelect = (day: Date) => {
-    if (!day) return setSelected(undefined)
-
-    const manipulated = DateTime.fromJSDate(day).setZone(myTz, { keepLocalTime: true }).toJSDate()
-    setSelected(manipulated)
-    onSelect(manipulated)
+    // Create a new Date object with the local date and time
+    const localDate = new Date(day.getFullYear(), day.getMonth(), day.getDate())
+    setSelected(localDate)
+    onSelect?.(localDate)
   }
 
   return (
     <DayPicker
       mode="single"
-      selected={
-        selected && DateTime.fromJSDate(selected, { zone: myTz }).setZone("local", { keepLocalTime: true }).toJSDate()
-      }
+      selected={selected}
+      // @ts-ignore
+      onSelect={handleSelect}
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
       classNames={{
@@ -66,11 +68,10 @@ function CalendarWithoutTimezone({ className, classNames, showOutsideDays = true
         IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
       }}
       {...props}
-      // @ts-ignore
-      onSelect={handleSelect}
     />
   )
 }
+
 CalendarWithoutTimezone.displayName = "CalendarWithoutTimezone"
 
 export { CalendarWithoutTimezone }

@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/actionts"
 import { Sequence, gameFormSchema } from "@/types"
+import dateToUTCString from "@/utils/convert-date-to-utc-string"
 import { getComboIdsMap, getCombosData } from "@/utils/get-combos-data"
 import { getSequenceData, getTotalPoints } from "@/utils/get-sequence-data"
 import { uploadGame, uploadReport } from "@/utils/upload-db-data"
@@ -20,7 +21,7 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
   try {
-    const date = values.date.toISOString()
+    const date = dateToUTCString(values.date)
     let { playerName, teamName, gameType, jersey, opponentName, playerId, teamId, opponentTeamId, points } = values
     const reportName = `${playerName} - ${date.split("T")[0]}`
     const totalPoints = Number(points) || getTotalPoints(sequences)
@@ -122,7 +123,7 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
         name: playerName,
         points: totalPoints,
         game: `${teamName} @ ${opponentName}`,
-        date: values.date.toISOString().split("T")[0],
+        date: date.split("T")[0],
       },
       imageInfo: imageData || [],
       error: null,
