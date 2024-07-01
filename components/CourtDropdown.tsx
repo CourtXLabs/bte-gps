@@ -63,9 +63,9 @@ export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props)
               key={option.id}
               src={option.image}
               alt={option.name}
-              width={100}
-              height={129}
-              className="cursor-pointer"
+              width={120}
+              height={120}
+              className=" cursor-pointer"
               onClick={onSelectOption(option)}
             />
           ) : (
