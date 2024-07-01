@@ -106,13 +106,13 @@ const groupSequenceData = (data: DribbleChartApiData[]) => {
     if (!move.length) continue
     const isMadeShot = move[move.length - 1].code === 8
     const key = isMadeShot ? "madeShots" : "missedShots"
-    if (initial_direction) {
+    if (initial_direction && initial_direction !== "0") {
       initialDirectionCounts[key][initial_direction] = (initialDirectionCounts[key][initial_direction] || 0) + 1
     }
-    if (counter_direction) {
+    if (counter_direction && counter_direction !== "0") {
       counterDirectionCounts[key][counter_direction] = (counterDirectionCounts[key][counter_direction] || 0) + 1
     }
-    if (last_dribble_type) {
+    if (last_dribble_type && last_dribble_type !== "0") {
       lastDribbleTypeCounts[key][last_dribble_type] = (lastDribbleTypeCounts[key][last_dribble_type] || 0) + 1
     }
   }
