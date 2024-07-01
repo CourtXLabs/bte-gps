@@ -12,7 +12,6 @@ import { Pencil } from "lucide-react"
 import { useEffect, useState } from "react"
 import sanitizeHtml from "sanitize-html"
 import useSWR from "swr"
-import InsightsEditor from "./InsightsEditor"
 
 interface Props {
   open: boolean
@@ -53,25 +52,43 @@ export default function InsightsDialog({ open, onOpenChange, canEdit, id }: Prop
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[80vh] max-w-3xl overflow-scroll">
+      <DialogContent className="h-[80vh] max-w-6xl">
         <DialogHeader>
           <DialogTitle className="border-b-2 border-accent pb-6">Player Data Insights</DialogTitle>
         </DialogHeader>
         {canEdit && (
-          <Button className="w-max gap-2 text-base" onClick={isEditing.onToggle}>
-            {isEditing.value ? "Preview" : "Edit"}
-            {!isEditing.value && <Pencil className="w-4" />}
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button
+              className="w-max text-base"
+              variant={isEditing.value ? "outline" : "default"}
+              onClick={isEditing.onFalse}
+            >
+              Preview
+            </Button>
+            <Button
+              variant={isEditing.value ? "default" : "outline"}
+              className="w-max gap-2 text-base"
+              onClick={isEditing.onTrue}
+            >
+              Edit
+              <Pencil className="w-4" />
+            </Button>
+            {isEditing.value && (
+              <Button disabled={isLoading.value || !hasChanges} onClick={onSave} className="ml-auto text-base">
+                Save
+              </Button>
+            )}
+          </div>
         )}
-        {isEditing.value ? (
-          <InsightsEditor withSaveBtn={hasChanges} onSave={onSave} isBtnDisabled={isLoading.value}>
+        <div className="overflow-auto">
+          {isEditing.value ? (
             <Tiptap content={data} onUpdate={onUpdate} />
-          </InsightsEditor>
-        ) : cleanHtml ? (
-          <div dangerouslySetInnerHTML={{ __html: cleanHtml }} className="insights tiptap" />
-        ) : (
-          <div>No Insights for this Player Yet...</div>
-        )}
+          ) : cleanHtml ? (
+            <div dangerouslySetInnerHTML={{ __html: cleanHtml }} className="insights tiptap" />
+          ) : (
+            <div>No Insights for this Player Yet...</div>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   )

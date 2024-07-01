@@ -66,90 +66,82 @@ const Toolbar = () => {
   }
 
   return (
-    <div>
-      <div className="flex gap-2">
-        <button
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          disabled={!editor.can().chain().focus().toggleBold().run()}
-          className={cn(itemClassname, { [activeItemClassname]: editor.isActive("bold") })}
-        >
-          <BoldIcon />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          disabled={!editor.can().chain().focus().toggleItalic().run()}
-          className={cn(itemClassname, { [activeItemClassname]: editor.isActive("italic") })}
-        >
-          <ItalicIcon />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-          disabled={!editor.can().chain().focus().toggleUnderline().run()}
-          className={cn(itemClassname, { [activeItemClassname]: editor.isActive("underline") })}
-        >
-          <UnderlineIcon />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          disabled={!editor.can().chain().focus().toggleStrike().run()}
-          className={cn(itemClassname, { [activeItemClassname]: editor.isActive("strike") })}
-        >
-          <StrikethroughIcon />
-        </button>
+    <div className="mb-4 flex gap-2">
+      <button
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        disabled={!editor.can().chain().focus().toggleBold().run()}
+        className={cn(itemClassname, { [activeItemClassname]: editor.isActive("bold") })}
+      >
+        <BoldIcon />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        disabled={!editor.can().chain().focus().toggleItalic().run()}
+        className={cn(itemClassname, { [activeItemClassname]: editor.isActive("italic") })}
+      >
+        <ItalicIcon />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleUnderline().run()}
+        disabled={!editor.can().chain().focus().toggleUnderline().run()}
+        className={cn(itemClassname, { [activeItemClassname]: editor.isActive("underline") })}
+      >
+        <UnderlineIcon />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleStrike().run()}
+        disabled={!editor.can().chain().focus().toggleStrike().run()}
+        className={cn(itemClassname, { [activeItemClassname]: editor.isActive("strike") })}
+      >
+        <StrikethroughIcon />
+      </button>
 
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          className={cn(itemClassname, { [activeItemClassname]: editor.isActive("heading", { level: 1 }) })}
-        >
-          <Heading1Icon />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={cn(itemClassname, { [activeItemClassname]: editor.isActive("heading", { level: 2 }) })}
-        >
-          <Heading2Icon />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          className={cn(itemClassname, { [activeItemClassname]: editor.isActive("heading", { level: 3 }) })}
-        >
-          <Heading3Icon />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-          className={cn(itemClassname, { [activeItemClassname]: editor.isActive("heading", { level: 4 }) })}
-        >
-          <Heading4Icon />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().setParagraph().run()}
-          className={cn(itemClassname, { [activeItemClassname]: editor.isActive("paragraph") })}
-        >
-          <Type />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={cn(itemClassname, { [activeItemClassname]: editor.isActive("bulletList") })}
-        >
-          <ListIcon />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={cn(itemClassname, { [activeItemClassname]: editor.isActive("orderedList") })}
-        >
-          <ListOrderedIcon />
-        </button>
-        <button onClick={() => fileInputRef.current!.click()} className={itemClassname}>
-          <ImageIcon />
-        </button>
-        <input
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          style={{ display: "none" }}
-          onChange={handleImageUpload}
-        />
-      </div>
+      <button
+        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+        className={cn(itemClassname, { [activeItemClassname]: editor.isActive("heading", { level: 1 }) })}
+      >
+        <Heading1Icon />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        className={cn(itemClassname, { [activeItemClassname]: editor.isActive("heading", { level: 2 }) })}
+      >
+        <Heading2Icon />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        className={cn(itemClassname, { [activeItemClassname]: editor.isActive("heading", { level: 3 }) })}
+      >
+        <Heading3Icon />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
+        className={cn(itemClassname, { [activeItemClassname]: editor.isActive("heading", { level: 4 }) })}
+      >
+        <Heading4Icon />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().setParagraph().run()}
+        className={cn(itemClassname, { [activeItemClassname]: editor.isActive("paragraph") })}
+      >
+        <Type />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className={cn(itemClassname, { [activeItemClassname]: editor.isActive("bulletList") })}
+      >
+        <ListIcon />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        className={cn(itemClassname, { [activeItemClassname]: editor.isActive("orderedList") })}
+      >
+        <ListOrderedIcon />
+      </button>
+      <button onClick={() => fileInputRef.current!.click()} className={itemClassname}>
+        <ImageIcon />
+      </button>
+      <input type="file" accept="image/*" ref={fileInputRef} style={{ display: "none" }} onChange={handleImageUpload} />
     </div>
   )
 }
