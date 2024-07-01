@@ -24,7 +24,7 @@ export const getBteValue = (move: MoveSequence, hasDribbles: boolean): number =>
 
 export const getBteScore = (bteValue: number, moves: MoveSequence[]) => {
   const lastMove = moves[moves.length - 1]
-  const isMadeShot = lastMove.moveId === 7
+  const isMadeShot = lastMove.moveId === 8
   if (!isMadeShot) return 0 // Missed shot -> view CourtDropdown.tsx options
 
   let dribblesCounted = 0
@@ -41,7 +41,7 @@ export const getTotalPoints = (sequences: Sequence[]) => {
   return sequences.reduce((totalPoints, sequence) => {
     if (!sequence.moves?.length) return totalPoints
     const lastMove = sequence.moves[sequence.moves.length - 1]
-    const isMadeShot = lastMove.moveId === 7
+    const isMadeShot = lastMove.moveId === 8
     if (!isMadeShot) return totalPoints
     const direction = lastMove.x > 0 ? "right" : "left"
     const isIn3PointArea = direction === "right" ? getIsInRight3PointArea(lastMove) : getIsInLeft3PointArea(lastMove)
@@ -52,7 +52,7 @@ export const getTotalPoints = (sequences: Sequence[]) => {
 
 export const getTotalPointsFromMoves = (moves: MoveApiData[]) => {
   return moves.reduce((totalPoints, move) => {
-    const isMadeShot = move.code === 7
+    const isMadeShot = move.code === 8
     if (!isMadeShot) return totalPoints
 
     const direction = move.x > 0 ? "right" : "left"

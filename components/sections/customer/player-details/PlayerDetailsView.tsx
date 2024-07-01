@@ -51,7 +51,7 @@ const groupMoves = (data: DribbleChartApiData[]) => {
       const moves = report.move
       if (!moves.length) return acc
 
-      const isMadeShot = moves[moves.length - 1].code === 7
+      const isMadeShot = moves[moves.length - 1].code === 8
       const objectToChange = acc[isMadeShot ? "madeShots" : "missedShots"]
 
       moves.forEach((move: { code: MoveIds }) => {
@@ -104,7 +104,7 @@ const groupSequenceData = (data: DribbleChartApiData[]) => {
 
   for (const { initial_direction, counter_direction, last_dribble_type, move } of data) {
     if (!move.length) continue
-    const isMadeShot = move[move.length - 1].code === 7
+    const isMadeShot = move[move.length - 1].code === 8
     const key = isMadeShot ? "madeShots" : "missedShots"
     if (initial_direction) {
       initialDirectionCounts[key][initial_direction] = (initialDirectionCounts[key][initial_direction] || 0) + 1
