@@ -29,7 +29,7 @@ export default function DribblePieChart({ data }: Props) {
   const formattedData = Object.entries(data)
     .flatMap(([key, value]) => ({
       key,
-      name: moveIdToNames[key as MoveIds],
+      name: moveIdToNames[Number(key) as MoveIds],
       value,
     }))
     .sort((a, b) => a.key.localeCompare(b.key))
