@@ -36,5 +36,5 @@ export async function login(values: Inputs) {
     redirect("/add-game")
   }
 
-  redirect("/")
+  redirect("/players/41")
 }

@@ -18,6 +18,7 @@ export default async function Header() {
             Add Game
           </Link>
         )}
+        <p className="ml-auto text-lg font-medium">BETA</p>
       </div>
     </div>
   )
