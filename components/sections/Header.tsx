@@ -13,6 +13,9 @@ export default async function Header() {
         <Link href="/about-us" className="text-lg font-medium">
           About Us
         </Link>
+        <Link href="/glossary" className="text-lg font-medium">
+          Glossary
+        </Link>
         {isAdmin && (
           <Link href="/add-game" className="text-lg font-medium">
             Add Game
