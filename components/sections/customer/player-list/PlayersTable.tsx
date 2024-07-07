@@ -1,6 +1,7 @@
 "use client"
 
 import { DataTablePagination } from "@/components/table/DataTablePagination"
+import { AVAILABLE_PLAYER_IDS } from "@/global-constants"
 import { PlayerApiData, TeamData } from "@/types"
 import {
   ColumnDef,
@@ -93,7 +94,12 @@ export default function PlayersTable({ data, count }: Props) {
           </TableHeader>
           <TableBody>
             {data.map((player) => (
-              <TableRow key={player.id} onClick={onClickRow(player.id!)} className="cursor-pointer">
+              <TableRow
+                key={player.id}
+                onClick={onClickRow(player.id!)}
+                className="cursor-pointer aria-disabled:pointer-events-none aria-disabled:opacity-50"
+                aria-disabled={!AVAILABLE_PLAYER_IDS.has(Number(player.id))}
+              >
                 <TableCell>{player.name}</TableCell>
                 <TableCell>{player.jersey}</TableCell>
                 <TableCell>{(player.team_id as TeamData)?.name}</TableCell>

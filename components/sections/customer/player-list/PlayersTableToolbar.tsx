@@ -3,6 +3,7 @@
 import Autocomplete from "@/components/Autocomplete"
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { EMPTY_AUTOCOMPLETE_VALUE } from "@/constants/misc"
+import { AVAILABLE_PLAYER_IDS } from "@/global-constants"
 import fetcher from "@/lib/swr/fetcher"
 import { SimlePlayerData, SimpleTeamData, dashboardToolbarFormSchema } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -111,6 +112,9 @@ export default function PlayersTableToolbar() {
             <FormItem className="flex w-40 flex-col">
               <FormLabel>Player</FormLabel>
               <Autocomplete
+                disabled={playersOptions.flatMap((player) =>
+                  AVAILABLE_PLAYER_IDS.has(player.value) ? [] : player.value,
+                )}
                 value={activePlayerName}
                 isOpen={isPlayerAutocompleteOpen}
                 options={playersOptions}

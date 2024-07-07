@@ -19,6 +19,7 @@ interface Props {
   noDataMessage?: string
   onAddNew?: (value: string) => void
   className?: string
+  disabled?: number[]
 }
 
 export default function Autocomplete({
@@ -32,6 +33,7 @@ export default function Autocomplete({
   noDataMessage,
   onAddNew,
   className,
+  disabled,
 }: Props) {
   const handleSelect = (id: string) => () => onSelect(id)
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -74,6 +76,7 @@ export default function Autocomplete({
                   value={option.value as string}
                   key={option.value}
                   onSelect={handleSelect(option.value as string)}
+                  disabled={disabled?.includes(Number(option.value))}
                 >
                   {option.label}
                   <CheckIcon className={cn("ml-auto h-4 w-4", option.value === value ? "opacity-100" : "opacity-0")} />
