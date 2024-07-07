@@ -268,8 +268,8 @@ export default function AboutUs() {
               the ball into the air. More of a vertical jump rather than horizontal like a runner (RU)
             </li>
             <li>
-              Layup = <strong>LU</strong> - Shooting a shot right at the basket and the player's hand is near the rim,
-              but not touching it
+              Layup = <strong>LU</strong> - Shooting a shot right at the basket and the player&apos;s hand is near the
+              rim, but not touching it
             </li>
             <li>
               Pull up 2 pointer = <strong>PU2</strong> - A player shoots off of the dribble from inside of the 3-point
@@ -363,15 +363,15 @@ export default function AboutUs() {
         <div className={contentClasses}>
           <ul className={mainListStyle}>
             <li>
-              1 - Catch and Shoot Mid-Range Jumper (Any shot <strong>inside</strong> the 3-point line that's{" "}
+              1 - Catch and Shoot Mid-Range Jumper (Any shot <strong>inside</strong> the 3-point line that&apos;s{" "}
               <strong>not</strong> at the rim. No dribbles involved. <strong>Farther</strong> than 5 feet from the
               basket)
             </li>
             <li>2 - Catch and Shoot Lay-up (No dribbles involved)</li>
             <li>3 - Catch and Shoot 3-pointer (No dribbles involved)</li>
             <li>
-              5 - Off the dribble shot from the Mid-Ranger (Any shot <strong>inside</strong> the 3-point line that's not
-              at the rim. <strong>Farther</strong> than 5 feet from the basket)
+              5 - Off the dribble shot from the Mid-Ranger (Any shot <strong>inside</strong> the 3-point line
+              that&apos;s not at the rim. <strong>Farther</strong> than 5 feet from the basket)
             </li>
             <li>
               10 - Any shots around the basket (<strong>Closer</strong> than 5 feet from the basket)
