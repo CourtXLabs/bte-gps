@@ -2,6 +2,7 @@
 
 import Autocomplete from "@/components/Autocomplete"
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { AVAILABLE_PLAYER_IDS } from "@/global-constants"
 import { SimlePlayerData, playerDashboardToolbarFormSchema } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useParams, useRouter } from "next/navigation"
@@ -52,6 +53,9 @@ export default function PlayerDashboardToolbar({ players }: Props) {
               <FormItem className="flex w-full flex-col sm:w-48">
                 <FormLabel>Player</FormLabel>
                 <Autocomplete
+                  disabled={playersOptions.flatMap((player) =>
+                    AVAILABLE_PLAYER_IDS.has(player.value) ? [] : player.value,
+                  )}
                   value={activePlayerName}
                   isOpen={isPlayerAutocompleteOpen}
                   options={playersOptions}
