@@ -239,7 +239,7 @@ export default async function PlayerDetailsView({ id }: Props) {
       <Link href="/" className="mx-auto mb-2 flex w-full max-w-7xl items-center gap-1">
         <ArrowLeftIcon /> Players List
       </Link>
-      {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} />}
+      {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} isAdmin={isAdmin} />}
       <InsightsButton id={id} canEdit={isAdmin} />
       <div>
         <SequencesGraphs dribbleCounts={dribbleCounts as SeuqenceGraphData} />

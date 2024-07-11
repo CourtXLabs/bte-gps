@@ -1,9 +1,11 @@
 import { DEFAULT_PAGE_SIZE } from "@/constants/misc"
+import { getIsAdmin } from "@/lib/auth"
 import { createClient } from "@/lib/supabase/server"
 import { PlayerApiData } from "@/types"
 import { cookies } from "next/headers"
 import NotFound404Error from "../../error/NotFound404Error"
 import PlayersTable from "./PlayersTable"
+import PlayersTableToolbar from "./PlayersTableToolbar"
 
 interface Props {
   page?: string
@@ -48,9 +50,13 @@ export default async function CustomerHomeView(props: Props) {
   const players = await getData(props)
   if (players.error || !players.data) return <NotFound404Error />
 
+  const isAdmin = await getIsAdmin()
+
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-20">
-      <PlayersTable data={players.data} count={players.count || 0} />
+      <PlayersTable data={players.data} count={players.count || 0} isAdmin={isAdmin}>
+        <PlayersTableToolbar isAdmin={isAdmin} />
+      </PlayersTable>
     </div>
   )
 }

@@ -12,9 +12,10 @@ import { z } from "zod"
 
 interface Props {
   players: SimlePlayerData[]
+  isAdmin: boolean
 }
 
-export default function PlayerDashboardToolbar({ players }: Props) {
+export default function PlayerDashboardToolbar({ players, isAdmin }: Props) {
   const params = useParams()
   const router = useRouter()
   const [isPlayerAutocompleteOpen, setIsPlayerAutocompleteOpen] = useState(false)
@@ -31,6 +32,10 @@ export default function PlayerDashboardToolbar({ players }: Props) {
     value: player.id,
     label: player.name,
   }))
+
+  const disabledOptions = isAdmin
+    ? []
+    : playersOptions.flatMap((player) => (AVAILABLE_PLAYER_IDS.has(player.value) ? [] : player.value))
 
   const activePlayerName = players?.find((player) => player.id == Number(params.id as string))?.name
   const onSelectPlayer = (value: string) => {
@@ -53,9 +58,7 @@ export default function PlayerDashboardToolbar({ players }: Props) {
               <FormItem className="flex w-full flex-col sm:w-48">
                 <FormLabel>Player</FormLabel>
                 <Autocomplete
-                  disabled={playersOptions.flatMap((player) =>
-                    AVAILABLE_PLAYER_IDS.has(player.value) ? [] : player.value,
-                  )}
+                  disabled={disabledOptions}
                   value={activePlayerName}
                   isOpen={isPlayerAutocompleteOpen}
                   options={playersOptions}

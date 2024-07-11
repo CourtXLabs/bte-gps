@@ -12,13 +12,14 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect } from "react"
+import React, { useEffect } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../ui/table"
-import PlayersTableToolbar from "./PlayersTableToolbar"
 
 interface Props {
   data: PlayerApiData[]
   count: number
+  children: React.ReactNode
+  isAdmin: boolean
 }
 
 const TABLE_COLUMNS: ColumnDef<PlayerApiData>[] = [
@@ -48,7 +49,7 @@ const TABLE_COLUMNS: ColumnDef<PlayerApiData>[] = [
   },
 ]
 
-export default function PlayersTable({ data, count }: Props) {
+export default function PlayersTable({ data, count, children, isAdmin }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const table = useReactTable({
@@ -58,6 +59,11 @@ export default function PlayersTable({ data, count }: Props) {
     getPaginationRowModel: getPaginationRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
   })
+
+  const getIsOptionDisabled = (player: PlayerApiData) => {
+    if (isAdmin) return false
+    return !AVAILABLE_PLAYER_IDS.has(Number(player.id))
+  }
 
   const onClickRow = (id: string) => () => {
     router.push(`/players/${id}`)
@@ -76,7 +82,7 @@ export default function PlayersTable({ data, count }: Props) {
 
   return (
     <div className="mt-6 space-y-4 lg:min-w-[600px]">
-      <PlayersTableToolbar />
+      {children}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -98,7 +104,7 @@ export default function PlayersTable({ data, count }: Props) {
                 key={player.id}
                 onClick={onClickRow(player.id!)}
                 className="cursor-pointer aria-disabled:pointer-events-none aria-disabled:opacity-50"
-                aria-disabled={!AVAILABLE_PLAYER_IDS.has(Number(player.id))}
+                aria-disabled={getIsOptionDisabled(player)}
               >
                 <TableCell>{player.name}</TableCell>
                 <TableCell>{player.jersey}</TableCell>

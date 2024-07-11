@@ -13,7 +13,11 @@ import { useForm } from "react-hook-form"
 import useSWR from "swr"
 import { z } from "zod"
 
-export default function PlayersTableToolbar() {
+interface Props {
+  isAdmin: boolean
+}
+
+export default function PlayersTableToolbar({ isAdmin }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const activeTeamId = searchParams.get("team")
@@ -43,6 +47,10 @@ export default function PlayersTableToolbar() {
 
   const activeTeamName = teamData?.find((team) => team.id == Number(activeTeamId))?.name
   const activePlayerName = playerData?.find((player) => player.id == Number(activePlayerId))?.name
+
+  const disabledOptions = isAdmin
+    ? []
+    : playersOptions.flatMap((player) => (AVAILABLE_PLAYER_IDS.has(player.value) ? [] : player.value))
 
   const form = useForm<z.infer<typeof dashboardToolbarFormSchema>>({
     resolver: zodResolver(dashboardToolbarFormSchema),
@@ -112,9 +120,7 @@ export default function PlayersTableToolbar() {
             <FormItem className="flex w-40 flex-col">
               <FormLabel>Player</FormLabel>
               <Autocomplete
-                disabled={playersOptions.flatMap((player) =>
-                  AVAILABLE_PLAYER_IDS.has(player.value) ? [] : player.value,
-                )}
+                disabled={disabledOptions}
                 value={activePlayerName}
                 isOpen={isPlayerAutocompleteOpen}
                 options={playersOptions}
