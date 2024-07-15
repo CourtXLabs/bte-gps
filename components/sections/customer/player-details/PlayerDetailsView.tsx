@@ -1,4 +1,5 @@
 import { MoveIds, idToUid, moveUids } from "@/constants/misc"
+import { dribbleOptions } from "@/constants/sequence-options"
 import { getIsAdmin } from "@/lib/auth"
 import { createClient } from "@/lib/supabase/server"
 import {
@@ -14,6 +15,7 @@ import { getIsDribble } from "@/utils/get-is-dribble"
 import { getTotalPointsFromMoves } from "@/utils/get-sequence-data"
 import { ArrowLeftIcon } from "lucide-react"
 import { cookies } from "next/headers"
+import Image from "next/image"
 import Link from "next/link"
 import PlayerDashboardToolbar from "./PlayerDashboardToolbar"
 import ReportsList from "./ReportsList"
@@ -235,12 +237,21 @@ export default async function PlayerDetailsView({ id }: Props) {
   const isAdmin = await getIsAdmin()
 
   return (
-    <div className="mx-auto flex w-full flex-col gap-6 px-4 py-10">
-      <Link href="/" className="mx-auto mb-2 flex w-full max-w-7xl items-center gap-1">
-        <ArrowLeftIcon /> Players List
-      </Link>
-      {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} isAdmin={isAdmin} />}
-      <InsightsButton id={id} canEdit={isAdmin} />
+    <div className="mx-auto flex w-full flex-col gap-10 px-4 py-10">
+      <div className="mx-auto flex w-full max-w-7xl flex-wrap justify-between">
+        <div className="space-y-6">
+          <Link href="/" className="mx-auto mb-2 flex w-full max-w-7xl items-center gap-1">
+            <ArrowLeftIcon /> Players List
+          </Link>
+          {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} isAdmin={isAdmin} />}
+          <InsightsButton id={id} canEdit={isAdmin} />
+        </div>
+        <div className="flex items-center justify-center">
+          {dribbleOptions.map((option) => (
+            <Image key={option.id} src={option.image!} alt={option.name} width={125} height={125} />
+          ))}
+        </div>
+      </div>
       <div>
         <SequencesGraphs dribbleCounts={dribbleCounts as SeuqenceGraphData} />
         <div className="flex flex-col items-center justify-center gap-10 lg:flex-row">

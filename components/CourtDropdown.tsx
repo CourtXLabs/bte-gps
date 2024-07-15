@@ -57,28 +57,17 @@ export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props)
       style={positionStyle}
     >
       <div className="flex items-center">
-        {dribbleOptions.map((option) =>
-          option.image ? (
-            <Image
-              key={option.id}
-              src={option.image}
-              alt={option.name}
-              width={120}
-              height={120}
-              className=" cursor-pointer"
-              onClick={onSelectOption(option)}
-            />
-          ) : (
-            <p
-              key={option.id}
-              className="m-0 flex w-[100px] cursor-pointer flex-col items-center gap-1 text-center text-2xl font-semibold"
-              onClick={onSelectOption(option)}
-            >
-              <span>{option.keyShortcut} </span>
-              <span>{option.name}</span>
-            </p>
-          ),
-        )}
+        {dribbleOptions.map((option) => (
+          <Image
+            key={option.id}
+            src={option.image!}
+            alt={option.name}
+            width={120}
+            height={120}
+            className=" cursor-pointer"
+            onClick={onSelectOption(option)}
+          />
+        ))}
       </div>
       <div className="flex items-center">
         {nonDribbleMoves.flatMap((option) => {
