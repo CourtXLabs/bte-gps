@@ -74,10 +74,6 @@ export default function PlayerDashboardToolbar({ players, isAdmin }: Props) {
           />
         </form>
       </Form>
-      {/* <Button variant="outline" className="sm:ml-auto">
-        Download CSV
-      </Button>
-      <Button>Download PDF</Button> */}
     </div>
   )
 }

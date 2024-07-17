@@ -19,6 +19,7 @@ import { cookies } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
 import PlayerDashboardToolbar from "./PlayerDashboardToolbar"
+import PlayerGamesFilter from "./PlayerGamesFilter"
 import ReportsList from "./ReportsList"
 import ComboTimesUsedChart from "./charts/ComboTimesUsedChart"
 import PointsComboBarChart from "./charts/PointsComboBarChart"
@@ -281,12 +282,13 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
 
   return (
     <div className="mx-auto flex w-full flex-col gap-10 px-4 py-10">
-      <div className="mx-auto flex w-full max-w-7xl flex-wrap justify-between">
+      <div className="mx-auto flex w-full max-w-7xl flex-wrap justify-between gap-6">
         <div className="space-y-6">
           <Link href="/" className="mx-auto mb-2 flex w-full max-w-7xl items-center gap-1">
             <ArrowLeftIcon /> Players List
           </Link>
           {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} isAdmin={isAdmin} />}
+          <PlayerGamesFilter />
           <InsightsButton id={id} canEdit={isAdmin} />
         </div>
         <div className="flex items-center justify-center">
