@@ -1,7 +1,7 @@
 import { Sequence, SequenceApiData } from "@/types"
 
-export const getCombosData = (sequences: Sequence[], addedSequences: SequenceApiData[]) => {
-  const combosData = [] as { sequence_id: number }[]
+export const getCombosData = (sequences: Sequence[], playerId: number, addedSequences: SequenceApiData[]) => {
+  const combosData = [] as { sequence_id: number; player_id: number }[]
   for (let i = 0; i < sequences.length; i++) {
     const sequenceId = addedSequences?.[i].id
 
@@ -11,6 +11,7 @@ export const getCombosData = (sequences: Sequence[], addedSequences: SequenceApi
 
     combos?.forEach(() => {
       combosData.push({
+        player_id: playerId,
         sequence_id: sequenceId,
       })
     })

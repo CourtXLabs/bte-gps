@@ -72,10 +72,10 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
       player_id: playerId,
     })
 
-    const sequencesData = getSequenceData(sequences, addedReportId!)
+    const sequencesData = getSequenceData(sequences, playerId, addedReportId!)
     const addedSequences = await supabase.from("sequence").insert(sequencesData).select("id")
 
-    const combosData = getCombosData(sequences, addedSequences.data as any)
+    const combosData = getCombosData(sequences, playerId, addedSequences.data as any)
     const adddedCombos = await supabase.from("combo").insert(combosData).select("id, sequence_id")
     const comboIdMap = getComboIdsMap(sequences, addedSequences.data as any, adddedCombos.data as any)
 
@@ -94,6 +94,7 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
         })
         movesData.push({
           sequence_id: sequenceId,
+          player_id: playerId,
           combo_id: comboId,
           code: move.moveId,
           x: move.x,

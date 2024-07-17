@@ -73,7 +73,7 @@ const getBteCombo = (moves: MoveSequence[]) => {
   return bteComboArray.join("")
 }
 
-export const getSequenceData = (sequences: Sequence[], addedReportId: number) => {
+export const getSequenceData = (sequences: Sequence[], playerId: number, addedReportId: number) => {
   return sequences.map((sequence) => {
     const { moves, combos, moveUids, ...rest } = sequence
     if (!moves) return rest
@@ -87,6 +87,7 @@ export const getSequenceData = (sequences: Sequence[], addedReportId: number) =>
 
     return {
       report_id: addedReportId,
+      player_id: playerId,
       full_combo: fullCombo,
       bte_combo: bteCombo,
       lanes_left: leftLaneMoves.join(""),
