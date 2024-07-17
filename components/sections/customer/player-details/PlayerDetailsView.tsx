@@ -10,6 +10,7 @@ import {
   SequenceCombosData,
   SeuqenceGraphData,
   SimlePlayerData,
+  gameLimitOptions,
 } from "@/types"
 import { getIsDribble } from "@/utils/get-is-dribble"
 import { getTotalPointsFromMoves } from "@/utils/get-sequence-data"
@@ -24,21 +25,36 @@ import PointsComboBarChart from "./charts/PointsComboBarChart"
 import SequencesGraphs from "./charts/SequencesGraphs"
 import InsightsButton from "./insights/InsightsButton"
 
+const gamesCountOptionsLimit = {
+  all: 99999999999999,
+  "5": 5,
+  "10": 10,
+  "41": 41,
+  "82": 82,
+} as Record<gameLimitOptions, number>
+
 function groupByReportId(data: Record<string, any>[]) {
-  const grouped = data.reduce((acc: any, item: any) => {
-    const reportId = item.report?.id
+  const grouped = data.reduce((acc: any, report: any) => {
+    const reportId = report.id
     if (!reportId) return acc
 
-    if (!acc[reportId]) {
-      acc[reportId] = {
-        report: item.report,
-        moves: [],
-        combos: [],
-      }
+    acc[reportId] = {
+      report: {
+        id: report.id,
+        player_id: report.player_id,
+        points: report.points,
+        game: report.game_id,
+      },
+      moves: [],
+      combos: [],
     }
 
-    acc[reportId].moves = acc[reportId].moves.concat(item.move)
-    acc[reportId].combos = acc[reportId].combos.concat(item.combo)
+    if (report.sequence && Array.isArray(report.sequence)) {
+      report.sequence.forEach((seq: any) => {
+        if (seq.move) acc[reportId].moves.push(seq.move)
+        if (seq.combo) acc[reportId].combos.push(seq.combo)
+      })
+    }
 
     return acc
   }, {})
@@ -49,19 +65,20 @@ function groupByReportId(data: Record<string, any>[]) {
 const groupMoves = (data: DribbleChartApiData[]) => {
   const moveCounts = data.reduce(
     (acc: Record<string, Record<string, number>>, report) => {
-      if (!report.report) return acc
-      const moves = report.move
-      if (!moves.length) return acc
+      report.sequence.forEach((seq) => {
+        const moves = seq.move
+        if (!moves.length) return
 
-      const isMadeShot = moves[moves.length - 1].code === 8
-      const objectToChange = acc[isMadeShot ? "madeShots" : "missedShots"]
+        const isMadeShot = moves[moves.length - 1].code === 8
+        const objectToChange = acc[isMadeShot ? "madeShots" : "missedShots"]
 
-      moves.forEach((move: { code: MoveIds }) => {
-        const code = idToUid[move.code] as moveUids
-        if (!code) return
-        if (!getIsDribble(code)) return
+        moves.forEach((move: { code: MoveIds }) => {
+          const code = idToUid[move.code] as moveUids
+          if (!code) return
+          if (!getIsDribble(code)) return
 
-        objectToChange[code] += 1
+          objectToChange[code] = (objectToChange[code] || 0) + 1
+        })
       })
 
       return acc
@@ -80,19 +97,19 @@ const groupMoves = (data: DribbleChartApiData[]) => {
 const groupCombos = (data: DribbleChartApiData[]) => {
   const comboCounts = [] as SequenceCombosData[]
 
-  for (const { report, combo } of data) {
-    if (!report) continue
+  for (const report of data) {
+    report.sequence.forEach((seq) => {
+      seq.combo.forEach((comboMoves) => {
+        const comboCode = comboMoves.move.flatMap((move) => (getIsDribble(move.code) ? move.code : [])).join("")
+        if (!comboCode) return
+        const comboIndex = comboCounts.findIndex((comboCount) => comboCount.sequence === comboCode)
 
-    combo.forEach((comboMoves) => {
-      const comboCode = comboMoves.move.flatMap((move) => (getIsDribble(move.code) ? move.code : [])).join("")
-      if (!comboCode) return
-      const comboIndex = comboCounts.findIndex((comboCount) => comboCount.sequence === comboCode)
-
-      if (comboIndex === -1) {
-        comboCounts.push({ sequence: comboCode, count: 1 })
-      } else {
-        comboCounts[comboIndex].count += 1
-      }
+        if (comboIndex === -1) {
+          comboCounts.push({ sequence: comboCode, count: 1 })
+        } else {
+          comboCounts[comboIndex].count += 1
+        }
+      })
     })
   }
 
@@ -104,19 +121,23 @@ const groupSequenceData = (data: DribbleChartApiData[]) => {
   const counterDirectionCounts = { madeShots: {}, missedShots: {} } as Record<string, Record<string, number>>
   const lastDribbleTypeCounts = { madeShots: {}, missedShots: {} } as Record<string, Record<string, number>>
 
-  for (const { initial_direction, counter_direction, last_dribble_type, move } of data) {
-    if (!move.length) continue
-    const isMadeShot = move[move.length - 1].code === 8
-    const key = isMadeShot ? "madeShots" : "missedShots"
-    if (initial_direction && initial_direction !== "0") {
-      initialDirectionCounts[key][initial_direction] = (initialDirectionCounts[key][initial_direction] || 0) + 1
-    }
-    if (counter_direction && counter_direction !== "0") {
-      counterDirectionCounts[key][counter_direction] = (counterDirectionCounts[key][counter_direction] || 0) + 1
-    }
-    if (last_dribble_type && last_dribble_type !== "0") {
-      lastDribbleTypeCounts[key][last_dribble_type] = (lastDribbleTypeCounts[key][last_dribble_type] || 0) + 1
-    }
+  for (const report of data) {
+    report.sequence.forEach((seq) => {
+      const { initial_direction, counter_direction, last_dribble_type, move } = seq
+      if (!move.length) return
+      const isMadeShot = move[move.length - 1].code === 8
+      const key = isMadeShot ? "madeShots" : "missedShots"
+
+      if (initial_direction && initial_direction !== "0") {
+        initialDirectionCounts[key][initial_direction] = (initialDirectionCounts[key][initial_direction] || 0) + 1
+      }
+      if (counter_direction && counter_direction !== "0") {
+        counterDirectionCounts[key][counter_direction] = (counterDirectionCounts[key][counter_direction] || 0) + 1
+      }
+      if (last_dribble_type && last_dribble_type !== "0") {
+        lastDribbleTypeCounts[key][last_dribble_type] = (lastDribbleTypeCounts[key][last_dribble_type] || 0) + 1
+      }
+    })
   }
   return { initialDirectionCounts, counterDirectionCounts, lastDribbleTypeCounts }
 }
@@ -134,7 +155,7 @@ const getAllPlayers = async () => {
   }
 }
 
-const getReports = async (id: string) => {
+const getReports = async (id: string, games: gameLimitOptions) => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
@@ -145,6 +166,8 @@ const getReports = async (id: string) => {
         "id, name, points, player_id(name, jersey, team_id(name)), game_id(date, home_team_id(name, abbreviation), away_team_id(name, abbreviation)), sequence(*, combo(id), move(code, x, y))",
       )
       .eq("player_id", id)
+      .order("game_id(date)", { ascending: false })
+      .limit(gamesCountOptionsLimit[games])
 
     return {
       // @ts-ignore
@@ -156,23 +179,29 @@ const getReports = async (id: string) => {
   }
 }
 
-const getComboPointsRatio = async (id: string) => {
+const getComboPointsRatio = async (id: string, games: gameLimitOptions) => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
   try {
     // TODO: For improved performance, consider using a rpc function
     const { data, error } = await supabase
-      .from("sequence")
+      .from("report")
       .select(
         `
-          move (code, x, y),
-          combo (id, move (code, x, y)),
-          report: report_id (id, player_id, points, game_id (date))
-        `,
+      id,
+      player_id,
+      points,
+      game_id (date),
+      sequence!inner (
+        move (code, x, y),
+        combo (id, move (code, x, y))
       )
-      .not("report", "is", null)
-      .eq("report.player_id", id)
+    `,
+      )
+      .eq("player_id", id)
+      .order("game_id(date)", { ascending: false })
+      .limit(gamesCountOptionsLimit[games])
 
     if (!data) {
       return { error: "No data found" }
@@ -181,10 +210,10 @@ const getComboPointsRatio = async (id: string) => {
 
     const chartData = [] as ComboToPointData[]
     for (const { report, combos, moves } of Object.values(groupedData)) {
-      const date = report.game_id.date.split("T")[0]
+      const date = report.game.date.split("T")[0]
       const comboCount = moves.filter((move: MoveApiData) => getIsDribble(move.code)).length // TODO: This should be removed?
       const points = report.points !== null ? report.points : getTotalPointsFromMoves(moves)
-      chartData.push({ date, comboCount: combos.length || comboCount, points })
+      chartData.push({ date, comboCount: combos ? combos.length : comboCount, points })
     }
 
     return { data: chartData, error }
@@ -193,18 +222,30 @@ const getComboPointsRatio = async (id: string) => {
   }
 }
 
-const getDribblesCounts = async (id: string) => {
+const getDribblesCounts = async (id: string, games: gameLimitOptions) => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
   try {
     const { data, error } = await supabase
-      .from("sequence")
+      .from("report")
       .select(
-        "initial_direction, counter_direction, last_dribble_type, move (code), combo (move (code)), report:report_id (player_id)",
+        `
+          id,
+          player_id,
+          game_id(date),
+          sequence!inner (
+            initial_direction,
+            counter_direction,
+            last_dribble_type,
+            move (code),
+            combo (move (code))
+          )
+        `,
       )
-      .not("report", "is", null)
-      .eq("report.player_id", id)
+      .eq("player_id", id)
+      .order("game_id(date)", { ascending: false })
+      .limit(gamesCountOptionsLimit[games])
 
     if (!data) {
       return { error: "No data found" }
@@ -224,14 +265,16 @@ const getDribblesCounts = async (id: string) => {
 
 interface Props {
   id: string
+  searchParams: { games: gameLimitOptions }
 }
 
-export default async function PlayerDetailsView({ id }: Props) {
+export default async function PlayerDetailsView({ id, searchParams }: Props) {
+  const { games } = searchParams
   const [playersResponse, reportsResponse, comboPointsResponse, dribbleCounts] = await Promise.all([
     getAllPlayers(),
-    getReports(id),
-    getComboPointsRatio(id),
-    getDribblesCounts(id),
+    getReports(id, games),
+    getComboPointsRatio(id, games),
+    getDribblesCounts(id, games),
   ])
 
   const isAdmin = await getIsAdmin()

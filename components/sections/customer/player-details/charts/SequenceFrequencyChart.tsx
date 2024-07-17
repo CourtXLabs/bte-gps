@@ -22,6 +22,8 @@ export default function SequenceFrequencyChart({ data, title, xAxisLabel, yAxisL
   const maxPoint = Math.round(Math.max(...Object.values(data)) * 1.25)
 
   const calculateTickStep = (maxValue: number): number => {
+    if (maxValue <= 10) return 2
+    if (maxValue <= 25) return 5
     if (maxValue <= 100) return 10
     if (maxValue <= 500) return 25
     if (maxValue <= 1000) return 50

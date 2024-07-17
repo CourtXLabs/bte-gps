@@ -267,19 +267,23 @@ export interface MoveApiData {
 }
 
 export interface DribbleChartApiData {
-  initial_direction: string
-  counter_direction: string
-  last_dribble_type: string
-  move: {
-    code: any
+  id: number
+  player_id: number
+  game_id: {
+    date: string
   }[]
-  combo: {
+  sequence: {
+    initial_direction: string
+    counter_direction: string
+    last_dribble_type: string
     move: {
       code: any
     }[]
-  }[]
-  report: {
-    player_id: number
+    combo: {
+      move: {
+        code: any
+      }[]
+    }[]
   }[]
 }
 
@@ -312,3 +316,5 @@ export interface IGraphFilters {
 export interface Insights {
   insights: string
 }
+
+export type gameLimitOptions = "all" | "5" | "10" | "41" | "82"
