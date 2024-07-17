@@ -157,6 +157,7 @@ export interface TeamData {
   id?: string
   code?: string
   name: string
+  abbreviation: string
 }
 
 export interface PlayerData {

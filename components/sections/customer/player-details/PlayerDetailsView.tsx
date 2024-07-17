@@ -142,7 +142,7 @@ const getReports = async (id: string) => {
     const { data, error } = await supabase
       .from("report")
       .select(
-        "id, name, points, player_id(name, jersey, team_id(name)), game_id(date, home_team_id(name), away_team_id(name)), sequence(*, combo(id), move(code, x, y))",
+        "id, name, points, player_id(name, jersey, team_id(name)), game_id(date, home_team_id(name, abbreviation), away_team_id(name, abbreviation)), sequence(*, combo(id), move(code, x, y))",
       )
       .eq("player_id", id)
 

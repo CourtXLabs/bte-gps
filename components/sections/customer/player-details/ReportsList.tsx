@@ -81,7 +81,14 @@ export default function ReportsList({ data }: Props) {
       header: () => <div className="py-4 text-center text-white">Date</div>,
       enableSorting: false,
       enableHiding: false,
-      size: 250,
+      size: 150,
+    },
+    {
+      id: "teams",
+      header: () => <div className="py-4 text-center text-white">Teams</div>,
+      enableSorting: false,
+      enableHiding: false,
+      size: 150,
     },
     {
       id: "individualDribble",
@@ -281,7 +288,7 @@ export default function ReportsList({ data }: Props) {
   }
 
   return (
-    <div className="mx-auto max-w-screen-2xl">
+    <div className="mx-auto max-w-[112.5rem]">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -306,6 +313,9 @@ export default function ReportsList({ data }: Props) {
             return (
               <TableRow key={report.id}>
                 <TableCell className="text-center">{formatDate(report.game_id?.date)}</TableCell>
+                <TableCell className="text-center">
+                  {report.game_id?.home_team_id?.abbreviation} @ {report.game_id?.away_team_id?.abbreviation}{" "}
+                </TableCell>
                 <TableCell className="text-center">
                   {getIndividualDribblePercent(report, activeData.individualDribble).toFixed(1)}%
                 </TableCell>
