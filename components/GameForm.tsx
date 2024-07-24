@@ -50,8 +50,8 @@ export default function GameForm({ players, teams }: Props) {
     defaultValues: {
       gameType: INITIAL_GAME_TYPE,
       playerName: "",
-      teamName: "",
-      opponentName: "",
+      homeTeam: "",
+      awayTeam: "",
     },
   })
   const gameType = form.watch("gameType") as GameTypes
@@ -84,16 +84,16 @@ export default function GameForm({ players, teams }: Props) {
   const onSelectTeam = (teamId: string) => {
     const team = teams?.find((team) => team.id === teamId)
     if (!team) return
-    form.setValue("teamName", team.name)
-    form.setValue("teamId", Number(team.id))
+    form.setValue("homeTeam", team.name)
+    form.setValue("homeTeamId", Number(team.id))
     onToggleTeamCombobox()
   }
 
   const onSelectOpponentTeam = (teamId: string) => {
     const team = teams?.find((team) => team.id === teamId)
     if (!team) return
-    form.setValue("opponentName", team.name)
-    form.setValue("opponentTeamId", Number(team.id))
+    form.setValue("awayTeam", team.name)
+    form.setValue("awayTeamId", Number(team.id))
     onToggleOpponentTeamCombobox()
   }
 
@@ -105,14 +105,14 @@ export default function GameForm({ players, teams }: Props) {
   }
 
   const onAddNewTeam = (value: string) => {
-    form.setValue("teamName", value)
-    form.setValue("teamId", undefined)
+    form.setValue("homeTeam", value)
+    form.setValue("homeTeamId", undefined)
     onToggleTeamCombobox()
   }
 
   const onAddNewOpponentTeam = (value: string) => {
-    form.setValue("opponentName", value)
-    form.setValue("opponentTeamId", undefined)
+    form.setValue("awayTeam", value)
+    form.setValue("awayTeamId", undefined)
     onToggleOpponentTeamCombobox()
   }
 
@@ -180,15 +180,15 @@ export default function GameForm({ players, teams }: Props) {
         />
         <FormField
           control={form.control}
-          name="teamName"
+          name="homeTeam"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Team</FormLabel>
+              <FormLabel>Home Team</FormLabel>
               <Autocomplete
                 isOpen={isTeamComboboxOpen}
                 options={teamsOptions}
                 value={field.value}
-                placeholder="Select team"
+                placeholder="Select home team"
                 onToggle={onToggleTeamCombobox}
                 onSelect={onSelectTeam}
                 searchPlaceholder="Search team..."
@@ -201,15 +201,15 @@ export default function GameForm({ players, teams }: Props) {
         />
         <FormField
           control={form.control}
-          name="opponentName"
+          name="awayTeam"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Opponent Team</FormLabel>
+              <FormLabel>Away Team</FormLabel>
               <Autocomplete
                 isOpen={IsOpponentTeamComboboxOpen}
                 options={teamsOptions}
                 value={field.value}
-                placeholder="Select opponent team"
+                placeholder="Select away team"
                 searchPlaceholder="Search team..."
                 noDataMessage="No team found."
                 onToggle={onToggleOpponentTeamCombobox}

@@ -82,8 +82,8 @@ export interface Sequence {
 export interface Game {
   gameType: GameTypes
   playerName: string
-  teamName: string
-  opponentName: string
+  homeTeam: string
+  awayTeam: string
   jersey: string
   date: Date
   sequences: Sequence[]
@@ -114,10 +114,10 @@ export const gameFormSchema = z.object({
   gameType: z.nativeEnum(GameTypes),
   playerName: z.string().min(1, { message: errorMessage }),
   playerId: z.number().optional(),
-  teamName: z.string().min(1, { message: errorMessage }),
-  teamId: z.number().optional(),
-  opponentName: z.string().min(1, { message: errorMessage }),
-  opponentTeamId: z.number().optional(),
+  homeTeam: z.string().min(1, { message: errorMessage }),
+  homeTeamId: z.number().optional(),
+  awayTeam: z.string().min(1, { message: errorMessage }),
+  awayTeamId: z.number().optional(),
   jersey: z.string().min(1, { message: errorMessage }),
   points: z.string(),
   date: z.date(),
@@ -317,4 +317,4 @@ export interface Insights {
   insights: string
 }
 
-export type gameLimitOptions = "all" | "5" | "10" | "41" | "82"
+export type gameLimitOptions = "all" | "5" | "10" | "41" | "82" | "away" | "home"

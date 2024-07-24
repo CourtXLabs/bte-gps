@@ -22,28 +22,28 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
   const supabase = createClient(cookieStore)
   try {
     const date = dateToUTCString(values.date)
-    let { playerName, teamName, gameType, jersey, opponentName, playerId, teamId, opponentTeamId, points } = values
+    let { playerName, homeTeam, gameType, jersey, awayTeam, playerId, homeTeamId, awayTeamId, points } = values
     const reportName = `${playerName} - ${date.split("T")[0]}`
     const totalPoints = Number(points) || getTotalPoints(sequences)
 
-    if (!teamId) {
-      const teamData = [
+    if (!homeTeamId) {
+      const homeTeamData = [
         {
-          name: teamName,
+          name: homeTeam,
         },
       ]
-      const addedTeam = await supabase.from("team").insert(teamData).select("id")
-      teamId = addedTeam.data?.[0].id as number
+      const addedTeam = await supabase.from("team").insert(homeTeamData).select("id")
+      homeTeamId = addedTeam.data?.[0].id as number
     }
 
-    if (!opponentTeamId) {
-      const oppoentTeamData = [
+    if (!awayTeamId) {
+      const awayTeamData = [
         {
-          name: opponentName,
+          name: awayTeam,
         },
       ]
-      const addedOppoentTeam = await supabase.from("team").insert(oppoentTeamData).select("id")
-      opponentTeamId = addedOppoentTeam.data?.[0].id as number
+      const addedOppoentTeam = await supabase.from("team").insert(awayTeamData).select("id")
+      awayTeamId = addedOppoentTeam.data?.[0].id as number
     }
 
     if (!playerId) {
@@ -51,7 +51,7 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
         {
           name: playerName,
           jersey,
-          team_id: teamId,
+          team_id: homeTeamId,
         },
       ]
       const addedPlayer = await supabase.from("player").insert(playerData).select("id")
@@ -61,8 +61,8 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
     const addedGameId = await uploadGame(supabase, {
       type: gameType,
       date,
-      home_team_id: teamId,
-      away_team_id: opponentTeamId,
+      home_team_id: homeTeamId,
+      away_team_id: awayTeamId,
     })
 
     const addedReportId = await uploadReport(supabase, {
@@ -123,7 +123,7 @@ export async function saveGame({ values, sequences, imageNames }: Props) {
       playerInfo: {
         name: playerName,
         points: totalPoints,
-        game: `${teamName} @ ${opponentName}`,
+        game: `${homeTeam} @ ${awayTeam}`,
         date: date.split("T")[0],
       },
       imageInfo: imageData || [],

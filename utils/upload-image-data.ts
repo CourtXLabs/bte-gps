@@ -11,7 +11,7 @@ interface UploadImagesProps {
 export const uploadImages = async ({ supabase, values, sequences }: UploadImagesProps) => {
   const sequencesImages = await constructSequencesSvg(sequences)
   const uploadPromises = sequencesImages.map((image, imageIndex) => {
-    const imageName = `${values.playerName}: ${values.teamName} vs ${values.opponentName}. ${values.date} - ${imageIndex}`
+    const imageName = `${values.playerName}: ${values.homeTeam} vs ${values.awayTeam}. ${values.date} - ${imageIndex}`
     // Return a promise to upload each image. This promise resolves to imageName for success tracking.
     return supabase.storage
       .from("BTE GPS")

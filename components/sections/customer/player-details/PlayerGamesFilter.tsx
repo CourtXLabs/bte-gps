@@ -10,6 +10,8 @@ const gameOptions = [
   { value: "10", label: "Last 10 games" },
   { value: "41", label: "Last 41 games" },
   { value: "82", label: "Last 82 games" },
+  { value: "home", label: "Home games" },
+  { value: "away", label: "Away games" },
 ]
 
 export default function PlayerGamesFilter() {
