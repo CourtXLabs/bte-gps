@@ -32,6 +32,8 @@ const gamesCountOptionsLimit = {
   "10": 10,
   "41": 41,
   "82": 82,
+  away: 99999999999999,
+  home: 99999999999999,
 } as Record<gameLimitOptions, number>
 
 function groupByReportId(data: Record<string, any>[]) {
@@ -162,12 +164,10 @@ const getReports = async (id: string, games: gameLimitOptions) => {
 
   try {
     const { data, error } = await supabase
-      .from("report")
-      .select(
-        "id, name, points, player_id(name, jersey, team_id(name)), game_id(date, home_team_id(name, abbreviation), away_team_id(name, abbreviation)), sequence(*, combo(id), move(code, x, y))",
-      )
-      .eq("player_id", id)
-      .order("game_id(date)", { ascending: false })
+      .rpc("get_player_reports", {
+        player_id_param: id,
+        ...(["away", "home"].includes(games) ? { games_limiter: games } : {}),
+      })
       .limit(gamesCountOptionsLimit[games])
 
     return {
