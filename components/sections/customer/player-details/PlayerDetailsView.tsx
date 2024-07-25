@@ -187,21 +187,10 @@ const getComboPointsRatio = async (id: string, games: gameLimitOptions) => {
   try {
     // TODO: For improved performance, consider using a rpc function
     const { data, error } = await supabase
-      .from("report")
-      .select(
-        `
-      id,
-      player_id,
-      points,
-      game_id (date),
-      sequence!inner (
-        move (code, x, y),
-        combo (id, move (code, x, y))
-      )
-    `,
-      )
-      .eq("player_id", id)
-      .order("game_id(date)", { ascending: false })
+      .rpc("get_player_reports", {
+        player_id_param: id,
+        ...(["away", "home"].includes(games) ? { games_limiter: games } : {}),
+      })
       .limit(gamesCountOptionsLimit[games])
 
     if (!data) {
@@ -229,23 +218,10 @@ const getDribblesCounts = async (id: string, games: gameLimitOptions) => {
 
   try {
     const { data, error } = await supabase
-      .from("report")
-      .select(
-        `
-          id,
-          player_id,
-          game_id(date),
-          sequence!inner (
-            initial_direction,
-            counter_direction,
-            last_dribble_type,
-            move (code),
-            combo (move (code))
-          )
-        `,
-      )
-      .eq("player_id", id)
-      .order("game_id(date)", { ascending: false })
+      .rpc("get_player_report_dribbles", {
+        p_player_id: id,
+        ...(["away", "home"].includes(games) ? { team_type: games } : {}),
+      })
       .limit(gamesCountOptionsLimit[games])
 
     if (!data) {
