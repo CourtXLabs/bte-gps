@@ -17,6 +17,7 @@ interface Props {
 
 export default function SequenceFrequencyChart({ data, title, xAxisLabel, yAxisLabel }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null)
+  const chartRef = useRef<SVGGElement | null>(null)
 
   const sortedData = Object.entries(data).sort((a, b) => b[1] - a[1])
   const maxPoint = Math.round(Math.max(...Object.values(data)) * 1.25)
@@ -31,16 +32,25 @@ export default function SequenceFrequencyChart({ data, title, xAxisLabel, yAxisL
   }
 
   useEffect(() => {
-    const svg = d3
-      .select(svgRef.current)
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    if (!svgRef.current) return
+
+    // Create SVG and chart group only once
+    if (!chartRef.current) {
+      const svg = d3
+        .select(svgRef.current)
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+
+      chartRef.current = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`).node()
+    }
+
+    const chart = d3.select(chartRef.current)
+
+    // Clear existing content
+    chart.selectAll("*").remove()
 
     // Title
-    svg
+    chart
       .append("text")
       .attr("x", (width - margin.left - margin.right) / 2)
       .attr("y", -margin.top / 2)
@@ -57,9 +67,9 @@ export default function SequenceFrequencyChart({ data, title, xAxisLabel, yAxisL
       .domain(sortedData.map((d) => d[0]))
       .padding(0.2)
 
-    svg
+    chart
       .append("g")
-      .attr("transform", "translate(0," + height + ")")
+      .attr("transform", `translate(0,${height})`)
       .call(d3.axisBottom(x))
       .selectAll("text")
       .attr("transform", "translate(-10,0)rotate(-45)")
@@ -67,7 +77,7 @@ export default function SequenceFrequencyChart({ data, title, xAxisLabel, yAxisL
       .style("font-size", "12px")
 
     // Adding X-axis Label
-    svg
+    chart
       .append("text")
       .attr("text-anchor", "middle")
       .attr("x", (width - margin.left - margin.right) / 2)
@@ -81,7 +91,7 @@ export default function SequenceFrequencyChart({ data, title, xAxisLabel, yAxisL
     const y = d3.scaleLinear().domain([0, maxPoint]).range([height, 0])
     const tickStep = calculateTickStep(maxPoint)
 
-    svg
+    chart
       .append("g")
       .call(
         d3
@@ -92,7 +102,7 @@ export default function SequenceFrequencyChart({ data, title, xAxisLabel, yAxisL
       .style("font-size", "12px")
 
     // Adding Y-axis Label
-    svg
+    chart
       .append("text")
       .attr("text-anchor", "middle")
       .attr("transform", "rotate(-90)")
@@ -104,7 +114,7 @@ export default function SequenceFrequencyChart({ data, title, xAxisLabel, yAxisL
       .style("font-size", "14px")
 
     // Grid lines
-    svg
+    chart
       .append("g")
       .attr("class", "grid")
       .call(
@@ -117,37 +127,25 @@ export default function SequenceFrequencyChart({ data, title, xAxisLabel, yAxisL
       .style("color", "#666")
 
     // Bars
-    svg
+    chart
       .selectAll("mybar")
       .data(sortedData)
       .enter()
       .append("rect")
-      .attr("x", function (d) {
-        return x(d[0])!
-      })
+      .attr("x", (d) => x(d[0])!)
       .attr("width", x.bandwidth())
       .attr("fill", PRIMARY_COLOR)
-      .attr("height", function (d) {
-        return height - y(0)
-      })
-      .attr("y", function (d) {
-        return y(0)
-      })
+      .attr("height", 0)
+      .attr("y", height)
 
     // Animation
-    svg
+    chart
       .selectAll("rect")
       .transition()
       .duration(800)
-      .attr("y", function (d: any) {
-        return y(d[1])
-      })
-      .attr("height", function (d: any) {
-        return height - y(d[1])
-      })
-      .delay(function (d, i) {
-        return i * 100
-      })
+      .attr("y", (d: any) => y(d[1]))
+      .attr("height", (d: any) => height - y(d[1]))
+      .delay((d, i) => i * 100)
   }, [data, maxPoint, title, xAxisLabel, sortedData, yAxisLabel])
 
   return (

@@ -6,30 +6,39 @@ import { useEffect, useRef } from "react"
 
 const PRIMARY_COLOR = "#FCBE22"
 
-const margin = { top: 80, right: 30, bottom: 70, left: 40 } // Adjusted top margin to make space for the title
+const margin = { top: 80, right: 30, bottom: 70, left: 40 }
 const width = 600 - margin.left - margin.right
 const height = 500 - margin.top - margin.bottom
+
 interface Props {
   data: ComboToPointData[]
 }
 
 export default function PointsComboBarChart({ data }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null)
+  const chartRef = useRef<SVGGElement | null>(null)
   const maxPoint = Math.round(Math.max(...data.map((d) => Math.max(d.points, d.comboCount))) * 1.25)
 
   useEffect(() => {
-    const svg = d3
-      .select(svgRef.current)
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    if (!svgRef.current) return
 
-    svg.selectAll("*").remove()
+    // Create SVG and chart group only once
+    if (!chartRef.current) {
+      const svg = d3
+        .select(svgRef.current)
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+
+      chartRef.current = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`).node()
+    }
+
+    const chart = d3.select(chartRef.current)
+
+    // Clear existing content
+    chart.selectAll("*").remove()
 
     // Add Title
-    svg
+    chart
       .append("text")
       .attr("x", width / 2)
       .attr("y", 0 - margin.top + 20)
@@ -51,9 +60,9 @@ export default function PointsComboBarChart({ data }: Props) {
 
     const xAxis = d3.axisBottom(x).tickValues(tickValues)
 
-    svg
+    chart
       .append("g")
-      .attr("transform", "translate(0," + height + ")")
+      .attr("transform", `translate(0,${height})`)
       .call(xAxis)
       .selectAll("text")
       .attr("transform", "translate(-10,0)rotate(-45)")
@@ -62,10 +71,10 @@ export default function PointsComboBarChart({ data }: Props) {
 
     // Add Y axis
     const y = d3.scaleLinear().domain([0, maxPoint]).range([height, 0])
-    svg.append("g").call(d3.axisLeft(y)).style("font-size", "12px")
+    chart.append("g").call(d3.axisLeft(y)).style("font-size", "12px")
 
     // Grid lines
-    svg
+    chart
       .append("g")
       .attr("class", "grid")
       .call(
@@ -78,7 +87,7 @@ export default function PointsComboBarChart({ data }: Props) {
       .style("color", "#666")
 
     // Bars
-    svg
+    chart
       .selectAll("mybar")
       .data(data)
       .enter()
@@ -86,25 +95,26 @@ export default function PointsComboBarChart({ data }: Props) {
       .attr("x", (d) => x(d.date)!)
       .attr("width", x.bandwidth())
       .attr("fill", PRIMARY_COLOR)
-      .attr("height", (d) => height - y(0))
-      .attr("y", (d) => y(0))
+      .attr("height", 0)
+      .attr("y", height)
 
     // Line
     const line = d3
-      .line()
-      .x((d: any) => x(d.date)! + x.bandwidth() / 2)
-      .y((d: any) => y(d.points))
+      .line<ComboToPointData>()
+      .x((d) => x(d.date)! + x.bandwidth() / 2)
+      .y((d) => y(d.points))
 
-    svg
+    chart
       .append("path")
+      .datum(data)
       .attr("fill", "none")
       .attr("stroke", "red")
       .attr("stroke-miterlimit", 1)
       .attr("stroke-width", 3)
-      .attr("d", line(data as any))
+      .attr("d", line)
 
     // Animation
-    svg
+    chart
       .selectAll("rect")
       .transition()
       .duration(800)
@@ -117,7 +127,7 @@ export default function PointsComboBarChart({ data }: Props) {
       { name: "Combos", color: PRIMARY_COLOR, type: "rect" },
     ]
 
-    const legend = svg
+    const legend = chart
       .append("g")
       .attr("font-size", 14)
       .attr("font-weight", 500)
@@ -128,8 +138,8 @@ export default function PointsComboBarChart({ data }: Props) {
       .enter()
       .append("g")
       .attr("transform", (d, i) => {
-        const offset = width / 2 + (i - (legendData.length - 1) / 2) * 90
-        return `translate(${offset}, 0)`
+        const offset = (width - margin.left - margin.right) / 2 + (i - (legendData.length - 1) / 2) * 90
+        return `translate(${offset}, -40)`
       })
 
     legend.each(function (d) {
@@ -154,11 +164,6 @@ export default function PointsComboBarChart({ data }: Props) {
       .attr("y", 9)
       .attr("dy", "0.35em")
       .text((d) => d.name)
-
-    legend.attr("transform", (d, i) => {
-      const offset = (width - margin.left - margin.right) / 2 + (i - (legendData.length - 1) / 2) * 90
-      return `translate(${offset}, -40)`
-    })
   }, [data, maxPoint])
 
   return (
