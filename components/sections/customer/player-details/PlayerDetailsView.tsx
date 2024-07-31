@@ -206,7 +206,7 @@ const getComboPointsRatio = async (id: string, games: gameLimitOptions) => {
       chartData.push({ date, comboCount: combos ? combos.length : comboCount, points })
     }
 
-    return { data: chartData, error }
+    return { data: chartData.sort((a, b) => a.date.localeCompare(b.date)), error }
   } catch (error: any) {
     return { error: typeof error === "string" ? error : error.message || "An error occurred" }
   }

@@ -120,7 +120,7 @@ export default function PointsComboBarChart({ data }: Props) {
       .duration(800)
       .attr("y", (d: any) => y(d.comboCount))
       .attr("height", (d: any) => height - y(d.comboCount))
-      .delay((d, i) => i * 100)
+      .delay((d, i) => i * 30)
 
     const legendData = [
       { name: "Points", color: "red", type: "line" },
