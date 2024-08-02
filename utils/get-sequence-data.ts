@@ -34,7 +34,7 @@ export const getBteScore = (bteValue: number, moves: MoveSequence[]) => {
     dribblesCounted++
     return currentScore + moveIdToValue[move.moveId]
   }, 0)
-  return sumOfFirstThreeDribbles * bteValue
+  return Math.max(sumOfFirstThreeDribbles, 1) * bteValue
 }
 
 export const getTotalPoints = (sequences: Sequence[]) => {
@@ -82,7 +82,10 @@ export const getSequenceData = (sequences: Sequence[], playerId: number, addedRe
 
     const { leftLaneMoves, middleLaneMoves, rightLaneMoves } = getLanes(sequence)
     const lastMove = moves[moves.length - 1]
-    const bteValue = lastMove && getIsShot(lastMove.moveId as number) ? getBteValue(lastMove, moves.length > 1) : 0
+    const bteValue =
+      lastMove && getIsShot(lastMove.moveId as number)
+        ? getBteValue(lastMove, !!moves.find((move) => getIsDribble(move.moveId)))
+        : 0
     const bteScore = bteValue ? getBteScore(bteValue, moves) : 0
 
     return {
