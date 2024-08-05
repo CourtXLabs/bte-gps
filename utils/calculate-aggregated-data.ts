@@ -64,7 +64,7 @@ export const getAggregatedComboToPointRatio = (data: ReportApiData[]) => {
   let totalPoints = 0
 
   for (const report of data) {
-    if (!report.sequence.length) return "-"
+    if (!report.sequence.length) continue
     let gameCombos = 0
     let gamePoints = 0
     const pointsFromDb = report.points
