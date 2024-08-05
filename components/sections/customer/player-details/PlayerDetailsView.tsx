@@ -170,9 +170,13 @@ const getReports = async (id: string, games: gameLimitOptions) => {
       })
       .limit(gamesCountOptionsLimit[games])
 
-    return {
+    const sortedData = data?.sort(
       // @ts-ignore
-      data: data?.sort((a, b) => new Date(b.game_id.date) - new Date(a.game_id.date)) as unknown as ReportApiData[],
+      (a, b) => new Date(b.game_id.date) - new Date(a.game_id.date),
+    ) as unknown as ReportApiData[]
+
+    return {
+      data: sortedData,
       error,
     }
   } catch (error: any) {

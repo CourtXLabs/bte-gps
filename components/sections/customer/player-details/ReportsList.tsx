@@ -42,6 +42,7 @@ import {
 } from "@tanstack/react-table"
 import { DownloadIcon } from "lucide-react"
 import { useState } from "react"
+import AggregatedDataRow from "../player-list/AggregatedDataRow"
 import BoxscoreColumnSelect from "./charts/boxscore/BoxscoreColumnSelect"
 
 interface Props {
@@ -357,6 +358,12 @@ export default function ReportsList({ data }: Props) {
               </TableRow>
             )
           })}
+          <TableRow className="border-none">
+            <TableCell colSpan={3}>
+              <span className="text-base font-semibold">Aggregated Data</span>
+            </TableCell>
+          </TableRow>
+          <AggregatedDataRow data={data} activeData={activeData} />
         </TableBody>
       </Table>
     </div>
