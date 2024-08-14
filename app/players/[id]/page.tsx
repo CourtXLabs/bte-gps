@@ -12,7 +12,7 @@ interface Props {
   params: {
     id: string
   }
-  searchParams: { games: gameLimitOptions }
+  searchParams: { games: gameLimitOptions; season: string }
 }
 
 export default async function PlayerDetailsPage({ params, searchParams }: Props) {
