@@ -30,8 +30,6 @@ const gamesCountOptionsLimit = {
   all: 99999999999999,
   "5": 5,
   "10": 10,
-  "41": 41,
-  "82": 82,
   away: 99999999999999,
   home: 99999999999999,
 } as Record<gameLimitOptions, number>
@@ -158,21 +156,33 @@ const getAllPlayers = async () => {
   }
 }
 
-const getReports = async (id: string, games: gameLimitOptions) => {
+const getReports = async (id: string, games: gameLimitOptions, season: string) => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
   try {
+    let minDate: string | null = null
+    let maxDate: string | null = null
+
+    if (season) {
+      const [startYear] = season.split("-").map(Number)
+      if (!isNaN(startYear)) {
+        minDate = `${startYear}-08-29`
+        maxDate = `${startYear + 1}-08-28`
+      }
+    }
+
     const { data, error } = await supabase
       .rpc("get_player_reports", {
         player_id_param: id,
         ...(["away", "home"].includes(games) ? { games_limiter: games } : {}),
+        ...(minDate && maxDate ? { min_date: minDate, max_date: maxDate } : {}),
       })
       .limit(gamesCountOptionsLimit[games])
 
     const sortedData = data?.sort(
       // @ts-ignore
-      (a, b) => new Date(b.game_id.date) - new Date(a.game_id.date),
+      (a, b) => new Date(b.game_id.date).getTime() - new Date(a.game_id.date).getTime(),
     ) as unknown as ReportApiData[]
 
     return {
@@ -184,22 +194,35 @@ const getReports = async (id: string, games: gameLimitOptions) => {
   }
 }
 
-const getComboPointsRatio = async (id: string, games: gameLimitOptions) => {
+const getComboPointsRatio = async (id: string, games: gameLimitOptions, season: string) => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
   try {
-    // TODO: For improved performance, consider using a rpc function
+    let minDate: string | null = null
+    let maxDate: string | null = null
+
+    if (season) {
+      const [startYear] = season.split("-").map(Number)
+      if (!isNaN(startYear)) {
+        minDate = `${startYear}-08-29`
+        maxDate = `${startYear + 1}-08-28`
+      }
+    }
+
     const { data, error } = await supabase
       .rpc("get_player_reports", {
         player_id_param: id,
         ...(["away", "home"].includes(games) ? { games_limiter: games } : {}),
+        ...(minDate ? { min_date: minDate } : {}),
+        ...(maxDate ? { max_date: maxDate } : {}),
       })
       .limit(gamesCountOptionsLimit[games])
 
     if (!data) {
       return { error: "No data found" }
     }
+
     const groupedData: Record<string, { report: any; moves: any; combos: any }> = groupByReportId(data)
 
     const chartData = [] as ComboToPointData[]
@@ -216,15 +239,28 @@ const getComboPointsRatio = async (id: string, games: gameLimitOptions) => {
   }
 }
 
-const getDribblesCounts = async (id: string, games: gameLimitOptions) => {
+const getDribblesCounts = async (id: string, games: gameLimitOptions, season: string) => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
   try {
+    let minDate: string | null = null
+    let maxDate: string | null = null
+
+    if (season) {
+      const [startYear] = season.split("-").map(Number)
+      if (!isNaN(startYear)) {
+        minDate = `${startYear}-08-29`
+        maxDate = `${startYear + 1}-08-28`
+      }
+    }
+
     const { data, error } = await supabase
       .rpc("get_player_report_dribbles", {
         p_player_id: id,
         ...(["away", "home"].includes(games) ? { team_type: games } : {}),
+        ...(minDate ? { min_date: minDate } : {}),
+        ...(maxDate ? { max_date: maxDate } : {}),
       })
       .limit(gamesCountOptionsLimit[games])
 
@@ -244,18 +280,32 @@ const getDribblesCounts = async (id: string, games: gameLimitOptions) => {
   }
 }
 
+const getSeasons = async (id: string) => {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+
+  const { data, error } = await supabase.rpc("get_player_seasons", { player_id_input: id })
+
+  if (!data || error) {
+    return { error: "No data found" }
+  }
+
+  return data
+}
+
 interface Props {
   id: string
-  searchParams: { games: gameLimitOptions }
+  searchParams: { games: gameLimitOptions; season: string }
 }
 
 export default async function PlayerDetailsView({ id, searchParams }: Props) {
-  const { games } = searchParams
-  const [playersResponse, reportsResponse, comboPointsResponse, dribbleCounts] = await Promise.all([
+  const { games, season } = searchParams
+  const [playersResponse, reportsResponse, comboPointsResponse, dribbleCounts, seasons] = await Promise.all([
     getAllPlayers(),
-    getReports(id, games),
-    getComboPointsRatio(id, games),
-    getDribblesCounts(id, games),
+    getReports(id, games, season),
+    getComboPointsRatio(id, games, season),
+    getDribblesCounts(id, games, season),
+    getSeasons(id),
   ])
 
   const isAdmin = await getIsAdmin()
@@ -268,7 +318,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
             <ArrowLeftIcon /> Players List
           </Link>
           {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} isAdmin={isAdmin} />}
-          <PlayerGamesFilter />
+          <PlayerGamesFilter seasons={seasons} />
           <InsightsButton id={id} canEdit={isAdmin} />
         </div>
         <div className="flex items-center justify-center">

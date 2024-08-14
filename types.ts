@@ -317,4 +317,4 @@ export interface Insights {
   insights: string
 }
 
-export type gameLimitOptions = "all" | "5" | "10" | "41" | "82" | "away" | "home"
+export type gameLimitOptions = "all" | "5" | "10" | "away" | "home"
