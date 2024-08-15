@@ -13,9 +13,9 @@ interface Props {
 export default function SequencesGraphs({ dribbleCounts }: Props) {
   const allDribbleCounts = { ...dribbleCounts.moveCounts?.madeShots, ...dribbleCounts.moveCounts?.missedShots }
   const [graphFilters, setGraphFilters] = useState<IGraphFilters>({
-    dribbles: true,
-    initialDirection: true,
-    counterDirection: true,
+    dribbles: false,
+    initialDirection: false,
+    counterDirection: false,
     lastHand: false,
   })
 
