@@ -37,13 +37,11 @@ export default function PlayersTableToolbar({ isAdmin }: Props) {
     })) || []),
   ]
 
-  const playersOptions = [
-    { value: EMPTY_AUTOCOMPLETE_VALUE, label: "No filter" }, // Empty first element
-    ...(playerData?.map((player) => ({
+  const playersOptions =
+    playerData?.map((player) => ({
       value: player.id,
       label: player.name,
-    })) || []),
-  ]
+    })) || []
 
   const activeTeamName = teamData?.find((team) => team.id == Number(activeTeamId))?.name
   const activePlayerName = playerData?.find((player) => player.id == Number(activePlayerId))?.name
