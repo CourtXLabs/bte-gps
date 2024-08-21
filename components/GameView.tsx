@@ -9,7 +9,7 @@ const MovesList = dynamic(() => import("./sections/MovesList"), { ssr: false })
 
 export default function GameView() {
   return (
-    <div className="mx-auto w-max max-w-7xl lg:px-0 ">
+    <div className="mx-auto w-max max-w-7xl pb-10 lg:px-0">
       <div className="flex items-center justify-center py-10">
         {dribbleOptions.map((option) => (
           <Image key={option.id} src={option.image!} alt={option.name} width={125} height={125} />

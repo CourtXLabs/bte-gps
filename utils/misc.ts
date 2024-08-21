@@ -5,5 +5,5 @@ export const generateRandomString = () => {
 export const formatDate = (dateString: string) => {
   const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "short", day: "numeric" }
   const date = new Date(dateString)
-  return date.toLocaleDateString(undefined, options)
+  return date.toLocaleDateString("en-US", options)
 }

@@ -80,14 +80,7 @@ export default function PlayersTableToolbar({ isAdmin }: Props) {
   }
 
   const onSelectPlayer = (value: string | number) => {
-    const newSearchParams = new URLSearchParams(searchParams)
-    if (value !== EMPTY_AUTOCOMPLETE_VALUE) {
-      newSearchParams.set("player", value as string)
-    } else {
-      newSearchParams.delete("player")
-    }
-    setIsPlayerAutocompleteOpen(false)
-    router.push(`?${newSearchParams.toString()}`)
+    router.push(`/players/${value}`)
   }
 
   return (

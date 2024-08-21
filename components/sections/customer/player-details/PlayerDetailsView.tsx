@@ -1,5 +1,6 @@
 import { MoveIds, idToUid, moveUids } from "@/constants/misc"
 import { dribbleOptions } from "@/constants/sequence-options"
+import { DEFAULT_GAMES_COUNT, DEFAULT_SEASON } from "@/global-constants"
 import { getIsAdmin } from "@/lib/auth"
 import { createClient } from "@/lib/supabase/server"
 import {
@@ -299,7 +300,10 @@ interface Props {
 }
 
 export default async function PlayerDetailsView({ id, searchParams }: Props) {
-  const { games, season } = searchParams
+  let { games: gamesParam, season: seasonParam } = searchParams
+  const games = gamesParam || DEFAULT_GAMES_COUNT
+  const season = seasonParam || DEFAULT_SEASON
+
   const [playersResponse, reportsResponse, comboPointsResponse, dribbleCounts, seasons] = await Promise.all([
     getAllPlayers(),
     getReports(id, games, season),
