@@ -16,6 +16,8 @@ interface Props {
   searchParams: { games?: gameLimitOptions; season?: string }
 }
 
+export const dynamic = "force-dynamic"
+
 export default async function PlayerDetailsPage({ params, searchParams }: Props) {
   const suspenseKey = new URLSearchParams(searchParams).toString()
   return (
