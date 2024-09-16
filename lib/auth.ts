@@ -63,6 +63,15 @@ export async function getIsAdmin() {
   return decodedJwt.user_roles?.includes(Roles.ADMIN)
 }
 
+export async function getIsPremium() {
+  const decodedJwt = await getJwt()
+  if (!decodedJwt) {
+    return false
+  }
+
+  return decodedJwt.user_roles?.includes(Roles.PREMIUM)
+}
+
 export async function getUserRoles(token: string) {
   const decodedJwt = await verifyJwtToken(token)
   if (!decodedJwt) {

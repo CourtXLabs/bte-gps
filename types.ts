@@ -289,6 +289,7 @@ export interface DribbleChartApiData {
 
 export enum Roles {
   ADMIN = "ADMIN",
+  PREMIUM = "PREMIUM",
 }
 
 export interface CustomJWTPayload extends JWTPayload {
