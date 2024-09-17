@@ -1,7 +1,8 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { CaretSortIcon, CheckIcon, PlusIcon } from "@radix-ui/react-icons"
+import { CheckIcon, PlusIcon } from "@radix-ui/react-icons"
+import { ChevronDown } from "lucide-react"
 import { useRef } from "react"
 import { Button } from "./ui/button"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "./ui/command"
@@ -51,10 +52,14 @@ export default function Autocomplete({
           <Button
             variant="outline"
             role="combobox"
-            className={cn("justify-between font-normal", !value && "text-muted-foreground", className)}
+            className={cn(
+              "h-11 justify-between border-none bg-muted py-4 font-normal hover:text-foreground",
+              !value && "text-muted-foreground",
+              className,
+            )}
           >
             <span className="overflow-hidden">{value || placeholder || "Select data"}</span>
-            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <ChevronDown className="ml-2 h-5 w-5" />
           </Button>
         </FormControl>
       </PopoverTrigger>

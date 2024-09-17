@@ -257,7 +257,10 @@ export default function GameForm({ players, teams }: Props) {
                   <FormControl>
                     <Button
                       variant={"outline"}
-                      className={cn("pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
+                      className={cn(
+                        "h-11 justify-between bg-muted py-4 text-left font-normal hover:text-foreground",
+                        !field.value && "text-muted-foreground",
+                      )}
                     >
                       {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
