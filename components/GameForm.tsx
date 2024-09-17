@@ -144,7 +144,9 @@ export default function GameForm({ players, teams }: Props) {
         <div className="text-xl font-bold underline">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">{gameType}</Button>
+              <Button variant="outline" className="hover:bg-accent-dark">
+                {gameType}
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>Game Type</DropdownMenuLabel>
@@ -164,6 +166,7 @@ export default function GameForm({ players, teams }: Props) {
             <FormItem className="flex flex-col">
               <FormLabel>Player</FormLabel>
               <Autocomplete
+                variant="dark"
                 isOpen={isPlayerComboboxOpen}
                 options={playerOptions}
                 value={field.value}
@@ -185,6 +188,7 @@ export default function GameForm({ players, teams }: Props) {
             <FormItem className="flex flex-col">
               <FormLabel>Home Team</FormLabel>
               <Autocomplete
+                variant="dark"
                 isOpen={isTeamComboboxOpen}
                 options={teamsOptions}
                 value={field.value}
@@ -206,6 +210,7 @@ export default function GameForm({ players, teams }: Props) {
             <FormItem className="flex flex-col">
               <FormLabel>Away Team</FormLabel>
               <Autocomplete
+                variant="dark"
                 isOpen={IsOpponentTeamComboboxOpen}
                 options={teamsOptions}
                 value={field.value}
@@ -227,7 +232,7 @@ export default function GameForm({ players, teams }: Props) {
             <FormItem>
               <FormLabel>Jersey</FormLabel>
               <FormControl>
-                <Input placeholder="Jersey" type="number" {...field} />
+                <Input variant="dark" placeholder="Jersey" type="number" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -240,7 +245,7 @@ export default function GameForm({ players, teams }: Props) {
             <FormItem>
               <FormLabel>Points</FormLabel>
               <FormControl>
-                <Input placeholder="Points" type="number" {...field} />
+                <Input variant="dark" placeholder="Points" type="number" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -258,7 +263,7 @@ export default function GameForm({ players, teams }: Props) {
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "h-11 justify-between bg-muted py-4 text-left font-normal hover:text-foreground",
+                        "hover:bg-accent-dark h-11 justify-between border-none py-4 text-left font-normal hover:text-foreground",
                         !field.value && "text-muted-foreground",
                       )}
                     >

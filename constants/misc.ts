@@ -41,7 +41,7 @@ export const moveIdToValue = {
   0: 0,
 }
 
-export const INITIAL_GAME_TYPE = GameTypes.PROFESSIONAL
+export const INITIAL_GAME_TYPE = GameTypes.HIGH_SCHOOL
 
 export const gameTypesPeriods = {
   [GameTypes.COLLEGE]: 3,

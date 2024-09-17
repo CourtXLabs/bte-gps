@@ -301,7 +301,7 @@ export default function ReportsList({ data }: Props) {
                     <TableHead
                       key={header.id}
                       colSpan={header.colSpan}
-                      className="align-bottom"
+                      className="align-top"
                       style={{ width: header.getSize() }}
                     >
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}

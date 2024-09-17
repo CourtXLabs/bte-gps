@@ -31,21 +31,16 @@ const config = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
-        // select: {
-        //   DEFAULT: "hsl(var(--select))",
-        //   foreground: "hsl(var(--select-foreground))",
-        // },
-        // "select-dark": {
-        //   DEFAULT: "hsl(var(--select-dark))",
-        //   foreground: "hsl(var(--select-dark-foreground))",
-        // },
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
+          dark: "hsl(var(--muted-dark))",
+          "dark-foreground": "hsl(var(--muted-dark-foreground))",
         },
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          dark: "hsl(var(--accent-dark))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",

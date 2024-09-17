@@ -10,12 +10,6 @@
     --card: 240 3.7% 15.9%;
     --card-foreground: 0 0 98%;
 
-    /* --select: 240 3.7% 15.9%;
-    --select-foreground: 0 0 98%;
-
-    --select-dark: 0 0% 0%;
-    --select-dark-foreground: 240 4.9% 83.9%; */
-
     --popover: 240 3.7% 15.9%;
     --popover-foreground: 0 0 98%;
 
@@ -27,6 +21,10 @@
 
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 0 0 98%;
+
+    --muted-dark: 0 0% 0%;
+    --muted-dark-foreground: 240 4.88% 83.92%;
+    --accent-dark: 0 0% 10%;
 
     --accent: 240 3.03% 25.88%;
     --accent-foreground: 210 30% 80%;

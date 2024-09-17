@@ -6,6 +6,33 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+const sizes = {
+  default: {
+    trigger: "h-11 p-4",
+    icon: "h-5 w-5",
+    iconContainer: "min-w-5",
+  },
+  sm: {
+    trigger: "h-9 px-3 py-2 text-xs",
+    icon: "h-4 w-4",
+    iconContainer: "min-w-4",
+  },
+  // Add more sizes here in the future
+}
+type Size = keyof typeof sizes
+
+const variants = {
+  default: {
+    trigger: "bg-muted",
+    item: "",
+  },
+  dark: {
+    trigger: "bg-muted-dark text-muted-dark-foreground hover:bg-accent-dark ",
+    item: "text-muted-dark-foreground data-[highlighted]:bg-accent-dark",
+  },
+}
+type Variant = keyof typeof variants
+
 const Select = SelectPrimitive.Root
 
 const SelectGroup = SelectPrimitive.Group
@@ -14,22 +41,25 @@ const SelectValue = SelectPrimitive.Value
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & { size?: Size; variant?: Variant }
+>(({ className, children, size = "default", variant = "default", ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-11 w-full items-center justify-between rounded-md bg-muted p-4 text-sm ring-offset-background placeholder:text-muted-foreground hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      "flex h-11 w-full items-center justify-between gap-1 rounded-md bg-muted p-4 text-left text-sm ring-offset-background placeholder:text-muted-foreground hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      sizes[size].trigger,
+      variants[variant].trigger,
       className,
     )}
     {...props}
   >
     {children}
-    <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-5 w-5" />
+    <SelectPrimitive.Icon asChild className={sizes[size].iconContainer}>
+      <ChevronDown className={sizes[size].icon} />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ))
+
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
 
 const SelectScrollUpButton = React.forwardRef<

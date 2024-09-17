@@ -9,6 +9,34 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { FormControl } from "./ui/form"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 
+const sizes = {
+  default: {
+    trigger: "h-11 p-4",
+    icon: "h-5 w-5",
+    iconContainer: "min-w-5",
+  },
+  sm: {
+    trigger: "h-9 px-3 py-2 text-xs",
+    icon: "h-4 w-4",
+    iconContainer: "min-w-4",
+  },
+} as const
+
+type Size = keyof typeof sizes
+
+const variants = {
+  default: {
+    trigger: "bg-muted",
+    item: "",
+  },
+  dark: {
+    trigger: "bg-muted-dark text-muted-dark-foreground hover:bg-accent-dark",
+    item: "text-muted-dark-foreground data-[highlighted]:bg-accent-dark",
+  },
+} as const
+
+type Variant = keyof typeof variants
+
 interface Props {
   isOpen: boolean
   onToggle: () => void
@@ -21,6 +49,8 @@ interface Props {
   onAddNew?: (value: string) => void
   className?: string
   disabled?: number[]
+  size?: Size
+  variant?: Variant
 }
 
 export default function Autocomplete({
@@ -35,6 +65,8 @@ export default function Autocomplete({
   onAddNew,
   className,
   disabled,
+  size = "default",
+  variant = "default",
 }: Props) {
   const handleSelect = (id: string) => () => onSelect(id)
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -53,13 +85,15 @@ export default function Autocomplete({
             variant="outline"
             role="combobox"
             className={cn(
-              "h-11 justify-between border-none bg-muted py-4 font-normal hover:text-foreground",
+              "justify-between border-none font-normal hover:text-foreground",
+              sizes[size].trigger,
+              variants[variant].trigger,
               !value && "text-muted-foreground",
               className,
             )}
           >
             <span className="overflow-hidden">{value || placeholder || "Select data"}</span>
-            <ChevronDown className="ml-2 h-5 w-5" />
+            <ChevronDown className={cn("ml-2", sizes[size].icon)} />
           </Button>
         </FormControl>
       </PopoverTrigger>
@@ -82,6 +116,7 @@ export default function Autocomplete({
                   key={option.value}
                   onSelect={handleSelect(option.value as string)}
                   disabled={disabled?.includes(Number(option.value))}
+                  className={variants[variant].item}
                 >
                   {option.label}
                   <CheckIcon className={cn("ml-auto h-4 w-4", option.value === value ? "opacity-100" : "opacity-0")} />
