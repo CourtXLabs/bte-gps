@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useToast } from "@/components/ui/use-toast"
 import {
@@ -289,83 +290,87 @@ export default function ReportsList({ data }: Props) {
   }
 
   return (
-    <div className="mx-auto max-w-[112.5rem]">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead
-                    key={header.id}
-                    colSpan={header.colSpan}
-                    className="align-bottom"
-                    style={{ width: header.getSize() }}
-                  >
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {data.map((report) => {
-            return (
-              <TableRow key={report.id}>
-                <TableCell className="text-center">{formatDate(report.game_id?.date)}</TableCell>
-                <TableCell className="text-center">
-                  {report.game_id?.home_team_id?.abbreviation} @ {report.game_id?.away_team_id?.abbreviation}{" "}
-                </TableCell>
-                <TableCell className="text-center">
-                  {getIndividualDribblePercent(report, activeData.individualDribble).toFixed(1)}%
-                </TableCell>
-                <TableCell className="text-center">
-                  {getLaneDribblePercent(report, activeData.lane).toFixed(1)}%
-                </TableCell>
-                <TableCell className="text-center">
-                  {getPlayCodePercent(report, activeData.playCode).toFixed(1)}%
-                </TableCell>
-                <TableCell className="text-center">
-                  {getShootingOffDribblesPercent(report, activeData.shootingOffDribbles).toFixed(1)}%
-                </TableCell>
-                <TableCell className="text-center">
-                  {getShootingStationaryPercent(report, activeData.shootingStationary).toFixed(1)}%
-                </TableCell>
-                <TableCell className="text-center">{getFrequency(report, activeData.frequency).toFixed(1)}%</TableCell>
-                <TableCell className="text-center">{getComboToPointRatio(report)}</TableCell>
-                <TableCell className="text-center">
-                  {getInitialDirectionPercent(report, activeData.initialDirection).toFixed(1)}%
-                </TableCell>
-                <TableCell className="text-center">
-                  {getCounterDirectionPercent(report, activeData.counterDirection).toFixed(1)}%
-                </TableCell>
-                <TableCell className="text-center">
-                  {getLastHandPercent(report, activeData.lastHand).toFixed(1)}%
-                </TableCell>
-                <TableCell className="text-center">{getEfficiencyScore(report).toFixed(1)}</TableCell>
-                <TableCell className="text-center">
-                  <Button
-                    variant="link"
-                    className="p-0"
-                    title="Download Report"
-                    type="button"
-                    onClick={onDownloadReport(report.id!)}
-                  >
-                    <DownloadIcon width={18} height={18} />
-                  </Button>
-                </TableCell>
+    <Card className="mx-auto max-w-[112.5rem]">
+      <CardContent>
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      className="align-bottom"
+                      style={{ width: header.getSize() }}
+                    >
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  )
+                })}
               </TableRow>
-            )
-          })}
-          <TableRow className="border-none">
-            <TableCell colSpan={3}>
-              <span className="text-base font-semibold">Aggregated Data</span>
-            </TableCell>
-          </TableRow>
-          <AggregatedDataRow data={data} activeData={activeData} />
-        </TableBody>
-      </Table>
-    </div>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {data.map((report) => {
+              return (
+                <TableRow key={report.id}>
+                  <TableCell className="text-center">{formatDate(report.game_id?.date)}</TableCell>
+                  <TableCell className="text-center">
+                    {report.game_id?.home_team_id?.abbreviation} @ {report.game_id?.away_team_id?.abbreviation}{" "}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {getIndividualDribblePercent(report, activeData.individualDribble).toFixed(1)}%
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {getLaneDribblePercent(report, activeData.lane).toFixed(1)}%
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {getPlayCodePercent(report, activeData.playCode).toFixed(1)}%
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {getShootingOffDribblesPercent(report, activeData.shootingOffDribbles).toFixed(1)}%
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {getShootingStationaryPercent(report, activeData.shootingStationary).toFixed(1)}%
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {getFrequency(report, activeData.frequency).toFixed(1)}%
+                  </TableCell>
+                  <TableCell className="text-center">{getComboToPointRatio(report)}</TableCell>
+                  <TableCell className="text-center">
+                    {getInitialDirectionPercent(report, activeData.initialDirection).toFixed(1)}%
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {getCounterDirectionPercent(report, activeData.counterDirection).toFixed(1)}%
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {getLastHandPercent(report, activeData.lastHand).toFixed(1)}%
+                  </TableCell>
+                  <TableCell className="text-center">{getEfficiencyScore(report).toFixed(1)}</TableCell>
+                  <TableCell className="text-center">
+                    <Button
+                      variant="link"
+                      className="p-0"
+                      title="Download Report"
+                      type="button"
+                      onClick={onDownloadReport(report.id!)}
+                    >
+                      <DownloadIcon width={18} height={18} />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
+            <TableRow className="border-none">
+              <TableCell colSpan={3}>
+                <span className="text-base font-semibold">Aggregated Data</span>
+              </TableCell>
+            </TableRow>
+            <AggregatedDataRow data={data} activeData={activeData} />
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
   )
 }
