@@ -53,7 +53,7 @@ export default function CourtDropdown({ onClose, coordinates, onSubmit }: Props)
   return (
     <div
       ref={dropdownRef}
-      className="background-dark-foreground absolute z-10 flex w-max -translate-x-1/2 flex-col items-center gap-8 rounded-sm bg-background-dark p-4"
+      className="card-foreground absolute z-10 flex w-max -translate-x-1/2 flex-col items-center gap-8 rounded-sm bg-card p-4"
       style={positionStyle}
     >
       <div className="flex items-center">

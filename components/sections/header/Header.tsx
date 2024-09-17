@@ -1,6 +1,7 @@
 import { getIsAdmin } from "@/lib/auth"
 import Image from "next/image"
 import Link from "next/link"
+import ProfileInfo from "./ProfileInfo"
 
 export default async function Header() {
   const isAdmin = await getIsAdmin()
@@ -22,6 +23,7 @@ export default async function Header() {
           </Link>
         )}
         <p className="ml-auto text-lg font-medium text-gray-300">BETA</p>
+        <ProfileInfo />
       </div>
     </div>
   )
