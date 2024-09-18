@@ -33,7 +33,7 @@ export default function SequencesGraphs({ dribbleCounts }: Props) {
           <DribblePieChartsSection dribbleCounts={dribbleCounts} allDribbleCounts={allDribbleCounts} />
         )}
         {graphFilters.initialDirection && (
-          <div className="flex flex-col items-center gap-10 lg:flex-row">
+          <div className="flex flex-col items-center gap-8 lg:flex-row">
             <SequenceFrequencyChart
               data={dribbleCounts.seuqenceInfoCounts?.initialDirectionCounts?.madeShots}
               title="Initial Direction Made Shots"
@@ -49,7 +49,7 @@ export default function SequencesGraphs({ dribbleCounts }: Props) {
           </div>
         )}
         {graphFilters.counterDirection && (
-          <div className="flex flex-col items-center gap-10 lg:flex-row">
+          <div className="flex flex-col items-center gap-8 lg:flex-row">
             <SequenceFrequencyChart
               data={dribbleCounts.seuqenceInfoCounts?.counterDirectionCounts?.madeShots}
               title="Counter Direction Made Shots"
@@ -65,7 +65,7 @@ export default function SequencesGraphs({ dribbleCounts }: Props) {
           </div>
         )}
         {graphFilters.lastHand && (
-          <div className="flex flex-col items-center gap-10 lg:flex-row">
+          <div className="flex flex-col items-center gap-8 lg:flex-row">
             <SequenceFrequencyChart
               data={dribbleCounts.seuqenceInfoCounts?.lastDribbleTypeCounts?.madeShots}
               title="Last Hand Made Shots"
