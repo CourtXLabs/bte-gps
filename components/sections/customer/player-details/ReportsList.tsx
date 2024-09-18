@@ -291,7 +291,7 @@ export default function ReportsList({ data }: Props) {
 
   return (
     <Card className="mx-auto max-w-[112.5rem]">
-      <CardContent>
+      <CardContent className="p-6 pb-12">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -356,13 +356,13 @@ export default function ReportsList({ data }: Props) {
                       type="button"
                       onClick={onDownloadReport(report.id!)}
                     >
-                      <DownloadIcon width={18} height={18} />
+                      <DownloadIcon width={20} height={20} />
                     </Button>
                   </TableCell>
                 </TableRow>
               )
             })}
-            <TableRow className="border-none">
+            <TableRow className="border-b border-white border-opacity-20">
               <TableCell colSpan={3}>
                 <span className="text-base font-semibold">Aggregated Data</span>
               </TableCell>

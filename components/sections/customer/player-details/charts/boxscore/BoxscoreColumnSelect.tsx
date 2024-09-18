@@ -12,7 +12,7 @@ interface Props {
 
 export default function BoxscoreColumnSelect({ options, onValueChange, value, title, placeholder, className }: Props) {
   return (
-    <div className={cn("flex h-full flex-col justify-between gap-1 py-4", className)}>
+    <div className={cn("flex h-full flex-col justify-between gap-3 py-4", className)}>
       <span className="text-center text-white">{title}</span>
       <Select value={value} onValueChange={onValueChange}>
         <SelectTrigger size="sm" variant="dark">
