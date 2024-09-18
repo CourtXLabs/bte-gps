@@ -26,7 +26,7 @@ export default function SequencesGraphs({ dribbleCounts }: Props) {
   const showDribblesGraphs = graphFilters.dribbles && !!dribbleCounts.moveCounts
 
   return (
-    <div className="mx-auto mt-4 max-w-7xl">
+    <div className="mx-auto mt-4 max-w-screen-2xl">
       <GraphFilters filters={graphFilters} onChangeFilter={onChangeFilter} />
       <div className="flex flex-col items-center space-y-10 py-10">
         {showDribblesGraphs && (

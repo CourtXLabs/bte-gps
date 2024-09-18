@@ -315,10 +315,13 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
   const isAdmin = await getIsAdmin()
 
   return (
-    <div className="mx-auto flex w-full flex-col gap-10 px-4 py-10">
-      <div className="mx-auto flex w-full max-w-7xl flex-wrap justify-between gap-6">
+    <div className="mx-auto flex w-full flex-col gap-10 px-4 py-12">
+      <div className="mx-auto flex w-full max-w-screen-2xl flex-wrap justify-between gap-6">
         <div className="space-y-6">
-          <Link href="/" className="mx-auto mb-2 flex w-full max-w-7xl items-center gap-1">
+          <Link
+            href="/"
+            className="mb-2 flex w-max max-w-screen-2xl items-center gap-3 text-lg hover:text-accent-foreground"
+          >
             <ArrowLeftIcon /> Players List
           </Link>
           {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} isAdmin={isAdmin} />}

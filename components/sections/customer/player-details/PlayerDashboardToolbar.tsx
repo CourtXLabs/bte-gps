@@ -48,7 +48,7 @@ export default function PlayerDashboardToolbar({ players, isAdmin }: Props) {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 sm:flex-row sm:items-end">
+    <div className="mx-auto flex w-full max-w-screen-2xl flex-col gap-4 sm:flex-row sm:items-end">
       <Form {...form}>
         <form>
           <FormField
