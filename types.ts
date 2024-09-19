@@ -319,3 +319,10 @@ export interface Insights {
 }
 
 export type gameLimitOptions = "all" | "5" | "10" | "away" | "home"
+
+export interface Margin {
+  top: number
+  right: number
+  bottom: number
+  left: number
+}

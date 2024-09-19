@@ -334,7 +334,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
           ))}
         </div>
       </div>
-      <div className="mx-auto max-w-screen-2xl ">
+      <div className="mx-auto w-full max-w-screen-2xl">
         <SequencesGraphs dribbleCounts={dribbleCounts as SeuqenceGraphData} />
         <div className="flex flex-col items-center justify-center gap-8 lg:flex-row">
           {!!comboPointsResponse.data?.length && <PointsComboBarChart data={comboPointsResponse.data} />}
