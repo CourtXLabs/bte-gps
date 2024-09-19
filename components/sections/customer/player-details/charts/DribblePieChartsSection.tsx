@@ -13,7 +13,7 @@ export default function DribblePieChartsSection({ dribbleCounts, allDribbleCount
   return (
     <Card className="w-full">
       <CardContent className="flex flex-col  pt-6">
-        <div className="flex flex-col items-center justify-between gap-12 lg:flex-row">
+        <div className="flex flex-col items-center justify-between gap-6 lg:flex-row lg:gap-12">
           <DribblePieChartWrapper
             title="Made Shots Dribbles Count"
             subtitle="This Pie Chart shows the ratio of dribble types for MADE shots"
