@@ -8,7 +8,7 @@ interface Props {
 
 export default function ChartRoot({ title, subtitle, children }: Props) {
   return (
-    <Card className="flex-1">
+    <Card className="w-full flex-1">
       <CardHeader className="mx-6 border-b border-[#E7EAEE] border-opacity-50 px-0">
         <p className="text-lg font-semibold">{title}</p>
         <p className="text-sm">{subtitle}</p>

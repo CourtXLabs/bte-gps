@@ -290,7 +290,7 @@ export default function ReportsList({ data }: Props) {
   }
 
   return (
-    <Card className="max-w-screen-3xl mx-auto max-w-full">
+    <Card className="max-w-screen-3xl mx-auto w-full">
       <CardContent className="p-6 pb-12">
         <Table>
           <TableHeader>

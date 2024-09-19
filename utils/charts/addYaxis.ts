@@ -15,6 +15,8 @@ const addYAxis = ({ maxPoint, tickFormat, tickCount, tickValues, chart, height }
 
   if (tickFormat) {
     call.tickFormat(tickFormat)
+  } else {
+    call.tickFormat(d3.format("d"))
   }
 
   if (tickValues) {

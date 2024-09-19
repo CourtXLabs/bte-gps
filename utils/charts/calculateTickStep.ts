@@ -1,4 +1,5 @@
 const calculateTickStep = (maxValue: number): number => {
+  if (maxValue <= 18) return 2
   if (maxValue <= 50) return 5
   if (maxValue <= 180) return 10
   if (maxValue <= 500) return 25
