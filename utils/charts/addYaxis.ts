@@ -4,7 +4,7 @@ interface Props {
   maxPoint: number
   chart: d3.Selection<SVGGElement | null, unknown, null, undefined>
   tickFormat?: any
-  tickValues: number[]
+  tickValues?: number[]
   tickCount?: number
   height: number
 }

@@ -1,9 +1,18 @@
 "use client"
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { CardContent } from "@/components/ui/card"
+import useResize from "@/hooks/useResize"
 import { ComboToPointData } from "@/types"
+import addXAxis from "@/utils/charts/addXAxis"
+import addYAxis from "@/utils/charts/addYaxis"
+import animateBars from "@/utils/charts/animateBars"
+import calculateNewWidth from "@/utils/charts/calculateNewWidth"
+import drawBars from "@/utils/charts/drawBars"
+import drawGrid from "@/utils/charts/drawGrid"
+import initializeD3 from "@/utils/charts/initializeD3"
 import * as d3 from "d3"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
+import ChartRoot from "./ChartRoot"
 
 const PRIMARY_COLOR = "#FCBE22"
 
@@ -18,100 +27,34 @@ export default function PointsComboBarChart({ data }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null)
   const chartRef = useRef<SVGGElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const [width, setWidth] = useState(600) // Initial width
+  const width = useResize({
+    containerRef,
+    calculateNewWidth: (containerRef) => calculateNewWidth({ containerRef, margin }),
+  })
 
   const maxCalculatedPoint = Math.round(Math.max(...data.map((d) => Math.max(d.points, d.comboCount))) * 1.25)
+  const formattedBarsData = data.map((d) => [d.date, d.comboCount] as [string, number])
   const tickInterval = Math.ceil(maxCalculatedPoint / 10)
   const maxPoint = tickInterval * 10
 
   useEffect(() => {
-    const handleResize = () => {
-      if (containerRef.current) {
-        setWidth(containerRef.current.clientWidth - margin.left - margin.right)
-      }
-    }
-
-    handleResize() // Set initial width
-    window.addEventListener("resize", handleResize)
-
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    }
-  }, [])
-
-  useEffect(() => {
     if (!svgRef.current) return
-
-    // Create SVG and chart group only once
-    if (!chartRef.current) {
-      const svg = d3.select(svgRef.current).attr("width", width + margin.left + margin.right)
-
-      chartRef.current = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`).node()
-    }
-
-    const chart = d3.select(chartRef.current)
-
-    // Clear existing content
-    chart.selectAll("*").remove()
-
-    // X axis
-    const x = d3
-      .scaleBand()
-      .range([0, width])
-      .domain(data.map((d) => d.date))
-      .padding(0.2)
+    const chart = initializeD3({ svgRef, chartRef, width, height, margin })
 
     const numTicks = Math.min(20, data.length)
     const tickValues = data.filter((_, i) => i % Math.ceil(data.length / numTicks) === 0).map((d) => d.date)
 
-    const xAxis = d3.axisBottom(x).tickValues(tickValues)
-    chart
-      .append("g")
-      .attr("transform", `translate(0,${height})`)
-      .call(xAxis)
-      .selectAll("text")
-      .attr("transform", "translate(-10,0)rotate(-45)")
-      .style("text-anchor", "end")
-      .style("font-size", "12px")
+    const x = addXAxis({ chart, data: formattedBarsData, width, tickValues, height })
+    const y = addYAxis({
+      maxPoint,
+      chart,
+      height,
+    })
 
-    // Apply styles to X-axis lines and ticks
-    chart.selectAll(".domain, .tick line").style("stroke", "#E7EAEE").style("opacity", 0.35)
+    drawGrid({ chart, y, width })
+    drawBars({ chart, data: formattedBarsData, x, height })
 
-    // Add Y axis
-    const y = d3.scaleLinear().domain([0, maxPoint]).range([height, 0])
-    chart
-      .append("g")
-      .call(d3.axisLeft(y))
-      .style("font-size", "12px")
-      .selectAll("path, line") // Apply styles to both axis line and ticks
-      .style("stroke", "#E7EAEE")
-      .style("opacity", 0.35)
-
-    // Grid lines
-    chart
-      .append("g")
-      .attr("class", "grid")
-      .call(
-        d3
-          .axisLeft(y)
-          .tickSize(-width)
-          .tickFormat(() => "")
-          .ticks(10),
-      )
-      .style("color", "#E7EAEE")
-      .style("opacity", 0.35)
-
-    // Bars
-    chart
-      .selectAll("mybar")
-      .data(data)
-      .enter()
-      .append("rect")
-      .attr("x", (d) => x(d.date)!)
-      .attr("width", x.bandwidth())
-      .attr("fill", PRIMARY_COLOR)
-      .attr("height", 0)
-      .attr("y", height)
+    animateBars({ chart, height, y, delay: 30 })
 
     // Line
     const line = d3
@@ -129,13 +72,6 @@ export default function PointsComboBarChart({ data }: Props) {
       .attr("d", line)
 
     // Animation
-    chart
-      .selectAll("rect")
-      .transition()
-      .duration(800)
-      .attr("y", (d: any) => y(d.comboCount))
-      .attr("height", (d: any) => height - y(d.comboCount))
-      .delay((d, i) => i * 30)
 
     const legendData = [
       { name: "Points", color: "red" },
@@ -171,11 +107,7 @@ export default function PointsComboBarChart({ data }: Props) {
   }, [data, maxPoint, width])
 
   return (
-    <Card className="flex-1">
-      <CardHeader className="mx-6 border-b border-[#E7EAEE] border-opacity-50 px-0">
-        <p className="text-lg font-semibold">Points and Combos</p>
-        <p className="text-sm">This Chart shows the ratio of points & combos made each game</p>
-      </CardHeader>
+    <ChartRoot title="Points and Combos" subtitle="This Chart shows the ratio of points & combos made each game">
       <CardContent ref={containerRef}>
         <svg
           id="combo-to-point"
@@ -185,6 +117,6 @@ export default function PointsComboBarChart({ data }: Props) {
           xmlnsXlink="http://www.w3.org/1999/xlink"
         />
       </CardContent>
-    </Card>
+    </ChartRoot>
   )
 }
