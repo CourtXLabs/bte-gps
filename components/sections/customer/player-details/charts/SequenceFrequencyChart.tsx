@@ -14,7 +14,7 @@ import initializeD3 from "@/utils/charts/initializeD3"
 import { useEffect, useRef } from "react"
 import ChartRoot from "./ChartRoot"
 
-const margin = { top: 48, right: 30, bottom: 70, left: 30 }
+const margin = { top: 48, right: 50, bottom: 70, left: 30 }
 const height = 500 - margin.top - margin.bottom
 
 interface Props {

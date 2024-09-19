@@ -8,7 +8,7 @@ interface Props {
 }
 
 const addYAxisLabel = ({ chart, margin, title }: Props) => {
-  addAxisLabel({ chart, x: -margin.left, y: -margin.top + 12 + 20, title })
+  addAxisLabel({ chart, x: -margin.left, y: -margin.top + 12 + 20, title, textAnchor: "start" })
 }
 
 export default addYAxisLabel

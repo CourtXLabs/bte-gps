@@ -16,7 +16,7 @@ import ChartRoot from "./ChartRoot"
 
 const PRIMARY_COLOR = "#FCBE22"
 
-const margin = { top: 58, right: 30, bottom: 70, left: 30 }
+const margin = { top: 58, right: 50, bottom: 70, left: 30 }
 const height = 500 - margin.top - margin.bottom
 
 interface Props {

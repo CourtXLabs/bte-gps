@@ -17,7 +17,7 @@ import * as d3 from "d3"
 import { useEffect, useRef } from "react"
 import ChartRoot from "./ChartRoot"
 
-const margin = { top: 58, right: 30, bottom: 70, left: 30 }
+const margin = { top: 58, right: 50, bottom: 70, left: 30 }
 const height = 500 - margin.top - margin.bottom
 const MAX_COMBOS_TO_SHOW = 25
 
