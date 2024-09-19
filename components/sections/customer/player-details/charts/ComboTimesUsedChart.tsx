@@ -50,11 +50,12 @@ export default function ComboTimesUsedChart({ data }: Props) {
   })
 
   const sortedData = getSortedData(data)
-  const maxCalculatedPoint = Math.round(sortedData[0][1] * 1.25)
-  const tickStep = calculateTickStep(maxCalculatedPoint)
+  const maxCalculatedPoint = Math.round(sortedData[0][1] * 1.2)
 
-  const tickInterval = Math.ceil(maxCalculatedPoint / tickStep)
-  const maxPoint = tickInterval * tickStep
+  const tickStep = calculateTickStep(maxCalculatedPoint)
+  const ticksCount = Math.ceil(maxCalculatedPoint / tickStep)
+  const maxPoint = ticksCount * tickStep
+  const tickValues = d3.range(0, maxPoint + 1, tickStep)
 
   useEffect(() => {
     if (!svgRef.current) return
@@ -68,7 +69,7 @@ export default function ComboTimesUsedChart({ data }: Props) {
       maxPoint,
       chart,
       tickFormat: d3.format("d"),
-      tickValues: d3.range(0, maxPoint + 1, tickStep),
+      tickValues,
       height,
     })
 

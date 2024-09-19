@@ -7,6 +7,7 @@ import addXAxis from "@/utils/charts/addXAxis"
 import addYAxis from "@/utils/charts/addYaxis"
 import animateBars from "@/utils/charts/animateBars"
 import calculateNewWidth from "@/utils/charts/calculateNewWidth"
+import calculateTickStep from "@/utils/charts/calculateTickStep"
 import drawBars from "@/utils/charts/drawBars"
 import drawGrid from "@/utils/charts/drawGrid"
 import initializeD3 from "@/utils/charts/initializeD3"
@@ -32,26 +33,30 @@ export default function PointsComboBarChart({ data }: Props) {
     calculateNewWidth: (containerRef) => calculateNewWidth({ containerRef, margin }),
   })
 
-  const maxCalculatedPoint = Math.round(Math.max(...data.map((d) => Math.max(d.points, d.comboCount))) * 1.25)
+  const maxCalculatedPoint = Math.round(Math.max(...data.map((d) => Math.max(d.points, d.comboCount))) * 1.2)
   const formattedBarsData = data.map((d) => [d.date, d.comboCount] as [string, number])
-  const tickInterval = Math.ceil(maxCalculatedPoint / 10)
-  const maxPoint = tickInterval * 10
+
+  const tickStep = calculateTickStep(maxCalculatedPoint)
+  const ticksCount = Math.ceil(maxCalculatedPoint / tickStep)
+  const maxPoint = ticksCount * tickStep
+  const tickValues = d3.range(0, maxPoint + 1, tickStep)
 
   useEffect(() => {
     if (!svgRef.current) return
     const chart = initializeD3({ svgRef, chartRef, width, height, margin })
 
     const numTicks = Math.min(20, data.length)
-    const tickValues = data.filter((_, i) => i % Math.ceil(data.length / numTicks) === 0).map((d) => d.date)
+    const xTickValues = data.filter((_, i) => i % Math.ceil(data.length / numTicks) === 0).map((d) => d.date)
 
-    const x = addXAxis({ chart, data: formattedBarsData, width, tickValues, height })
+    const x = addXAxis({ chart, data: formattedBarsData, width, tickValues: xTickValues, height })
     const y = addYAxis({
       maxPoint,
       chart,
       height,
+      tickValues,
     })
 
-    drawGrid({ chart, y, width })
+    drawGrid({ chart, y, width, tickValues })
     drawBars({ chart, data: formattedBarsData, x, height })
 
     animateBars({ chart, height, y, delay: 30 })

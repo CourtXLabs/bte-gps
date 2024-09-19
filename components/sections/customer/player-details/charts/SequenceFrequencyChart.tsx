@@ -8,13 +8,15 @@ import addYAxisLabel from "@/utils/charts/addYAxisLabel"
 import addYAxis from "@/utils/charts/addYaxis"
 import animateBars from "@/utils/charts/animateBars"
 import calculateNewWidth from "@/utils/charts/calculateNewWidth"
+import calculateTickStep from "@/utils/charts/calculateTickStep"
 import drawBars from "@/utils/charts/drawBars"
 import drawGrid from "@/utils/charts/drawGrid"
 import initializeD3 from "@/utils/charts/initializeD3"
+import * as d3 from "d3"
 import { useEffect, useRef } from "react"
 import ChartRoot from "./ChartRoot"
 
-const margin = { top: 48, right: 50, bottom: 70, left: 30 }
+const margin = { top: 58, right: 50, bottom: 70, left: 30 }
 const height = 500 - margin.top - margin.bottom
 
 interface Props {
@@ -35,7 +37,12 @@ export default function SequenceFrequencyChart({ data, title, subtitle, xAxisLab
   })
 
   const sortedData = Object.entries(data).sort((a, b) => b[1] - a[1])
-  const maxPoint = Math.round(Math.max(...Object.values(data)) * 1.25)
+  const maxCalculatedPoint = Math.round(Math.max(...Object.values(data)) * 1.2)
+
+  const tickStep = calculateTickStep(maxCalculatedPoint)
+  const ticksCount = Math.ceil(maxCalculatedPoint / tickStep)
+  const maxPoint = ticksCount * tickStep
+  const tickValues = d3.range(0, maxPoint + 1, tickStep)
 
   useEffect(() => {
     if (!svgRef.current) return
@@ -49,9 +56,10 @@ export default function SequenceFrequencyChart({ data, title, subtitle, xAxisLab
       maxPoint,
       chart,
       height,
+      tickValues,
     })
 
-    drawGrid({ chart, y, width })
+    drawGrid({ chart, y, width, tickValues })
     drawBars({ chart, data: sortedData, x, height })
     animateBars({ chart, height, y, delay: 100 })
   }, [data, maxPoint, title, xAxisLabel, sortedData, yAxisLabel])
