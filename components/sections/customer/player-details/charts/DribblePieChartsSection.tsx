@@ -1,6 +1,8 @@
+import { Card, CardContent } from "@/components/ui/card"
 import { SeuqenceGraphData } from "@/types"
 import DribblePieChart from "./DribblePieChart"
 import DribblePieChartLegend from "./DribblePieChartLegend"
+import DribblePieChartWrapper from "./DribblePieChartWrapper"
 
 interface Props {
   dribbleCounts: SeuqenceGraphData
@@ -9,18 +11,24 @@ interface Props {
 
 export default function DribblePieChartsSection({ dribbleCounts, allDribbleCounts }: Props) {
   return (
-    <>
-      <div className="flex flex-col items-center justify-center gap-10 lg:flex-row">
-        <div>
-          <h2 className="pb-6 text-center text-2xl font-bold">Made Shots Dribbles Count</h2>
-          <DribblePieChart data={dribbleCounts.moveCounts!.madeShots} />
+    <Card className="w-full">
+      <CardContent className="flex flex-col  pt-6">
+        <div className="flex flex-col items-center justify-between gap-12 lg:flex-row">
+          <DribblePieChartWrapper
+            title="Made Shots Dribbles Count"
+            subtitle="This Pie Chart shows the ratio of dribble types for MADE shots"
+          >
+            <DribblePieChart data={dribbleCounts.moveCounts!.madeShots} />
+          </DribblePieChartWrapper>
+          <DribblePieChartWrapper
+            title="Missed Shots Dribbles Count"
+            subtitle="This Pie Chart shows the ratio of dribble types for MISSED shots"
+          >
+            <DribblePieChart data={dribbleCounts.moveCounts!.missedShots} />
+          </DribblePieChartWrapper>
         </div>
-        <div>
-          <h2 className="pb-6 text-center text-2xl font-bold">Missed Shots Dribbles Count</h2>
-          <DribblePieChart data={dribbleCounts.moveCounts!.missedShots} />
-        </div>
-      </div>
-      <DribblePieChartLegend data={allDribbleCounts} />
-    </>
+        <DribblePieChartLegend data={allDribbleCounts} />
+      </CardContent>
+    </Card>
   )
 }

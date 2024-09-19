@@ -1,14 +1,14 @@
 "use client"
 
 import { MoveIds, moveIdToNames } from "@/constants/misc"
+import useResize from "@/hooks/useResize"
 import { Colors } from "@/types"
+import calculateNewWidth from "@/utils/charts/calculateNewWidth"
 import * as d3 from "d3"
 import { useEffect, useRef } from "react"
 
-const width = 500
 const height = 350
-const radius = Math.min(width, height) / 2
-
+const margin = { top: 0, right: 0, bottom: 0, left: 0 }
 const topPadding = 80
 
 const colors = [
@@ -35,6 +35,13 @@ export default function DribblePieChart({ data }: Props) {
     .sort((a, b) => a.key.localeCompare(b.key))
 
   const svgRef = useRef<SVGSVGElement | null>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const maxWidth = useResize({
+    containerRef,
+    calculateNewWidth: (containerRef) => calculateNewWidth({ containerRef, margin }),
+  })
+  const width = Math.min(maxWidth, 500)
+  const radius = Math.min(width, height) / 2
 
   useEffect(() => {
     const svg = d3.select(svgRef.current)
@@ -66,8 +73,8 @@ export default function DribblePieChart({ data }: Props) {
       .outerRadius(radius + 16)
     const labelArc = d3
       .arc()
-      .outerRadius(radius + 48) // Position labels outside of the pie
-      .innerRadius(radius + 48)
+      .outerRadius(radius + 40) // Position labels outside of the pie
+      .innerRadius(radius + 40)
 
     arcs
       .append("text")
@@ -113,15 +120,17 @@ export default function DribblePieChart({ data }: Props) {
 
         return [posInner, [x2, y2], pos]
       })
-  }, [formattedData])
+  }, [formattedData, width])
 
   return (
-    <svg
-      id="dribble-made-pie-chart"
-      ref={svgRef}
-      className="h-[500px] w-[500px]"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlnsXlink="http://www.w3.org/1999/xlink"
-    />
+    <div ref={containerRef} className="flex w-full justify-center">
+      <svg
+        id="dribble-made-pie-chart"
+        ref={svgRef}
+        className="h-[500px] w-[500px]"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </div>
   )
 }

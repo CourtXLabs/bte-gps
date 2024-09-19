@@ -6,8 +6,8 @@ import * as d3 from "d3"
 import { useEffect, useRef } from "react"
 
 const legendPadding = 24
-const rectangleWidth = 15
-const rectangleHeight = 15
+const rectangleWidth = 24
+const rectangleHeight = 24
 const width = 500
 const topPadding = 24
 
@@ -97,11 +97,11 @@ export default function DribblePieChartLegend({ data }: Props) {
       .enter()
       .append("text")
       .attr("x", (d, i) => i * (rectangleWidth + legendPadding) + rectangleWidth / 2)
-      .attr("y", 0)
+      .attr("y", 12)
       .attr("text-anchor", "middle")
       .text((d) => d.key)
       .style("fill", "white")
-      .style("font-size", "14px")
+      .style("font-size", "18px")
       .style("font-weight", "500")
   }, [formattedData])
 
@@ -109,7 +109,7 @@ export default function DribblePieChartLegend({ data }: Props) {
     <svg
       id="dribble-made-pie-chart"
       ref={svgRef}
-      className="h-[100px] w-[500px]"
+      className="h-[100px] w-[500px] self-center"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
     />
