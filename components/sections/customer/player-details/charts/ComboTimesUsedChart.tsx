@@ -73,7 +73,7 @@ export default function ComboTimesUsedChart({ data }: Props) {
       height,
     })
 
-    drawGrid({ chart, y, width })
+    drawGrid({ chart, y, width, tickValues })
     drawBars({ chart, data: sortedData, x, height })
 
     animateBars({ chart, height, y, delay: 30 })
