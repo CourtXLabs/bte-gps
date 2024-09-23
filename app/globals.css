@@ -93,3 +93,7 @@ menu {
 .tiptap h4 {
   @apply text-lg font-bold;
 }
+
+body {
+  font-family: var(--font-onest);
+}

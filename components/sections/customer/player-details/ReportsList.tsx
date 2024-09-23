@@ -83,14 +83,14 @@ export default function ReportsList({ data }: Props) {
       header: () => <div className="py-4 text-center text-white">Date</div>,
       enableSorting: false,
       enableHiding: false,
-      size: 150,
+      size: 160,
     },
     {
       id: "teams",
       header: () => <div className="py-4 text-center text-white">Teams</div>,
       enableSorting: false,
       enableHiding: false,
-      size: 150,
+      size: 160,
     },
     {
       id: "individualDribble",
@@ -290,7 +290,7 @@ export default function ReportsList({ data }: Props) {
   }
 
   return (
-    <Card className="max-w-screen-3xl mx-auto w-full">
+    <Card className="mx-auto w-full max-w-screen-3xl">
       <CardContent className="p-6 pb-12">
         <Table>
           <TableHeader>

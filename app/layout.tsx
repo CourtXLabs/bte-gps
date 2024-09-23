@@ -2,10 +2,10 @@ import Header from "@/components/sections/header/Header"
 import { Toaster } from "@/components/ui/toaster"
 import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
-import { Poppins } from "next/font/google"
+import { Onest } from "next/font/google"
 import "./globals.css"
 
-const poppins = Poppins({ weight: ["300", "400", "500", "600", "700"], subsets: ["latin"], variable: "--font-poppins" })
+const onest = Onest({ weight: ["300", "400", "500", "600", "700"], subsets: ["latin"], variable: "--font-onest" })
 
 export const metadata: Metadata = {
   title: "BTE GPS",
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn("min-h-screen bg-background antialiased", poppins.variable)}>
+      <body className={cn("min-h-screen bg-background antialiased", onest.variable)}>
         <Header />
         {children}
         <Toaster />
