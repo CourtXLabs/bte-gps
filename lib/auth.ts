@@ -54,6 +54,11 @@ export async function verifyAuthToken(token: string): Promise<boolean> {
   }
 }
 
+export async function getIsLoggedIn() {
+  const decodedJwt = await getJwt()
+  return !!decodedJwt
+}
+
 export async function getIsAdmin() {
   const decodedJwt = await getJwt()
   if (!decodedJwt) {

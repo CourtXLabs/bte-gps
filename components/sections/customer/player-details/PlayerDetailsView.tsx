@@ -144,6 +144,19 @@ const groupSequenceData = (data: DribbleChartApiData[]) => {
   return { initialDirectionCounts, counterDirectionCounts, lastDribbleTypeCounts }
 }
 
+const getPlayerInfo = async (id: string) => {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+
+  try {
+    const { data, error } = await supabase.from("player").select("*").eq("id", id).single()
+
+    return { data: data as SimlePlayerData, error }
+  } catch (error: any) {
+    return { error: typeof error === "string" ? error : error.message || "An error occurred" }
+  }
+}
+
 const getAllPlayers = async () => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
@@ -304,13 +317,15 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
   const games = gamesParam || DEFAULT_GAMES_COUNT
   const season = seasonParam || DEFAULT_SEASON
 
-  const [playersResponse, reportsResponse, comboPointsResponse, dribbleCounts, seasons] = await Promise.all([
-    getAllPlayers(),
-    getReports(id, games, season),
-    getComboPointsRatio(id, games, season),
-    getDribblesCounts(id, games, season),
-    getSeasons(id),
-  ])
+  const [playerInfoResponse, playersResponse, reportsResponse, comboPointsResponse, dribbleCounts, seasons] =
+    await Promise.all([
+      getPlayerInfo(id),
+      getAllPlayers(),
+      getReports(id, games, season),
+      getComboPointsRatio(id, games, season),
+      getDribblesCounts(id, games, season),
+      getSeasons(id),
+    ])
 
   const isAdmin = await getIsAdmin()
 
@@ -325,7 +340,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
             <ArrowLeftIcon /> Players List
           </Link>
           <h1 className="text-3xl font-bold">
-            Here are the stats for <span className="text-primary">Lebron James</span>
+            Here are the stats for <span className="text-primary">{playerInfoResponse?.data?.name}</span>
           </h1>
           <BteCardsSection />
         </div>

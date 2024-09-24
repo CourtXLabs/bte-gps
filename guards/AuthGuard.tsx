@@ -1,14 +1,10 @@
-import { createClient } from "@/lib/supabase/server"
-import { cookies } from "next/headers"
+import { getIsLoggedIn } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import React from "react"
 
 export default async function AuthGuard({ children }: { children: React.ReactNode }) {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
-
-  const { data, error } = await supabase.auth.getUser()
-  if (error || !data?.user) {
+  const isLoggedIn = await getIsLoggedIn()
+  if (!isLoggedIn) {
     redirect("/login")
   }
   return <>{children}</>
