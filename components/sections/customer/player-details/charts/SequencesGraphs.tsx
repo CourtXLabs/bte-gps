@@ -32,10 +32,10 @@ export default function SequencesGraphs({ dribbleCounts, children }: Props) {
         {children}
       </GraphFilters>
       {hasGraphs && (
-        <div className="flex flex-col items-center space-y-10">
+        <div className="flex flex-col items-center space-y-8">
           {showDribblesGraphs && <DribblePieChartsSection dribbleCounts={dribbleCounts} />}
           {graphFilters.initialDirection && (
-            <div className="flex w-full flex-col items-center gap-8 lg:flex-row">
+            <div className="flex w-full flex-col gap-8 lg:flex-row">
               <SequenceFrequencyChart
                 subtitle="This chart shows the frequency of initial direction moves used for MADE shots"
                 data={dribbleCounts.seuqenceInfoCounts?.initialDirectionCounts?.madeShots}
@@ -53,7 +53,7 @@ export default function SequencesGraphs({ dribbleCounts, children }: Props) {
             </div>
           )}
           {graphFilters.counterDirection && (
-            <div className="flex w-full flex-col items-center gap-8 lg:flex-row">
+            <div className="flex w-full flex-col gap-8 lg:flex-row">
               <SequenceFrequencyChart
                 subtitle="This chart shows the frequency of counter direction moves used for MADE shots"
                 data={dribbleCounts.seuqenceInfoCounts?.counterDirectionCounts?.madeShots}
@@ -71,7 +71,7 @@ export default function SequencesGraphs({ dribbleCounts, children }: Props) {
             </div>
           )}
           {graphFilters.lastHand && (
-            <div className="flex w-full flex-col items-center gap-8 lg:flex-row">
+            <div className="flex w-full flex-col gap-8 lg:flex-row">
               <SequenceFrequencyChart
                 subtitle="This chart shows the frequency of last hand moves used for MADE shots"
                 data={dribbleCounts.seuqenceInfoCounts?.lastDribbleTypeCounts?.madeShots}

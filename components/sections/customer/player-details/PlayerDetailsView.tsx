@@ -316,7 +316,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
 
   return (
     <div className="mx-auto flex w-full flex-col gap-10 px-4 py-12">
-      <div className="mx-auto flex w-full max-w-screen-2xl flex-col flex-wrap items-center justify-between gap-6 xl:flex-row xl:items-start">
+      <div className="mx-auto flex w-full max-w-screen-2xl flex-col flex-wrap items-center justify-center gap-6 xl:flex-row xl:items-start">
         <div className="w-full space-y-8 lg:w-max">
           <Link
             href="/"
@@ -337,8 +337,8 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
           height={360}
         />
       </div>
-      <div className="mx-auto flex w-full max-w-screen-2xl flex-col items-start gap-8 md:w-max">
-        <div className="flex w-full flex-col items-end gap-4 md:flex-row">
+      <div className="mx-auto flex w-full max-w-screen-2xl flex-col items-start gap-10 md:w-auto">
+        <div className="-mb-3 flex w-full flex-col items-end gap-4 md:w-auto md:flex-row md:self-center">
           {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} isAdmin={isAdmin} />}
           <PlayerGamesFilter seasons={seasons} />
         </div>

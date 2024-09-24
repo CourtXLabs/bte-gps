@@ -20,7 +20,7 @@ export default function GraphFilters({ filters, onChangeFilter, children }: Prop
   }
 
   return (
-    <div className="flex w-full flex-col items-center gap-3 md:w-max md:flex-row">
+    <div className="mx-auto flex w-full flex-col items-center gap-3 md:w-max md:flex-row">
       {Object.entries(filters).map(([key, value]) => {
         const isActive = filters[key as keyof IGraphFilters]
 
