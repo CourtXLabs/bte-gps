@@ -42,9 +42,11 @@ export default function PlayerGamesFilter({ seasons }: Props) {
   }
 
   return (
-    <div className="flex w-80 items-center gap-4">
-      <div className="w-full space-y-2">
-        <Label htmlFor="season-select">Season</Label>
+    <div className="flex w-full flex-col gap-4 md:w-max md:flex-row">
+      <div className="flex w-full min-w-48 flex-col space-y-2">
+        <Label htmlFor="season-select" className="leading-none">
+          Season
+        </Label>
         <Select onValueChange={handleSeasonChange} defaultValue={season}>
           <SelectTrigger id="season-select">
             <SelectValue placeholder="Select season" />
@@ -59,7 +61,7 @@ export default function PlayerGamesFilter({ seasons }: Props) {
         </Select>
       </div>
 
-      <div className="w-full space-y-2">
+      <div className="flex w-full min-w-48 flex-col space-y-2">
         <Label htmlFor="games-select">Games</Label>
         <Select onValueChange={handleGamesChange} defaultValue={games}>
           <SelectTrigger id="games-select">

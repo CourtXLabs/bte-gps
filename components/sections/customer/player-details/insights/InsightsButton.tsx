@@ -16,9 +16,9 @@ export default function InsightsButton({ id, canEdit }: Props) {
   return (
     <>
       <div className="mx-auto w-full max-w-7xl">
-        <Button className="w-max gap-1" onClick={isDialogOpen.onTrue}>
+        <Button className="w-full gap-1 md:w-max" size="lg" onClick={isDialogOpen.onTrue}>
           <LightbulbIcon />
-          <span>Insights</span>
+          <span>View Insights</span>
         </Button>
       </div>
       {isDialogOpen.value && (

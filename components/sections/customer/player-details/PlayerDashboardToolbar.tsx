@@ -48,32 +48,30 @@ export default function PlayerDashboardToolbar({ players, isAdmin }: Props) {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-screen-2xl flex-col gap-4 sm:flex-row sm:items-end">
-      <Form {...form}>
-        <form>
-          <FormField
-            control={form.control}
-            name="player"
-            render={() => (
-              <FormItem className="flex w-full flex-col sm:w-48">
-                <FormLabel>Player</FormLabel>
-                <Autocomplete
-                  disabled={disabledOptions}
-                  value={activePlayerName}
-                  isOpen={isPlayerAutocompleteOpen}
-                  options={playersOptions}
-                  placeholder="Select player"
-                  searchPlaceholder="Search player..."
-                  noDataMessage="No player found."
-                  onToggle={onTogglePlayerAutocomplete}
-                  onSelect={onSelectPlayer}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </form>
-      </Form>
-    </div>
+    <Form {...form}>
+      <form className="w-full md:w-max">
+        <FormField
+          control={form.control}
+          name="player"
+          render={() => (
+            <FormItem className="flex w-full flex-col md:w-48">
+              <FormLabel>Player</FormLabel>
+              <Autocomplete
+                disabled={disabledOptions}
+                value={activePlayerName}
+                isOpen={isPlayerAutocompleteOpen}
+                options={playersOptions}
+                placeholder="Select player"
+                searchPlaceholder="Search player..."
+                noDataMessage="No player found."
+                onToggle={onTogglePlayerAutocomplete}
+                onSelect={onSelectPlayer}
+              />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
   )
 }

@@ -1,5 +1,4 @@
 import { MoveIds, idToUid, moveUids } from "@/constants/misc"
-import { dribbleOptions } from "@/constants/sequence-options"
 import { DEFAULT_GAMES_COUNT, DEFAULT_SEASON } from "@/global-constants"
 import { getIsAdmin } from "@/lib/auth"
 import { createClient } from "@/lib/supabase/server"
@@ -19,6 +18,7 @@ import { ArrowLeftIcon } from "lucide-react"
 import { cookies } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
+import BteCardsSection from "./BteCardsSection"
 import PlayerDashboardToolbar from "./PlayerDashboardToolbar"
 import PlayerGamesFilter from "./PlayerGamesFilter"
 import ReportsList from "./ReportsList"
@@ -316,31 +316,41 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
 
   return (
     <div className="mx-auto flex w-full flex-col gap-10 px-4 py-12">
-      <div className="mx-auto flex w-full max-w-screen-2xl flex-wrap justify-between gap-6">
-        <div className="space-y-6">
+      <div className="mx-auto flex w-full max-w-screen-2xl flex-col flex-wrap items-center justify-between gap-6 xl:flex-row xl:items-start">
+        <div className="w-full space-y-8 lg:w-max">
           <Link
             href="/"
             className="mb-2 flex w-max max-w-screen-2xl items-center gap-3 text-lg hover:text-accent-foreground"
           >
             <ArrowLeftIcon /> Players List
           </Link>
+          <h1 className="text-3xl font-bold">
+            Here are the stats for <span className="text-primary">Lebron James</span>
+          </h1>
+          <BteCardsSection />
+        </div>
+        <Image
+          className="xl:-mt-10"
+          src="/example-player-image.png"
+          alt="Lebron James Photo"
+          width={436}
+          height={360}
+        />
+      </div>
+      <div className="mx-auto flex w-full max-w-screen-2xl flex-col items-start gap-8 md:w-max">
+        <div className="flex w-full flex-col items-end gap-4 md:flex-row">
           {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} isAdmin={isAdmin} />}
           <PlayerGamesFilter seasons={seasons} />
+        </div>
+        <SequencesGraphs dribbleCounts={dribbleCounts as SeuqenceGraphData}>
           <InsightsButton id={id} canEdit={isAdmin} />
-        </div>
-        <div className="flex items-center justify-center">
-          {dribbleOptions.map((option) => (
-            <Image key={option.id} src={option.image!} alt={option.name} width={125} height={125} />
-          ))}
-        </div>
-      </div>
-      <div className="mx-auto w-full max-w-screen-2xl">
-        <SequencesGraphs dribbleCounts={dribbleCounts as SeuqenceGraphData} />
+        </SequencesGraphs>
         <div className="flex flex-col items-center justify-center gap-8 lg:flex-row">
           {!!comboPointsResponse.data?.length && <PointsComboBarChart data={comboPointsResponse.data} />}
           {!!dribbleCounts.comboCounts?.length && <ComboTimesUsedChart data={dribbleCounts.comboCounts} />}
         </div>
       </div>
+
       {reportsResponse.data?.length ? (
         <ReportsList data={reportsResponse.data} />
       ) : (

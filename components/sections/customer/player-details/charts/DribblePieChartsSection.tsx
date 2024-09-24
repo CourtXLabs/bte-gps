@@ -6,13 +6,12 @@ import DribblePieChartWrapper from "./DribblePieChartWrapper"
 
 interface Props {
   dribbleCounts: SeuqenceGraphData
-  allDribbleCounts: Record<string, number>
 }
 
-export default function DribblePieChartsSection({ dribbleCounts, allDribbleCounts }: Props) {
+export default function DribblePieChartsSection({ dribbleCounts }: Props) {
   return (
     <Card className="w-full">
-      <CardContent className="flex flex-col  pt-6">
+      <CardContent className="flex flex-col pb-8 pt-6">
         <div className="flex flex-col items-center justify-between gap-6 lg:flex-row lg:gap-12">
           <DribblePieChartWrapper
             title="Made Shots Dribbles Count"
@@ -27,7 +26,7 @@ export default function DribblePieChartsSection({ dribbleCounts, allDribbleCount
             <DribblePieChart data={dribbleCounts.moveCounts!.missedShots} />
           </DribblePieChartWrapper>
         </div>
-        <DribblePieChartLegend data={allDribbleCounts} />
+        <DribblePieChartLegend />
       </CardContent>
     </Card>
   )

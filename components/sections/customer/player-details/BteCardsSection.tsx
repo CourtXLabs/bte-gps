@@ -1,0 +1,29 @@
+import BteCard from "@/components/cards/BteCard"
+
+const cardsData = [
+  {
+    link: "/socials",
+    title: "BTE Socials",
+    description: "Explore engagement.",
+  },
+  {
+    link: "/brands",
+    title: "BTE Brands",
+    description: "Explore opportunities.",
+  },
+  {
+    link: "/stats",
+    title: "BTE Stats",
+    description: "Explore studies.",
+  },
+]
+
+export default function BteCardsSection() {
+  return (
+    <div className="flex flex-col items-center gap-6 lg:flex-row">
+      {cardsData.map((cardData) => (
+        <BteCard key={cardData.link} {...cardData} />
+      ))}
+    </div>
+  )
+}
