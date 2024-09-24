@@ -19,6 +19,7 @@ import { cookies } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
 import BteCardsSection from "./BteCardsSection"
+import MediaSection from "./MediaSection"
 import PlayerDashboardToolbar from "./PlayerDashboardToolbar"
 import PlayerGamesFilter from "./PlayerGamesFilter"
 import ReportsList from "./ReportsList"
@@ -353,6 +354,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
         />
       </div>
       <div className="mx-auto flex w-full max-w-screen-2xl flex-col items-start gap-10 md:w-auto">
+        <MediaSection />
         <div className="-mb-3 flex w-full flex-col items-end gap-4 md:w-auto md:flex-row md:self-center">
           {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} isAdmin={isAdmin} />}
           <PlayerGamesFilter seasons={seasons} />
