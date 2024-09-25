@@ -353,7 +353,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
           height={360}
         />
       </div>
-      <div className="mx-auto flex w-full max-w-screen-2xl flex-col items-start gap-10 md:w-auto">
+      <div className="mx-auto flex w-full max-w-screen-2xl flex-col items-start gap-10">
         <MediaSection />
         <div className="-mb-3 flex w-full flex-col items-end gap-4 md:w-auto md:flex-row md:self-center">
           {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} isAdmin={isAdmin} />}
@@ -362,7 +362,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
         <SequencesGraphs dribbleCounts={dribbleCounts as SeuqenceGraphData}>
           <InsightsButton id={id} canEdit={isAdmin} />
         </SequencesGraphs>
-        <div className="flex flex-col items-center justify-center gap-8 lg:flex-row">
+        <div className="flex w-full flex-col items-center justify-center gap-8 lg:flex-row">
           {!!comboPointsResponse.data?.length && <PointsComboBarChart data={comboPointsResponse.data} />}
           {!!dribbleCounts.comboCounts?.length && <ComboTimesUsedChart data={dribbleCounts.comboCounts} />}
         </div>
