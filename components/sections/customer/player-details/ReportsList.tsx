@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useToast } from "@/components/ui/use-toast"
 import {
@@ -291,7 +291,11 @@ export default function ReportsList({ data }: Props) {
 
   return (
     <Card className="mx-auto w-full max-w-screen-3xl">
-      <CardContent className="p-6 pb-12">
+      <CardHeader>
+        <p className="text-lg font-semibold">Boxscore</p>
+        <p className="text-sm">This table provides in-depth insights into player performance and tendencies</p>
+      </CardHeader>
+      <CardContent className=" pb-12">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
