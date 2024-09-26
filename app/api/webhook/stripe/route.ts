@@ -83,7 +83,7 @@ async function revokePremiumStatus(data: Stripe.Subscription, supabaseAdmin: Sup
 }
 
 export async function POST(request: NextRequest) {
-  const body = await request.text() // Change this to text()
+  const body = await request.text()
   const signature = request.headers.get("stripe-signature")
 
   if (!signature) {
@@ -93,6 +93,8 @@ export async function POST(request: NextRequest) {
   let event: Stripe.Event
 
   try {
+    console.log("Received webhook body:", body)
+    console.log("Received signature:", signature)
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
   } catch (error) {
     console.error(`Webhook signature verification failed. ${error instanceof Error ? error.message : "Unknown error"}`)

@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
+import { createClient as createAdminClient } from "@supabase/supabase-js"
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import Stripe from "stripe"
@@ -16,10 +17,18 @@ export async function GET(request: Request) {
   // Initialize Supabase client
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
+  const supabaseAdmin = createAdminClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SERVICE_ROLE_KEY!, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  })
 
   try {
     // 1. Verify the payment with Stripe
     const session = await stripe.checkout.sessions.retrieve(session_id)
+
+    console.log({ session })
 
     if (session.payment_status !== "paid") {
       return NextResponse.json({ error: "Payment not completed" }, { status: 400 })
@@ -37,8 +46,8 @@ export async function GET(request: Request) {
     }
 
     // 3. Update user metadata
-    const { error: updateError } = await supabase.auth.updateUser({
-      data: { isPremium: true },
+    const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(user.id, {
+      app_metadata: { isPremium: true },
     })
 
     if (updateError) {
