@@ -28,8 +28,6 @@ export async function GET(request: Request) {
     // 1. Verify the payment with Stripe
     const session = await stripe.checkout.sessions.retrieve(session_id)
 
-    console.log({ session })
-
     if (session.payment_status !== "paid") {
       return NextResponse.json({ error: "Payment not completed" }, { status: 400 })
     }
