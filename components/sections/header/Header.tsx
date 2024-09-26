@@ -1,6 +1,6 @@
 import PremiumVersionBanner from "@/components/banners/PremiumVersionBanner"
 import { buttonVariants } from "@/components/ui/button"
-import { getIsAdmin, getIsLoggedIn } from "@/lib/auth"
+import { getIsAdmin, getIsLoggedIn, getIsPremium } from "@/lib/auth"
 import { createClient } from "@/lib/supabase/server"
 import { cn } from "@/lib/utils"
 import { cookies } from "next/headers"
@@ -17,13 +17,14 @@ const getUserData = async () => {
 
 export default async function Header() {
   const isAdmin = await getIsAdmin()
+  const isPremiumUser = await getIsPremium()
   const isLoggedIn = await getIsLoggedIn()
   const userData = await getUserData()
 
   const userEmail = userData?.email
   const userFullName = userData?.user_metadata?.full_name
 
-  const showPremiumBanner = true
+  const showPremiumBanner = isLoggedIn && !isPremiumUser && !isAdmin
 
   return (
     <>

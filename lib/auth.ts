@@ -69,12 +69,55 @@ export async function getIsAdmin() {
 }
 
 export async function getIsPremium() {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+  const { data: sessionData } = await supabase.auth.getSession()
+
+  const accessToken = sessionData?.session?.access_token
+
+  if (accessToken) {
+    try {
+      const payload = await verifyJwtToken(accessToken)
+      if (!payload) {
+        return null
+      }
+
+      return sessionData?.session?.user.app_metadata?.isPremium
+    } catch (error) {
+      return null
+    }
+  }
+  return null
+}
+
+export async function getUserData() {
   const decodedJwt = await getJwt()
   if (!decodedJwt) {
-    return false
+    return null
   }
 
-  return decodedJwt.user_roles?.includes(Roles.PREMIUM)
+  return decodedJwt
+}
+
+export async function getUserEmail() {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+  const { data: sessionData } = await supabase.auth.getSession()
+
+  const accessToken = sessionData?.session?.access_token
+
+  if (accessToken) {
+    try {
+      const payload = await verifyJwtToken(accessToken)
+      if (!payload) {
+        return null
+      }
+      return sessionData?.session?.user.email
+    } catch (error) {
+      return null
+    }
+  }
+  return null
 }
 
 export async function getUserRoles(token: string) {
