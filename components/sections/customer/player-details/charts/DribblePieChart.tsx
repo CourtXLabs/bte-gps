@@ -2,14 +2,14 @@
 
 import { MoveIds, moveIdToNames } from "@/constants/misc"
 import useResize from "@/hooks/useResize"
-import { Colors } from "@/types"
+import { Colors, foregroundColors } from "@/types"
 import calculateNewWidth from "@/utils/charts/calculateNewWidth"
 import * as d3 from "d3"
 import { useEffect, useRef } from "react"
 
-const height = 350
+const height = 420
 const margin = { top: 0, right: 0, bottom: 0, left: 0 }
-const topPadding = 80
+const topPadding = 40
 
 const colors = [
   Colors.POUND,
@@ -20,6 +20,8 @@ const colors = [
   Colors.HALF_SPIN,
   Colors.SPIN,
 ]
+
+const colorKeys = ["POUND", "CROSSOVER", "IN_AND_OUT", "BETWEEN_THE_LEGS", "BEHIND_THE_BACK", "HALF_SPIN", "SPIN"]
 
 interface Props {
   data: Record<string, number>
@@ -67,59 +69,34 @@ export default function DribblePieChart({ data }: Props) {
       .attr("stroke", "#1f1e1e")
       .attr("stroke-width", 2)
 
-    const arrowArc = d3
-      .arc()
-      .innerRadius(radius + 16)
-      .outerRadius(radius + 16)
+    // Define the label arc for positioning labels inside the pie slices
     const labelArc = d3
       .arc()
-      .outerRadius(radius + 40) // Position labels outside of the pie
-      .innerRadius(radius + 40)
+      .outerRadius(radius * 0.6) // Adjust this factor to position labels further inward or outward
+      .innerRadius(radius * 0.6)
 
     arcs
       .append("text")
       .attr("transform", function (d: any) {
         return `translate(${labelArc.centroid(d)})`
       })
-      .attr("text-anchor", "middle") // Center text horizontally
+      .attr("text-anchor", "middle")
       .each(function (d: any) {
         if (d.data.value === 0) return
         const el = d3.select(this)
         const percent = ((d.endAngle - d.startAngle) / (2 * Math.PI)) * 100
-        if (percent < 3) return
+        if (percent < 10) return
         // Append first line (value)
-        el.append("tspan").attr("x", 0).attr("dy", "-0.9em").text(d.data.value)
+        el.append("tspan").attr("x", 0).attr("dy", "-0.5em").text(d.data.value)
         // Append second line (percentage)
         el.append("tspan")
           .attr("x", 0)
           .attr("dy", "1.2em")
           .text(`${percent.toFixed(1)}%`)
       })
-      .style("fill", "white")
+      .style("fill", (d, i) => foregroundColors[colorKeys[i] as keyof typeof foregroundColors])
       .style("font-size", "14px")
-      .style("font-weight", "500")
-
-    // Adjust the connecting lines
-    arcs
-      .append("polyline")
-      // @ts-ignore
-      .attr("stroke", (d, i) => color(i)) // Match color with pie section
-      .attr("stroke-width", "2")
-      .attr("fill", "none")
-      // @ts-ignore
-      .attr("points", function (d: any) {
-        if (d.data.value === 0) return
-        const percent = ((d.endAngle - d.startAngle) / (2 * Math.PI)) * 100
-        if (percent < 3) return
-        const pos = arrowArc.centroid(d)
-        const posInner = arc.centroid(d)
-        const midAngle = (d.startAngle + d.endAngle) / 2
-        const lineLength = 4
-        const x2 = pos[0] + Math.cos(midAngle) * lineLength
-        const y2 = pos[1] + Math.sin(midAngle) * lineLength
-
-        return [posInner, [x2, y2], pos]
-      })
+      .style("font-weight", "600")
   }, [formattedData, width])
 
   return (

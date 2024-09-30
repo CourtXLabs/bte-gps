@@ -17,6 +17,16 @@ export enum Colors {
   SPIN = "#FF9E1F",
 }
 
+export const foregroundColors = {
+  POUND: "#fff",
+  CROSSOVER: "#fff",
+  IN_AND_OUT: "#fff",
+  BETWEEN_THE_LEGS: "#fff",
+  BEHIND_THE_BACK: "#000",
+  HALF_SPIN: "#000",
+  SPIN: "#000",
+}
+
 export interface Option {
   id: MoveIds
   uid: string
