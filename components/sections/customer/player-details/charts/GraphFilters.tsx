@@ -21,12 +21,12 @@ export default function GraphFilters({ filters, onChangeFilter, children }: Prop
   }
 
   return (
-    <div className="mx-auto flex w-full flex-col items-center gap-3 md:w-max md:flex-row">
+    <div className="mx-auto flex w-full flex-col flex-wrap items-center justify-center gap-3 md:flex-row">
       {Object.entries(filters).map(([key, value]) => {
         const isActive = filters[key as keyof IGraphFilters]
 
         return (
-          <div key={key} className="flex w-full items-center gap-2">
+          <div key={key} className="flex w-full items-center gap-2 md:w-max">
             <Button
               variant={isActive ? "active" : "secondary"}
               size="lg"
