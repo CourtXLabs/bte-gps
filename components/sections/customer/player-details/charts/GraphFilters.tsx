@@ -9,6 +9,7 @@ interface Props {
 
 const filterKeyToNameMap = {
   dribbles: "Dribbles",
+  dribbleTypes: "Dribble Types",
   initialDirection: "Initial Direction",
   counterDirection: "Counter Direction",
   lastHand: "Last Hand",

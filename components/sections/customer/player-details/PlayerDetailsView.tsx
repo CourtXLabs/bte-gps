@@ -23,8 +23,6 @@ import MediaSection from "./MediaSection"
 import PlayerDashboardToolbar from "./PlayerDashboardToolbar"
 import PlayerGamesFilter from "./PlayerGamesFilter"
 import ReportsList from "./ReportsList"
-import ComboTimesUsedChart from "./charts/ComboTimesUsedChart"
-import PointsComboBarChart from "./charts/PointsComboBarChart"
 import SequencesGraphs from "./charts/SequencesGraphs"
 import InsightsButton from "./insights/InsightsButton"
 
@@ -355,17 +353,16 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
       </div>
       <div className="mx-auto flex w-full max-w-screen-2xl flex-col items-start gap-10">
         <MediaSection />
-        <div className="-mb-3 flex w-full flex-col items-end gap-4 md:w-auto md:flex-row md:self-center">
+        <div className="-mb-3 mt-5 flex w-full flex-col items-end gap-4 md:w-auto md:flex-row md:self-center">
           {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} isAdmin={isAdmin} />}
           <PlayerGamesFilter seasons={seasons} />
         </div>
-        <SequencesGraphs dribbleCounts={dribbleCounts as SeuqenceGraphData}>
+        <SequencesGraphs
+          dribbleCounts={dribbleCounts as SeuqenceGraphData}
+          comboPointsResponse={comboPointsResponse?.data || []}
+        >
           <InsightsButton id={id} canEdit={isAdmin} />
         </SequencesGraphs>
-        <div className="flex w-full flex-col items-center justify-center gap-8 lg:flex-row">
-          {!!comboPointsResponse.data?.length && <PointsComboBarChart data={comboPointsResponse.data} />}
-          {!!dribbleCounts.comboCounts?.length && <ComboTimesUsedChart data={dribbleCounts.comboCounts} />}
-        </div>
       </div>
 
       {reportsResponse.data?.length ? (

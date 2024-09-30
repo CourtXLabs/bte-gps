@@ -1,19 +1,23 @@
 "use client"
 
-import { IGraphFilters, SeuqenceGraphData } from "@/types"
+import { ComboToPointData, IGraphFilters, SeuqenceGraphData } from "@/types"
 import { useState } from "react"
+import ComboTimesUsedChart from "./ComboTimesUsedChart"
 import DribblePieChartsSection from "./DribblePieChartsSection"
 import GraphFilters from "./GraphFilters"
+import PointsComboBarChart from "./PointsComboBarChart"
 import SequenceFrequencyChart from "./SequenceFrequencyChart"
 
 interface Props {
   dribbleCounts: SeuqenceGraphData
+  comboPointsResponse: ComboToPointData[]
   children?: React.ReactNode
 }
 
-export default function SequencesGraphs({ dribbleCounts, children }: Props) {
+export default function SequencesGraphs({ dribbleCounts, comboPointsResponse, children }: Props) {
   const [graphFilters, setGraphFilters] = useState<IGraphFilters>({
-    dribbles: false,
+    dribbles: true,
+    dribbleTypes: false,
     initialDirection: false,
     counterDirection: false,
     lastHand: false,
@@ -23,7 +27,6 @@ export default function SequencesGraphs({ dribbleCounts, children }: Props) {
     setGraphFilters((prev) => ({ ...prev, [key]: !prev[key] }))
   }
 
-  const showDribblesGraphs = graphFilters.dribbles && !!dribbleCounts.moveCounts
   const hasGraphs = Object.values(graphFilters).some((filter) => filter)
 
   return (
@@ -33,7 +36,7 @@ export default function SequencesGraphs({ dribbleCounts, children }: Props) {
       </GraphFilters>
       {hasGraphs && (
         <div className="flex flex-col items-center space-y-8">
-          {showDribblesGraphs && <DribblePieChartsSection dribbleCounts={dribbleCounts} />}
+          {graphFilters.dribbles && <DribblePieChartsSection dribbleCounts={dribbleCounts} />}
           {graphFilters.initialDirection && (
             <div className="flex w-full flex-col gap-8 lg:flex-row">
               <SequenceFrequencyChart
@@ -86,6 +89,12 @@ export default function SequencesGraphs({ dribbleCounts, children }: Props) {
                 xAxisLabel="Last Hand"
                 yAxisLabel="Number of times used"
               />
+            </div>
+          )}
+          {graphFilters.dribbleTypes && (
+            <div className="flex w-full flex-col items-center justify-center gap-8 lg:flex-row">
+              {!!comboPointsResponse?.length && <PointsComboBarChart data={comboPointsResponse} />}
+              {!!dribbleCounts.comboCounts?.length && <ComboTimesUsedChart data={dribbleCounts.comboCounts} />}
             </div>
           )}
         </div>

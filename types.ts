@@ -309,6 +309,7 @@ export interface SeuqenceGraphData {
 
 export interface IGraphFilters {
   dribbles: boolean
+  dribbleTypes: boolean
   initialDirection: boolean
   counterDirection: boolean
   lastHand: boolean
