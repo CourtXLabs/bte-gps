@@ -39,6 +39,9 @@ export default async function Header() {
             </span>
           </div>
           <div className="flex items-center gap-6 lg:gap-9">
+            <Link href="/players" className={cn(buttonVariants({ variant: "link" }), "text-xl text-foreground")}>
+              Players
+            </Link>
             <Link href="/about-us" className={cn(buttonVariants({ variant: "link" }), "text-xl text-foreground")}>
               About Us
             </Link>
@@ -51,7 +54,15 @@ export default async function Header() {
               </Link>
             )}
           </div>
-          <div>{isLoggedIn && <ProfileInfo email={userEmail} name={userFullName} />}</div>
+          <div>
+            {isLoggedIn ? (
+              <ProfileInfo email={userEmail} name={userFullName} />
+            ) : (
+              <Link href="/auth/login" className={cn(buttonVariants({ variant: "link" }), "text-xl text-foreground")}>
+                Log In
+              </Link>
+            )}
+          </div>
         </div>
       </div>
       {showPremiumBanner && <PremiumVersionBanner />}

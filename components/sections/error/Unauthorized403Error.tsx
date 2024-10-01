@@ -5,7 +5,7 @@ export default function Unauthorized403Error() {
     <div>
       You do not have enough permissions to view this page.
       <div className="mt-2 flex gap-4">
-        <Link href="/login" className="underline">
+        <Link href="/auth/login" className="underline">
           Log in
         </Link>
         <Link href="/" className="underline">

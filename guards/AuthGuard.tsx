@@ -5,7 +5,7 @@ import React from "react"
 export default async function AuthGuard({ children }: { children: React.ReactNode }) {
   const isLoggedIn = await getIsLoggedIn()
   if (!isLoggedIn) {
-    redirect("/login")
+    redirect("/auth/login")
   }
   return <>{children}</>
 }

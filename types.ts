@@ -119,6 +119,32 @@ export const loginFormSchema = z.object({
   password: z.string(),
 })
 
+export const signupFormSchema = z
+  .object({
+    email: z.string().email(),
+    password: z.string().min(8),
+    confirmPassword: z.string().min(1),
+    name: z.string().min(2),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  })
+
+export const forgotPasswordFormSchema = z.object({
+  email: z.string().email(),
+})
+
+export const resetPasswordFormSchema = z
+  .object({
+    newPassword: z.string().min(8),
+    confirmPassword: z.string().min(8),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  })
+
 const errorMessage = "This field is required"
 export const gameFormSchema = z.object({
   gameType: z.nativeEnum(GameTypes),

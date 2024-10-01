@@ -333,7 +333,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
       <div className="mx-auto flex w-full max-w-screen-2xl flex-col flex-wrap items-center justify-center gap-6 xl:flex-row xl:items-start">
         <div className="w-full space-y-8 lg:w-max">
           <Link
-            href="/"
+            href="/players"
             className="mb-2 flex w-max max-w-screen-2xl items-center gap-3 text-lg hover:text-accent-foreground"
           >
             <ArrowLeftIcon /> Players List
