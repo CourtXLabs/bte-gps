@@ -6,6 +6,7 @@ import TermsDisclaimer from "@/components/sections/TermsDisclaimer"
 import { buttonVariants } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
 import { cn } from "@/lib/utils"
 import { signupFormSchema } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -76,7 +77,7 @@ export default function LoginPage() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Password" {...field} />
+                <PasswordInput placeholder="Password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -89,7 +90,7 @@ export default function LoginPage() {
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Confirm Password" {...field} />
+                <PasswordInput placeholder="Confirm Password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
