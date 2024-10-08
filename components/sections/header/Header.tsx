@@ -1,10 +1,10 @@
+import Logo from "@/components/Logo"
 import PremiumVersionBanner from "@/components/banners/PremiumVersionBanner"
 import { buttonVariants } from "@/components/ui/button"
 import { getIsAdmin, getIsLoggedIn, getIsPremium } from "@/lib/auth"
 import { createClient } from "@/lib/supabase/server"
 import { cn } from "@/lib/utils"
 import { cookies } from "next/headers"
-import Image from "next/image"
 import Link from "next/link"
 import ProfileInfo from "./ProfileInfo"
 
@@ -31,9 +31,7 @@ export default async function Header() {
       <div className="w-full bg-black p-4">
         <div className="mx-auto flex max-w-screen-2xl items-center justify-between gap-6 lg:gap-9">
           <div className="relative">
-            <Link href="/">
-              <Image src="/logo.jpeg" alt="logo" width={200} height={60} />
-            </Link>
+            <Logo />
             <span className="absolute -right-12 bottom-0 rounded-2xl bg-primary px-2 py-1 text-sm leading-none text-black">
               Beta
             </span>
