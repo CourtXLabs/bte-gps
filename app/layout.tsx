@@ -1,4 +1,3 @@
-import Header from "@/components/sections/header/Header"
 import { Toaster } from "@/components/ui/toaster"
 import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
@@ -20,7 +19,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn("min-h-screen bg-background antialiased", onest.variable)}>
-        <Header />
         {children}
         <Toaster />
       </body>

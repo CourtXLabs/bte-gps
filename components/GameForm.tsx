@@ -8,7 +8,7 @@ import { Calendar as CalendarIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { Button } from "./ui/button"
 
-import { saveGame } from "@/app/add-game/actions"
+import { saveGame } from "@/app/(main)/add-game/actions"
 import { INITIAL_GAME_TYPE } from "@/constants/misc"
 import { createClient } from "@/lib/supabase/client"
 import { uploadImages } from "@/utils/upload-image-data"
@@ -263,7 +263,7 @@ export default function GameForm({ players, teams }: Props) {
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "hover:bg-accent-dark h-11 justify-between border-none py-4 text-left font-normal hover:text-foreground",
+                        "h-11 justify-between border-none py-4 text-left font-normal hover:bg-accent-dark hover:text-foreground",
                         !field.value && "text-muted-foreground",
                       )}
                     >
