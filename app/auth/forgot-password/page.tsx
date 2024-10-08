@@ -1,5 +1,6 @@
 "use client"
 
+import Logo from "@/components/Logo"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -7,6 +8,9 @@ import { useToast } from "@/components/ui/use-toast"
 import { forgotPasswordFormSchema } from "@/types"
 import formatApiError from "@/utils/format-api-error"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { ArrowLeft } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -37,7 +41,20 @@ export default function LoginPage() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mx-auto flex max-w-md flex-col gap-6 px-6 pt-20">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="mx-auto w-full max-w-md space-y-5 lg:w-[30%] lg:max-w-none lg:p-14 lg:pl-0 lg:pr-0 xl:pl-14"
+      >
+        <div className="mx-auto w-max">
+          <Logo />
+        </div>
+        <div className="py-3">
+          <Image src="/forgot-password.png" className="mx-auto" alt="Forgot Password" width={172} height={172} />
+        </div>
+        <div className="pb-3 text-center">
+          <h1 className="text-xl font-bold">Forgot Password</h1>
+          <p className="text-sm">Don't worry! It happens. Please enter the email associated with your account.</p>
+        </div>
         <FormField
           control={form.control}
           name="email"
@@ -52,9 +69,18 @@ export default function LoginPage() {
           )}
         />
 
-        <Button disabled={loading} className="font-semibold uppercase" type="submit">
-          Reset Password
-        </Button>
+        <div className="pt-3">
+          <Button disabled={loading} className="h-14 w-full rounded-full font-bold" type="submit">
+            Send Reset Email
+          </Button>
+        </div>
+
+        <Link
+          href="/auth/login"
+          className="flex items-center justify-center gap-1 pt-6 text-center text-sm text-[#afafaf] hover:underline"
+        >
+          <ArrowLeft className="h-4 w-4" /> Back to Log In
+        </Link>
       </form>
     </Form>
   )

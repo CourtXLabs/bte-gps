@@ -1,8 +1,9 @@
 "use client"
 
+import Logo from "@/components/Logo"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
 import { resetPasswordFormSchema } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
@@ -28,7 +29,17 @@ export default function LoginPage() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mx-auto flex max-w-md flex-col gap-6 px-6 pt-20">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="mx-auto w-full max-w-md space-y-5 lg:w-[30%] lg:max-w-none lg:p-14 lg:pl-0 lg:pr-0 xl:pl-14"
+      >
+        <div className="mx-auto w-max">
+          <Logo />
+        </div>
+        <div className="py-3 text-center">
+          <h1 className="text-xl font-bold">Reset Password</h1>
+          <p className="text-sm">Type a new password. It must contain at least 8 letters.</p>
+        </div>
         <FormField
           control={form.control}
           name="newPassword"
@@ -36,7 +47,7 @@ export default function LoginPage() {
             <FormItem>
               <FormLabel>New Password</FormLabel>
               <FormControl>
-                <Input placeholder="New Password" {...field} />
+                <PasswordInput placeholder="New Password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -49,15 +60,17 @@ export default function LoginPage() {
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <Input type="confirmPassword" placeholder="Confirm Password" {...field} />
+                <PasswordInput placeholder="Confirm Password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button disabled={loading} className="font-semibold uppercase" type="submit">
-          Change Password
-        </Button>
+        <div className="pt-3">
+          <Button disabled={loading} className="w-full rounded-full font-bold" type="submit">
+            Change Password
+          </Button>
+        </div>
       </form>
     </Form>
   )
