@@ -6,6 +6,6 @@ export default async function LandingPage() {
   if (isLoggedIn) {
     return redirect("/players/41")
   } else {
-    redirect("/login")
+    redirect("/auth/login")
   }
 }
