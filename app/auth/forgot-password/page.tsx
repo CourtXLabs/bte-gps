@@ -53,7 +53,7 @@ export default function LoginPage() {
         </div>
         <div className="pb-3 text-center">
           <h1 className="text-xl font-bold">Forgot Password</h1>
-          <p className="text-sm">Don't worry! It happens. Please enter the email associated with your account.</p>
+          <p className="text-sm">Don&apos;t worry! It happens. Please enter the email associated with your account.</p>
         </div>
         <FormField
           control={form.control}

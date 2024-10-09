@@ -149,7 +149,6 @@ const getPlayerInfo = async (id: string) => {
 
   try {
     const { data, error } = await supabase.from("player").select("*").eq("id", id).single()
-
     return { data: data as SimlePlayerData, error }
   } catch (error: any) {
     return { error: typeof error === "string" ? error : error.message || "An error occurred" }
@@ -345,6 +344,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
         </div>
         <Image
           className="xl:-mt-10"
+          priority
           src="/example-player-image.png"
           alt="Lebron James Photo"
           width={436}

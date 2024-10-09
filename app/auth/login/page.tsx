@@ -78,7 +78,7 @@ export default function LoginPage() {
           </AuthButton>
         </div>
         <p className="text-center text-sm">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link href="/auth/signup" className={cn(buttonVariants({ variant: "link" }), "p-0")}>
             Register
           </Link>

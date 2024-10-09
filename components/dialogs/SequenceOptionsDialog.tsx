@@ -53,7 +53,7 @@ export default function SequenceOptionsDialog({ open, onOpenChange, onSubmit }: 
             <DialogHeader>
               <DialogTitle className="border-b-2 border-accent pb-6">Sequence Details</DialogTitle>
             </DialogHeader>
-            <div className="grid grid-cols-2 gap-x-8 gap-y-6 border-b-2 border-accent pb-6">
+            <div className="grid grid-cols-2 gap-x-8 gap-y-6 border-b-2 border-accent py-6">
               {sequenceOptions.map((sequenceInput) => (
                 <SequenceOptionsItem
                   key={sequenceInput.name}
@@ -64,7 +64,7 @@ export default function SequenceOptionsDialog({ open, onOpenChange, onSubmit }: 
                 />
               ))}
             </div>
-            <DialogFooter className="pt-2 sm:justify-start">
+            <DialogFooter className="pt-6 sm:justify-start">
               <Button type="submit" form="sequence-form">
                 Submit
               </Button>

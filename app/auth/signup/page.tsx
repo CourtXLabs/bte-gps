@@ -98,7 +98,7 @@ export default function LoginPage() {
         />
         <div className="pt-3">
           <AuthButton disabled={loading} type="submit">
-            Let's Get Started
+            Let&apos;s Get Started
           </AuthButton>
         </div>
         <p className="text-center text-sm">
