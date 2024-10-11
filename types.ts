@@ -285,7 +285,7 @@ export interface SimlePlayerData {
   team_id: number
   player_photo?: string | null
   dribble_graph_image?: string | null
-  free_playlist_url?: string | null
+  free_playlist_id?: string | null
 }
 
 export interface ComboToPointData {

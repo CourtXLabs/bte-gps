@@ -85,7 +85,7 @@ export default function DribblePieChart({ data }: Props) {
         if (d.data.value === 0) return
         const el = d3.select(this)
         const percent = ((d.endAngle - d.startAngle) / (2 * Math.PI)) * 100
-        if (percent < 10) return
+        if (percent < 5) return
         // Append first line (value)
         el.append("tspan").attr("x", 0).attr("dy", "-0.5em").text(d.data.value)
         // Append second line (percentage)

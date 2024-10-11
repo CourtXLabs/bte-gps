@@ -12,6 +12,7 @@ import {
   SimlePlayerData,
   gameLimitOptions,
 } from "@/types"
+import convertBlobImageToBase64 from "@/utils/convert-blob-image-to-base64"
 import { getIsDribble } from "@/utils/get-is-dribble"
 import { getTotalPointsFromMoves } from "@/utils/get-sequence-data"
 import { ArrowLeftIcon } from "lucide-react"
@@ -148,8 +149,47 @@ const getPlayerInfo = async (id: string) => {
   const supabase = createClient(cookieStore)
 
   try {
-    const { data, error } = await supabase.from("player").select("*").eq("id", id).single()
-    return { data: data as SimlePlayerData, error }
+    const [playerDataResponse, playerPhotoResponse, dribbleGraphResponse] = await Promise.all([
+      supabase.from("player").select("*").eq("id", id).single(),
+      supabase.storage
+        .from("Player Images")
+        .download(`${id}/photo.png`)
+        .catch((error) => ({ error, data: null })),
+      supabase.storage
+        .from("Player Images")
+        .download(`${id}/dribble-graph.png`)
+        .catch((error) => ({ error, data: null })),
+    ])
+
+    if (playerDataResponse.error) {
+      throw playerDataResponse.error
+    }
+
+    let playerPhotoBase64 = null
+    let dribbleGraphBase64 = null
+
+    if (!playerPhotoResponse.error && playerPhotoResponse.data) {
+      playerPhotoBase64 = await convertBlobImageToBase64(playerPhotoResponse.data)
+    } else {
+      console.error("Error downloading player photo:", playerPhotoResponse.error)
+    }
+
+    if (!dribbleGraphResponse.error && dribbleGraphResponse.data) {
+      dribbleGraphBase64 = await convertBlobImageToBase64(dribbleGraphResponse.data)
+    } else {
+      console.error("Error downloading dribble graph:", dribbleGraphResponse.error)
+    }
+
+    const data = {
+      ...playerDataResponse.data,
+      player_photo: playerPhotoBase64,
+      dribble_graph_image: dribbleGraphBase64,
+    }
+
+    return {
+      data: data as SimlePlayerData & { player_photo?: string; dribble_graph_image?: string },
+      error: null,
+    }
   } catch (error: any) {
     return { error: typeof error === "string" ? error : error.message || "An error occurred" }
   }
@@ -342,17 +382,22 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
           </h1>
           <BteCardsSection />
         </div>
-        <Image
-          className="xl:-mt-10"
-          priority
-          src="/example-player-image.png"
-          alt="Lebron James Photo"
-          width={436}
-          height={360}
-        />
+        {playerInfoResponse?.data?.player_photo && (
+          <Image
+            className="xl:-mt-10"
+            priority
+            src={playerInfoResponse?.data?.player_photo!}
+            alt="Player Photo"
+            width={436}
+            height={360}
+          />
+        )}
       </div>
       <div className="mx-auto flex w-full max-w-screen-2xl flex-col items-start gap-10">
-        <MediaSection />
+        <MediaSection
+          dribbleGraphImg={playerInfoResponse?.data?.dribble_graph_image!}
+          playlistId={playerInfoResponse?.data?.free_playlist_id!}
+        />
         <div className="-mb-3 mt-5 flex w-full flex-col items-end gap-4 md:w-auto md:flex-row md:self-center">
           {playersResponse?.data && <PlayerDashboardToolbar players={playersResponse?.data} isAdmin={isAdmin} />}
           <PlayerGamesFilter seasons={seasons} />

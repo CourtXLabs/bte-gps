@@ -1,9 +1,13 @@
 import Image from "next/image"
 
-export default function DribbleChartSection() {
+interface Props {
+  src: string
+}
+
+export default function DribbleChartSection({ src }: Props) {
   return (
     <div className="mx-auto flex-1">
-      <Image src="/example-dribble-graph.png" alt="Dribble Graph" width={800} height={380} />
+      <Image src={src} alt="Dribble Graph" width={800} height={380} />
     </div>
   )
 }
