@@ -87,7 +87,7 @@ export default function LoginPage() {
             {" "}
             <div className="py-3 text-center">
               <h1 className="text-xl font-bold">Reset Password</h1>
-              <p className="text-sm">Type a new password. It must contain at least 8 letters.</p>
+              <p className="text-sm">Type a new password. It must contain at least 8 characters.</p>
             </div>
             <FormField
               control={form.control}

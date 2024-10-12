@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { Suspense } from "react"
 
 interface Props {
   children: React.ReactNode
@@ -7,7 +8,7 @@ interface Props {
 export default function ResetPasswordLayout({ children }: Props) {
   return (
     <>
-      {children}
+      <Suspense>{children}</Suspense>
       <div className="relative hidden flex-1 lg:block">
         <Image src="/auth-image.png" alt="Auth Image" layout="fill" objectFit="cover" quality={100} priority />
       </div>
