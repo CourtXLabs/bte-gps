@@ -9,9 +9,7 @@ import useBoolean from "@/hooks/useBoolean"
 import { forgotPasswordFormSchema } from "@/types"
 import formatApiError from "@/utils/format-api-error"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { ArrowLeft } from "lucide-react"
 import Image from "next/image"
-import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { forgotPassword } from "./actions"
@@ -86,13 +84,6 @@ export default function LoginPage() {
             </div>
           </>
         )}
-
-        <Link
-          href="/auth/login"
-          className="flex items-center justify-center gap-1 pt-6 text-center text-sm text-[#afafaf] hover:underline"
-        >
-          <ArrowLeft className="h-4 w-4" /> Back to Log In
-        </Link>
       </form>
     </Form>
   )
