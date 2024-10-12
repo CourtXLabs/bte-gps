@@ -7,6 +7,7 @@ import { buttonVariants } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
+import { toast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils"
 import { loginFormSchema } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -28,7 +29,10 @@ export default function LoginPage() {
 
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     setLoading(true)
-    await login(values)
+    const { error } = await login(values)
+    if (error) {
+      toast({ variant: "destructive", title: error })
+    }
     setLoading(false)
   }
 

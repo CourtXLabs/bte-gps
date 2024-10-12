@@ -16,7 +16,7 @@ export async function login(values: Inputs) {
   const { email, password } = values
 
   if (typeof email !== "string" || typeof password !== "string") {
-    redirect("/error")
+    return { error: "Invalid input" }
   }
 
   const data = {
@@ -27,7 +27,7 @@ export async function login(values: Inputs) {
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
-    redirect("/error")
+    return { error: error.message }
   }
 
   const isAdmin = await getIsAdmin()

@@ -4,7 +4,6 @@ import { createClient } from "@/lib/supabase/actionts"
 import { signupFormSchema } from "@/types"
 import { createClient as createAdminClient } from "@supabase/supabase-js"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
 import { z } from "zod"
 
 type Inputs = z.infer<typeof signupFormSchema>
@@ -27,11 +26,11 @@ export async function signUp(values: Inputs) {
     typeof name !== "string" ||
     typeof confirmPassword !== "string"
   ) {
-    redirect("/error")
+    return { error: "Invalid input", data: null }
   }
 
   if (password !== confirmPassword) {
-    redirect("/error")
+    return { error: "Passwords must match", data: null }
   }
 
   const signUpData = {
@@ -41,10 +40,8 @@ export async function signUp(values: Inputs) {
 
   const { data, error } = await supabase.auth.signUp(signUpData)
 
-  console.log({ error, data })
-
   if (error || !data.user) {
-    redirect("/error")
+    return { error: "Error signing up", data: null }
   }
 
   supabaseAdmin.auth.admin.updateUserById(data.user.id, {
@@ -53,5 +50,5 @@ export async function signUp(values: Inputs) {
     },
   })
 
-  redirect("/players/41")
+  return { error: null, data }
 }
