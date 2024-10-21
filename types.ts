@@ -145,6 +145,17 @@ export const resetPasswordFormSchema = z
     path: ["confirmPassword"],
   })
 
+export const updatePasswordFormSchema = z
+  .object({
+    currentPassword: z.string(),
+    newPassword: z.string().min(8),
+    confirmPassword: z.string().min(8),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  })
+
 const errorMessage = "This field is required"
 export const gameFormSchema = z.object({
   gameType: z.nativeEnum(GameTypes),

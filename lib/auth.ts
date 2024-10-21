@@ -90,13 +90,11 @@ export async function getIsPremium() {
   return null
 }
 
-export async function getUserData() {
-  const decodedJwt = await getJwt()
-  if (!decodedJwt) {
-    return null
-  }
-
-  return decodedJwt
+export const getUserData = async () => {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+  const { data } = await supabase.auth.getSession()
+  return data?.session?.user
 }
 
 export async function getUserEmail() {

@@ -1,4 +1,5 @@
 import { UserIcon } from "lucide-react"
+import Link from "next/link"
 
 interface Props {
   email?: string
@@ -7,7 +8,7 @@ interface Props {
 
 export default function ProfileInfo({ email, name }: Props) {
   return (
-    <div className="flex items-center gap-2.5">
+    <Link href="/account/settings" className="flex items-center gap-2.5">
       <div className="flex h-11 w-11 items-center justify-center rounded-full bg-muted">
         <UserIcon size={24} className="fill-white" />
       </div>
@@ -15,6 +16,6 @@ export default function ProfileInfo({ email, name }: Props) {
         <p className="font-bold leading-none">{name}</p>
         <p className="leading-none">{email}</p>
       </div>
-    </div>
+    </Link>
   )
 }

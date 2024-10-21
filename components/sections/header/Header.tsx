@@ -1,19 +1,10 @@
 import Logo from "@/components/Logo"
 import PremiumVersionBanner from "@/components/banners/PremiumVersionBanner"
 import { buttonVariants } from "@/components/ui/button"
-import { getIsAdmin, getIsLoggedIn, getIsPremium } from "@/lib/auth"
-import { createClient } from "@/lib/supabase/server"
+import { getIsAdmin, getIsLoggedIn, getIsPremium, getUserData } from "@/lib/auth"
 import { cn } from "@/lib/utils"
-import { cookies } from "next/headers"
 import Link from "next/link"
 import ProfileInfo from "./ProfileInfo"
-
-const getUserData = async () => {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
-  const { data } = await supabase.auth.getSession()
-  return data?.session?.user
-}
 
 export default async function Header() {
   const isAdmin = await getIsAdmin()
@@ -37,17 +28,29 @@ export default async function Header() {
             </span>
           </div>
           <div className="flex items-center gap-6 lg:gap-9">
-            <Link href="/players" className={cn(buttonVariants({ variant: "link" }), "text-xl text-foreground")}>
+            <Link
+              href="/players"
+              className={cn(buttonVariants({ variant: "link" }), "text-xl font-normal text-foreground")}
+            >
               Players
             </Link>
-            <Link href="/about-us" className={cn(buttonVariants({ variant: "link" }), "text-xl text-foreground")}>
+            <Link
+              href="/about-us"
+              className={cn(buttonVariants({ variant: "link" }), "text-xl font-normal text-foreground")}
+            >
               About Us
             </Link>
-            <Link href="/glossary" className={cn(buttonVariants({ variant: "link" }), "text-xl text-foreground")}>
+            <Link
+              href="/glossary"
+              className={cn(buttonVariants({ variant: "link" }), "text-xl font-normal text-foreground")}
+            >
               Glossary
             </Link>
             {isAdmin && (
-              <Link href="/add-game" className={cn(buttonVariants({ variant: "link" }), "text-xl text-foreground")}>
+              <Link
+                href="/add-game"
+                className={cn(buttonVariants({ variant: "link" }), "text-xl font-normal text-foreground")}
+              >
                 Add Game
               </Link>
             )}
