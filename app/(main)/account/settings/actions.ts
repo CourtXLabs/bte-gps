@@ -1,7 +1,9 @@
 "use server"
 
+import { getUserId } from "@/lib/auth"
 import { createClient } from "@/lib/supabase/actionts"
 import { changeEmailAddressFormSchema, personalInfoFormSchema, updatePasswordFormSchema } from "@/types"
+import { createClient as createAdminClient } from "@supabase/supabase-js"
 import { cookies } from "next/headers"
 import { z } from "zod"
 
@@ -77,6 +79,30 @@ export async function changeEmailAddress(values: z.infer<typeof changeEmailAddre
   const { error } = await supabase.auth.updateUser({
     email,
   })
+
+  if (error) {
+    return { data: null, error: error.message }
+  }
+
+  return { data: null, error: null }
+}
+
+export async function deleteAccount() {
+  const currentUserId = await getUserId()
+  if (!currentUserId) {
+    return { data: null, error: "User not found" }
+  }
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+  const supabaseAdmin = createAdminClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SERVICE_ROLE_KEY!, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  })
+
+  const { error } = await supabaseAdmin.auth.admin.deleteUser(currentUserId)
+  await supabase.auth.signOut()
 
   if (error) {
     return { data: null, error: error.message }

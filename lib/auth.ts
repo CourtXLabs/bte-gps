@@ -118,6 +118,27 @@ export async function getUserEmail() {
   return null
 }
 
+export async function getUserId() {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+  const { data: sessionData } = await supabase.auth.getSession()
+
+  const accessToken = sessionData?.session?.access_token
+
+  if (accessToken) {
+    try {
+      const payload = await verifyJwtToken(accessToken)
+      if (!payload) {
+        return null
+      }
+      return sessionData?.session?.user.id
+    } catch (error) {
+      return null
+    }
+  }
+  return null
+}
+
 export async function getUserRoles(token: string) {
   const decodedJwt = await verifyJwtToken(token)
   if (!decodedJwt) {
