@@ -156,6 +156,14 @@ export const updatePasswordFormSchema = z
     path: ["confirmPassword"],
   })
 
+export const personalInfoFormSchema = z.object({
+  name: z.string().min(2),
+})
+
+export const changeEmailAddressFormSchema = z.object({
+  email: z.string().email(),
+})
+
 const errorMessage = "This field is required"
 export const gameFormSchema = z.object({
   gameType: z.nativeEnum(GameTypes),

@@ -8,14 +8,14 @@ import Link from "next/link"
 
 export default async function AccountSidebar() {
   const userData = await getUserData()
-  const userFullName = userData?.user_metadata?.full_name
+  const userFullName = userData?.user_metadata?.name
   const firstName = userFullName?.split(" ")[0]
   return (
-    <Card>
-      <CardContent className="flex w-72 flex-col gap-8 pt-6 text-lg">
+    <Card className="h-[45rem]">
+      <CardContent className="flex h-full w-72 flex-col gap-8 pt-6 text-lg">
         <div>
           <span className="font-light">Welcome</span>{" "}
-          <span className="block pb-1 text-3xl font-bold">{firstName || "Customer"}</span>
+          <span className="block break-words pb-1 text-3xl font-bold">{firstName || "Customer"}</span>
         </div>
         <Link
           className={cn(

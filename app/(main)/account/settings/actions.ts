@@ -1,13 +1,12 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/actionts"
-import { updatePasswordFormSchema } from "@/types"
+import { changeEmailAddressFormSchema, personalInfoFormSchema, updatePasswordFormSchema } from "@/types"
 import { cookies } from "next/headers"
 import { z } from "zod"
 
-type Input = z.infer<typeof updatePasswordFormSchema> & { email: string }
-
-export async function updatePassword(values: Input) {
+type UpdatePasswordInput = z.infer<typeof updatePasswordFormSchema> & { email: string }
+export async function updatePassword(values: UpdatePasswordInput) {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
@@ -39,6 +38,48 @@ export async function updatePassword(values: Input) {
 
   if (updatePasswordError) {
     return { data: null, error: updatePasswordError.message }
+  }
+
+  return { data: null, error: null }
+}
+
+export async function upadtePersonalInfo(values: z.infer<typeof personalInfoFormSchema>) {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+
+  const { name } = values
+
+  if (typeof name !== "string") {
+    return { data: null, error: "Invalid input" }
+  }
+
+  const { error } = await supabase.auth.updateUser({
+    data: { name },
+  })
+
+  if (error) {
+    return { data: null, error: error.message }
+  }
+
+  return { data: null, error: null }
+}
+
+export async function changeEmailAddress(values: z.infer<typeof changeEmailAddressFormSchema>) {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+
+  const { email } = values
+
+  if (typeof email !== "string") {
+    return { data: null, error: "Invalid input" }
+  }
+
+  const { error } = await supabase.auth.updateUser({
+    email,
+  })
+
+  if (error) {
+    return { data: null, error: error.message }
   }
 
   return { data: null, error: null }

@@ -1,6 +1,7 @@
 "use client"
 
 import { updatePassword } from "@/app/(main)/account/settings/actions"
+import useBoolean from "@/hooks/useBoolean"
 import { updatePasswordFormSchema } from "@/types"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -13,6 +14,7 @@ import { useToast } from "../ui/use-toast"
 // TODO: Send email to inform user of password change
 export default function AccountUpdatePasswordForm({ email }: { email: string }) {
   const { toast } = useToast()
+  const isLoading = useBoolean()
   const form = useForm<z.infer<typeof updatePasswordFormSchema>>({
     defaultValues: {
       currentPassword: "",
@@ -22,7 +24,7 @@ export default function AccountUpdatePasswordForm({ email }: { email: string }) 
   })
 
   const onSubmit = async (values: z.infer<typeof updatePasswordFormSchema>) => {
-    console.log("wtf")
+    isLoading.onTrue()
     const { error } = await updatePassword({ ...values, email })
     if (error) {
       toast({ variant: "destructive", title: error })
@@ -30,6 +32,7 @@ export default function AccountUpdatePasswordForm({ email }: { email: string }) 
       toast({ title: "Password updated" })
       form.reset()
     }
+    isLoading.onFalse()
   }
 
   return (
@@ -79,7 +82,7 @@ export default function AccountUpdatePasswordForm({ email }: { email: string }) 
             />
           </CardContent>
           <CardFooter>
-            <Button size="xl" className="w-40">
+            <Button size="xl" className="w-40" disabled={isLoading.value}>
               Save
             </Button>
           </CardFooter>
