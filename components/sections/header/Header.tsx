@@ -13,7 +13,7 @@ export default async function Header() {
   const userData = await getUserData()
 
   const userEmail = userData?.email
-  const userFullName = userData?.user_metadata?.full_name
+  const userFullName = userData?.user_metadata?.name
 
   const showPremiumBanner = isLoggedIn && !isPremiumUser && !isAdmin
 
