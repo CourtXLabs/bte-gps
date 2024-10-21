@@ -1,10 +1,7 @@
 import LogoutButton from "@/components/buttons/LogoutButton"
-import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { getUserData } from "@/lib/auth"
-import { cn } from "@/lib/utils"
-import { ChevronRight } from "lucide-react"
-import Link from "next/link"
+import AccountLinks from "./AccountLinks"
 
 export default async function AccountSidebar() {
   const userData = await getUserData()
@@ -17,26 +14,7 @@ export default async function AccountSidebar() {
           <span className="font-light">Welcome</span>{" "}
           <span className="block break-words pb-1 text-3xl font-bold">{firstName || "Customer"}</span>
         </div>
-        <Link
-          className={cn(
-            buttonVariants({ variant: "link" }),
-            "flex w-full items-center justify-between p-0 text-lg font-bold text-foreground",
-          )}
-          href="/account/settings"
-        >
-          Account Settings
-          <ChevronRight />
-        </Link>
-        <Link
-          className={cn(
-            buttonVariants({ variant: "link" }),
-            "flex w-full items-center justify-between p-0 text-lg font-medium text-foreground",
-          )}
-          href="/account/billing"
-        >
-          Billing Information
-          <ChevronRight />
-        </Link>
+        <AccountLinks />
         <LogoutButton className="mt-auto" />
       </CardContent>
     </Card>
