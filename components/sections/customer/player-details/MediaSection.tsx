@@ -11,9 +11,12 @@ interface Props {
   id: string
 }
 
-const getImage = async (supabase: SupabaseClient, id: string) => {
+const getImage = async (supabase: SupabaseClient, id: string, isPremium: boolean) => {
+  if (!isPremium) {
+    return "/example-dribble-graph.png"
+  }
   const { data: dribbleGraphData } = await supabase.storage
-    .from("Player Images")
+    .from("Player Premium Images")
     .download(`${id}/dribble-graph.png`)
     .catch((error) => ({ error, data: null }))
   if (!dribbleGraphData) {
@@ -34,7 +37,7 @@ const getPlaylistId = async (supabase: SupabaseClient, id: string, isPremium: bo
 const getData = async (id: string, isPremium: boolean) => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
-  return await Promise.all([getImage(supabase, id), getPlaylistId(supabase, id, isPremium)])
+  return await Promise.all([getImage(supabase, id, isPremium), getPlaylistId(supabase, id, isPremium)])
 }
 
 export default async function MediaSection({ id }: Props) {
@@ -46,7 +49,7 @@ export default async function MediaSection({ id }: Props) {
       <DribbleChartLegend className="lg:w-1/2" />
 
       <div className="flex w-full flex-col gap-10 lg:flex-row">
-        {dribbleGraphImg && <DribbleChartSection src={dribbleGraphImg} />}
+        {dribbleGraphImg && <DribbleChartSection src={dribbleGraphImg} isPremium={isPremium} />}
         {playlistId && <VideosSection playlistId={playlistId} />}
       </div>
     </div>

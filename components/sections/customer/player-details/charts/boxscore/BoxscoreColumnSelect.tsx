@@ -8,13 +8,22 @@ interface Props {
   title: string
   placeholder: string
   className?: string
+  disabled?: boolean
 }
 
-export default function BoxscoreColumnSelect({ options, onValueChange, value, title, placeholder, className }: Props) {
+export default function BoxscoreColumnSelect({
+  options,
+  onValueChange,
+  value,
+  title,
+  placeholder,
+  disabled,
+  className,
+}: Props) {
   return (
     <div className={cn("flex h-full flex-col justify-between gap-3 py-4", className)}>
       <span className="text-center text-white">{title}</span>
-      <Select value={value} onValueChange={onValueChange}>
+      <Select value={value} onValueChange={onValueChange} disabled={disabled}>
         <SelectTrigger size="sm" variant="dark">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>

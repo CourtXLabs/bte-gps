@@ -1,4 +1,5 @@
 import { MoveIds, idToUid, moveUids } from "@/constants/misc"
+import { reportListSampleData } from "@/constants/sample-data"
 import { DEFAULT_GAMES_COUNT, DEFAULT_SEASON } from "@/global-constants"
 import { getIsAdmin, getIsPremium } from "@/lib/auth"
 import { createClient } from "@/lib/supabase/server"
@@ -196,9 +197,13 @@ const getAllPlayers = async () => {
   }
 }
 
-const getReports = async (id: string, games: gameLimitOptions, season: string) => {
+const getReports = async (id: string, games: gameLimitOptions, season: string, isPremium: boolean) => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
+
+  if (!isPremium) {
+    return { data: reportListSampleData }
+  }
 
   try {
     let minDate: string | null = null
@@ -279,7 +284,7 @@ const getComboPointsRatio = async (id: string, games: gameLimitOptions, season: 
   }
 }
 
-const getDribblesCounts = async (id: string, games: gameLimitOptions, season: string) => {
+const getDribblesCounts = async (id: string, games: gameLimitOptions, season: string, isPremium: boolean) => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
@@ -308,10 +313,14 @@ const getDribblesCounts = async (id: string, games: gameLimitOptions, season: st
       return { error: "No data found" }
     }
 
-    const moveCounts = groupMoves(data)
     const comboCounts = groupCombos(data)
       .filter((combo) => combo.count > 1)
       .sort((a, b) => b.count - a.count)
+
+    if (!isPremium) {
+      return { comboCounts, error }
+    }
+    const moveCounts = groupMoves(data)
     const seuqenceInfoCounts = groupSequenceData(data)
 
     return { moveCounts, comboCounts, seuqenceInfoCounts, error }
@@ -348,9 +357,9 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
     await Promise.all([
       getPlayerInfo(id),
       getAllPlayers(),
-      getReports(id, games, season),
+      getReports(id, games, season, isPremium),
       getComboPointsRatio(id, games, season),
-      getDribblesCounts(id, games, season),
+      getDribblesCounts(id, games, season, isPremium),
       getSeasons(id),
     ])
 
@@ -398,7 +407,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
       </div>
 
       {reportsResponse.data?.length ? (
-        <ReportsList data={reportsResponse.data} />
+        <ReportsList data={reportsResponse.data as ReportApiData[]} isPremium={isPremium} />
       ) : (
         <div>
           <p>No reports found for this player</p>

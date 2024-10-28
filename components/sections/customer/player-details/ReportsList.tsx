@@ -1,5 +1,6 @@
 "use client"
 
+import GoPremiumCard from "@/components/cards/GoPremiumCard"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -16,6 +17,7 @@ import {
   shotsStationaryOptions,
 } from "@/constants/sequence-options"
 import { createClient } from "@/lib/supabase/client"
+import { cn } from "@/lib/utils"
 import { GPSApiData, ReportApiData, SequenceApiData } from "@/types"
 import {
   getComboToPointRatio,
@@ -48,9 +50,10 @@ import BoxscoreColumnSelect from "./charts/boxscore/BoxscoreColumnSelect"
 
 interface Props {
   data: ReportApiData[]
+  isPremium?: boolean
 }
 
-export default function ReportsList({ data }: Props) {
+export default function ReportsList({ data, isPremium }: Props) {
   const { toast } = useToast()
   const supabase = createClient()
 
@@ -96,6 +99,7 @@ export default function ReportsList({ data }: Props) {
       id: "individualDribble",
       header: () => (
         <BoxscoreColumnSelect
+          disabled={!isPremium}
           value={activeData.individualDribble}
           title="Individual Dribble %"
           placeholder="Dribble Type"
@@ -110,6 +114,7 @@ export default function ReportsList({ data }: Props) {
       id: "lane",
       header: () => (
         <BoxscoreColumnSelect
+          disabled={!isPremium}
           value={activeData.lane}
           title="Lane Dribble %"
           placeholder="Lane"
@@ -124,6 +129,7 @@ export default function ReportsList({ data }: Props) {
       id: "playCode",
       header: () => (
         <BoxscoreColumnSelect
+          disabled={!isPremium}
           value={activeData.playCode}
           title="Play Code %"
           placeholder="Play Code"
@@ -138,6 +144,7 @@ export default function ReportsList({ data }: Props) {
       id: "shootingOffDribbles",
       header: () => (
         <BoxscoreColumnSelect
+          disabled={!isPremium}
           value={activeData.shootingOffDribbles}
           title="Shooting (off dribbles) %"
           placeholder="Shot Type"
@@ -152,6 +159,7 @@ export default function ReportsList({ data }: Props) {
       id: "shootingStationary",
       header: () => (
         <BoxscoreColumnSelect
+          disabled={!isPremium}
           value={activeData.shootingStationary}
           title="Shooting (stationary) %"
           placeholder="Shot Type"
@@ -166,6 +174,7 @@ export default function ReportsList({ data }: Props) {
       id: "frequency",
       header: () => (
         <BoxscoreColumnSelect
+          disabled={!isPremium}
           value={activeData.frequency}
           title="Frequency"
           placeholder="Frequency"
@@ -187,6 +196,7 @@ export default function ReportsList({ data }: Props) {
       size: 170,
       header: () => (
         <BoxscoreColumnSelect
+          disabled={!isPremium}
           value={activeData.initialDirection}
           title="Initial Direction %"
           placeholder="Initial Direction"
@@ -201,6 +211,7 @@ export default function ReportsList({ data }: Props) {
       id: "counterDirection",
       header: () => (
         <BoxscoreColumnSelect
+          disabled={!isPremium}
           value={activeData.counterDirection}
           title="Counter Direction %"
           placeholder="Counter Direction"
@@ -215,6 +226,7 @@ export default function ReportsList({ data }: Props) {
       id: "lastHand",
       header: () => (
         <BoxscoreColumnSelect
+          disabled={!isPremium}
           value={activeData.lastHand}
           title="Last Hand"
           placeholder="Last Hand"
@@ -295,7 +307,8 @@ export default function ReportsList({ data }: Props) {
         <p className="text-lg font-semibold">Boxscore</p>
         <p className="text-sm">This table provides in-depth insights into player performance and tendencies</p>
       </CardHeader>
-      <CardContent className=" pb-12">
+      <CardContent className="relative pb-12">
+        {!isPremium && <GoPremiumCard className="bg-background" />}
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -315,7 +328,7 @@ export default function ReportsList({ data }: Props) {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className={cn({ blur: !isPremium })}>
             {data.map((report) => {
               return (
                 <TableRow key={report.id}>
