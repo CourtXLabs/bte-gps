@@ -25,6 +25,7 @@ export default function MobileHeader({ isAdmin, isLoggedIn, userEmail, userFullN
       document.body.style.overflow = "auto"
     } else {
       document.body.style.overflow = "hidden"
+      window.scrollTo(0, 0)
     }
     isMenuVisible.onToggle()
   }
