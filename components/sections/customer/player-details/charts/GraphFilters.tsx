@@ -5,6 +5,8 @@ interface Props {
   filters: IGraphFilters
   onChangeFilter: (key: keyof IGraphFilters) => void
   children?: React.ReactNode
+  canChange?: boolean
+  keyAlwaysEnabled?: string
 }
 
 const filterKeyToNameMap = {
@@ -15,7 +17,7 @@ const filterKeyToNameMap = {
   lastHand: "Last Hand",
 }
 
-export default function GraphFilters({ filters, onChangeFilter, children }: Props) {
+export default function GraphFilters({ filters, onChangeFilter, keyAlwaysEnabled, canChange, children }: Props) {
   const handleFilterChange = (key: keyof IGraphFilters) => () => {
     onChangeFilter(key)
   }
@@ -32,6 +34,7 @@ export default function GraphFilters({ filters, onChangeFilter, children }: Prop
               size="lg"
               className="w-full max-w-none px-4"
               onClick={handleFilterChange(key as keyof IGraphFilters)}
+              disabled={!canChange && key !== keyAlwaysEnabled}
             >
               {filterKeyToNameMap[key as keyof IGraphFilters]}
             </Button>

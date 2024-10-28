@@ -9,19 +9,30 @@ import PointsComboBarChart from "./PointsComboBarChart"
 import SequenceFrequencyChart from "./SequenceFrequencyChart"
 
 interface Props {
+  isPremium?: boolean
   dribbleCounts: SeuqenceGraphData
   comboPointsResponse: ComboToPointData[]
   children?: React.ReactNode
 }
 
-export default function SequencesGraphs({ dribbleCounts, comboPointsResponse, children }: Props) {
-  const [graphFilters, setGraphFilters] = useState<IGraphFilters>({
-    dribbles: true,
-    dribbleTypes: false,
-    initialDirection: false,
-    counterDirection: false,
-    lastHand: false,
-  })
+const premiumFilters = {
+  dribbles: true,
+  dribbleTypes: false,
+  initialDirection: false,
+  counterDirection: false,
+  lastHand: false,
+}
+
+const freemiumFilters = {
+  dribbles: false,
+  dribbleTypes: true,
+  initialDirection: false,
+  counterDirection: false,
+  lastHand: false,
+} as IGraphFilters
+
+export default function SequencesGraphs({ isPremium, dribbleCounts, comboPointsResponse, children }: Props) {
+  const [graphFilters, setGraphFilters] = useState<IGraphFilters>(isPremium ? premiumFilters : freemiumFilters)
 
   const onChangeFilter = (key: keyof IGraphFilters) => {
     setGraphFilters((prev) => ({ ...prev, [key]: !prev[key] }))
@@ -31,7 +42,12 @@ export default function SequencesGraphs({ dribbleCounts, comboPointsResponse, ch
 
   return (
     <div className="w-full space-y-10">
-      <GraphFilters filters={graphFilters} onChangeFilter={onChangeFilter}>
+      <GraphFilters
+        filters={graphFilters}
+        onChangeFilter={onChangeFilter}
+        canChange={isPremium}
+        keyAlwaysEnabled="dribbleTypes"
+      >
         {children}
       </GraphFilters>
       {hasGraphs && (

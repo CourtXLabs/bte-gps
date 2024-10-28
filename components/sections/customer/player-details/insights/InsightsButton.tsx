@@ -8,15 +8,16 @@ import InsightsDialog from "./InsightsDialog"
 interface Props {
   id: string
   canEdit?: boolean
+  disabled?: boolean
 }
 
-export default function InsightsButton({ id, canEdit }: Props) {
+export default function InsightsButton({ id, canEdit, disabled }: Props) {
   const isDialogOpen = useBoolean(false)
 
   return (
     <>
       <div className="w-full max-w-7xl md:w-max">
-        <Button className="w-full gap-1 md:w-max" size="lg" onClick={isDialogOpen.onTrue}>
+        <Button className="w-full gap-1 md:w-max" size="lg" onClick={isDialogOpen.onTrue} disabled={disabled}>
           <LightbulbIcon />
           <span>View Insights</span>
         </Button>

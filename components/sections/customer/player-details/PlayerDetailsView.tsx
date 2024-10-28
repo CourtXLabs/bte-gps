@@ -1,6 +1,6 @@
 import { MoveIds, idToUid, moveUids } from "@/constants/misc"
 import { DEFAULT_GAMES_COUNT, DEFAULT_SEASON } from "@/global-constants"
-import { getIsAdmin } from "@/lib/auth"
+import { getIsAdmin, getIsPremium } from "@/lib/auth"
 import { createClient } from "@/lib/supabase/server"
 import {
   ComboToPointData,
@@ -342,6 +342,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
   let { games: gamesParam, season: seasonParam } = searchParams
   const games = gamesParam || DEFAULT_GAMES_COUNT
   const season = seasonParam || DEFAULT_SEASON
+  const isPremium = await getIsPremium()
 
   const [playerInfoResponse, playersResponse, reportsResponse, comboPointsResponse, dribbleCounts, seasons] =
     await Promise.all([
@@ -388,10 +389,11 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
           <PlayerGamesFilter seasons={seasons} />
         </div>
         <SequencesGraphs
+          isPremium={isPremium}
           dribbleCounts={dribbleCounts as SeuqenceGraphData}
           comboPointsResponse={comboPointsResponse?.data || []}
         >
-          <InsightsButton id={id} canEdit={isAdmin} />
+          <InsightsButton id={id} canEdit={isAdmin} disabled={!isPremium} />
         </SequencesGraphs>
       </div>
 
