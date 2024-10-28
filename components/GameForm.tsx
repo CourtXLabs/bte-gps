@@ -59,7 +59,7 @@ export default function GameForm({ players, teams }: Props) {
   const playerOptions =
     players?.map((player) => ({
       value: player.id!,
-      label: `${player.name} ${typeof player.jersey === "number" && `#${player.jersey}`}`,
+      label: `${player.name} ${typeof player.jersey === "number" ? `#${player.jersey}` : ""}`,
     })) || []
 
   const teamsOptions =
