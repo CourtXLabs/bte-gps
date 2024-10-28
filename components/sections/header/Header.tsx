@@ -1,10 +1,7 @@
-import Logo from "@/components/Logo"
 import PremiumVersionBanner from "@/components/banners/PremiumVersionBanner"
-import { buttonVariants } from "@/components/ui/button"
 import { getIsAdmin, getIsLoggedIn, getIsPremium, getUserData } from "@/lib/auth"
-import { cn } from "@/lib/utils"
-import Link from "next/link"
-import ProfileInfo from "./ProfileInfo"
+import DesktopHeader from "./DesktopHeader"
+import MobileHeader from "./MobileHeader"
 
 export default async function Header() {
   const isAdmin = await getIsAdmin()
@@ -20,51 +17,8 @@ export default async function Header() {
   return (
     <>
       <div className="w-full bg-black p-4">
-        <div className="mx-auto flex max-w-screen-2xl items-center justify-between gap-6 lg:gap-9">
-          <div className="relative">
-            <Logo />
-            <span className="absolute -right-12 bottom-0 rounded-2xl bg-primary px-2 py-1 text-sm leading-none text-black">
-              Beta
-            </span>
-          </div>
-          <div className="flex items-center gap-6 lg:gap-9">
-            <Link
-              href="/players"
-              className={cn(buttonVariants({ variant: "link" }), "text-xl font-normal text-foreground")}
-            >
-              Players
-            </Link>
-            <Link
-              href="/about-us"
-              className={cn(buttonVariants({ variant: "link" }), "text-xl font-normal text-foreground")}
-            >
-              About Us
-            </Link>
-            <Link
-              href="/glossary"
-              className={cn(buttonVariants({ variant: "link" }), "text-xl font-normal text-foreground")}
-            >
-              Glossary
-            </Link>
-            {isAdmin && (
-              <Link
-                href="/add-game"
-                className={cn(buttonVariants({ variant: "link" }), "text-xl font-normal text-foreground")}
-              >
-                Add Game
-              </Link>
-            )}
-          </div>
-          <div>
-            {isLoggedIn ? (
-              <ProfileInfo email={userEmail} name={userFullName} />
-            ) : (
-              <Link href="/auth/login" className={cn(buttonVariants({ variant: "link" }), "text-xl text-foreground")}>
-                Log In
-              </Link>
-            )}
-          </div>
-        </div>
+        <DesktopHeader isAdmin={isAdmin} isLoggedIn={isLoggedIn} userEmail={userEmail} userFullName={userFullName} />
+        <MobileHeader isAdmin={isAdmin} isLoggedIn={isLoggedIn} userEmail={userEmail} userFullName={userFullName} />
       </div>
       {showPremiumBanner && <PremiumVersionBanner />}
     </>

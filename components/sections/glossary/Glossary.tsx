@@ -6,7 +6,7 @@ const secondaryListStyle = "list-[square]"
 
 export default function AboutUs() {
   return (
-    <div className="mx-auto w-max max-w-7xl gap-12 px-4 py-20">
+    <div className="mx-auto max-w-7xl gap-12 px-4 py-20">
       <h1 className="text-2xl font-bold">BTE Analytics - Data Analyst Study Guide</h1>
 
       <div className={sectionClasses}>
