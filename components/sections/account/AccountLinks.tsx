@@ -25,7 +25,7 @@ export default function AccountLinks() {
       key={page.href}
       className={cn(
         buttonVariants({ variant: "link" }),
-        "flex w-full items-center justify-between p-0 text-lg font-medium text-foreground",
+        "flex h-auto w-full items-center justify-between p-0 text-lg font-medium text-foreground",
         pathname === page.href && "font-bold",
       )}
       href={page.href}
