@@ -52,7 +52,7 @@ export default function MobileHeader({ isAdmin, isLoggedIn, userEmail, userFullN
         </Button>
       </div>
 
-      <div className={cn("fixed z-10 hidden h-full w-full bg-background", { block: isMenuVisible.value })}>
+      <div className={cn("fixed left-0 z-10 hidden h-full w-full bg-background", { block: isMenuVisible.value })}>
         <ul className="flex flex-col items-start gap-8 pt-12">
           <li className="list-inside list-disc">
             <Link
