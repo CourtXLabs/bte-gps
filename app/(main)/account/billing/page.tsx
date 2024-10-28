@@ -12,6 +12,7 @@ export default function AccountBillingPage() {
     <div className="space-y-6">
       <h1 className="text-xl font-bold">Billing Information</h1>
       <Link
+        target="_blank"
         href={`${billingInfoLink}?prefilled_email=${userEmail}`}
         className={cn(buttonVariants({ size: "xl" }), "text-base")}
       >
