@@ -52,3 +52,4 @@ export const gameTypesPeriods = {
 export const DEFAULT_PAGE_SIZE = 10
 
 export const EMPTY_AUTOCOMPLETE_VALUE = -1
+export const EMPTY_SELECT_VALUE = "-1"

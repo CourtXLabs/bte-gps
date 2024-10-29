@@ -61,6 +61,12 @@ export enum GameTypes {
   PROFESSIONAL = "Professional Game",
 }
 
+export enum LevelTypes {
+  COLLEGE = "College",
+  HIGH_SCHOOL = "High School",
+  NBA = "NBA",
+}
+
 export interface MoveSequence {
   uid: string
   moveId: MoveIds
@@ -189,7 +195,8 @@ export const sequenceFormSchema = z.object({
   ball_handler_pick_and_roll: z.string().optional(),
 })
 
-export const dashboardToolbarFormSchema = z.object({
+export const playerListToolbarFormSchema = z.object({
+  player_level: z.nativeEnum(LevelTypes).optional(),
   team: z.string().optional(),
   player: z.string().optional(),
 })
@@ -220,6 +227,7 @@ export interface PlayerData {
   name: string
   jersey: string | number
   team_id: string
+  player_level?: keyof typeof LevelTypes | null
 }
 
 // Input for API

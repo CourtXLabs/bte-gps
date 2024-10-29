@@ -5,16 +5,16 @@ import { PlayerApiData } from "@/types"
 import { cookies } from "next/headers"
 import NotFound404Error from "../../error/NotFound404Error"
 import PlayersTable from "./PlayersTable"
-import PlayersTableToolbar from "./PlayersTableToolbar"
 
 interface Props {
   page?: string
   pageSize?: string
   team?: string
   player?: string
+  player_level?: string
 }
 
-const getData = async ({ page, pageSize, team, player }: Props) => {
+const getData = async ({ page, pageSize, team, player, player_level }: Props) => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
@@ -24,7 +24,7 @@ const getData = async ({ page, pageSize, team, player }: Props) => {
   const from = (parseInt(page) - 1) * parseInt(pageSize)
   const to = from + parseInt(pageSize) - 1
 
-  let query = supabase.from("player").select("id, name, jersey, team_id (name)", { count: "exact" })
+  let query = supabase.from("player").select("id, name, jersey, player_level, team_id (name)", { count: "exact" })
 
   if (typeof team === "string" && team.trim() !== "") {
     query = query.eq("team_id", team)
@@ -32,6 +32,10 @@ const getData = async ({ page, pageSize, team, player }: Props) => {
 
   if (typeof player === "string" && player.trim() !== "") {
     query = query.eq("id", player)
+  }
+
+  if (typeof player_level === "string" && player_level.trim() !== "") {
+    query = query.eq("player_level", player_level)
   }
 
   try {
@@ -53,10 +57,8 @@ export default async function CustomerHomeView(props: Props) {
   const isAdmin = await getIsAdmin()
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-20">
-      <PlayersTable data={players.data} count={players.count || 0} isAdmin={isAdmin}>
-        <PlayersTableToolbar isAdmin={isAdmin} />
-      </PlayersTable>
+    <div className="mx-auto w-full max-w-7xl px-4 py-10 md:py-20">
+      <PlayersTable data={players.data} count={players.count || 0} isAdmin={isAdmin} />
     </div>
   )
 }
