@@ -367,7 +367,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
 
   return (
     <div className="mx-auto flex w-full flex-col gap-10 px-4 py-12">
-      <div className="mx-auto flex w-full max-w-screen-2xl flex-col flex-wrap items-center justify-center gap-6 xl:flex-row xl:items-start">
+      <div className="mx-auto flex w-full max-w-screen-2xl flex-col flex-wrap items-center justify-center gap-6 xl:flex-row xl:items-start xl:gap-16">
         <div className="w-full space-y-8 lg:w-max">
           <Link
             href="/players"
