@@ -381,14 +381,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
           <BteCardsSection />
         </div>
         {playerInfoResponse?.data?.player_photo && (
-          <Image
-            className="xl:-mt-10"
-            priority
-            src={playerInfoResponse?.data?.player_photo}
-            alt="Player Photo"
-            width={436}
-            height={360}
-          />
+          <Image priority src={playerInfoResponse?.data?.player_photo} alt="Player Photo" width={436} height={360} />
         )}
       </div>
       <div className="mx-auto flex w-full max-w-screen-2xl flex-col items-start gap-10">
