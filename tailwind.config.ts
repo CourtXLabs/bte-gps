@@ -51,6 +51,9 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      backgroundImage: {
+        "athlete-card-border": "linear-gradient(150deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.25))",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

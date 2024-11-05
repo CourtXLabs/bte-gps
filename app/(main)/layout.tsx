@@ -1,3 +1,4 @@
+import Footer from "@/components/sections/Footer"
 import Header from "@/components/sections/header/Header"
 
 export default function MainLayout({
@@ -9,6 +10,7 @@ export default function MainLayout({
     <>
       <Header />
       {children}
+      <Footer />
     </>
   )
 }
