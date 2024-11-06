@@ -5,7 +5,7 @@ import AthletesHowItWorksSection from "@/components/sections/landing-page/athlet
 
 export default function AthletesPage() {
   return (
-    <main className="mx-auto max-w-screen-xl px-6 py-20 2xl:px-0">
+    <main className="mx-auto max-w-screen-xl px-6 py-12 lg:py-20 2xl:px-0">
       <AthletesHeroSection />
       <AthletesDataIntoMoneySection />
       <AthletesHowItWorksSection />

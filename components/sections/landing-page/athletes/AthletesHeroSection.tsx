@@ -5,9 +5,9 @@ import Link from "next/link"
 
 export default function AthletesHeroSection() {
   return (
-    <div className="flex items-start justify-between gap-14 pb-20">
-      <div className="w-1/2 space-y-8">
-        <h1 className="text-5xl font-semibold">
+    <div className="flex flex-col items-start justify-between gap-14 pb-20 lg:flex-row">
+      <div className="order-2 w-full space-y-8 lg:order-none lg:w-1/2">
+        <h1 className="text-4xl font-semibold lg:text-5xl">
           Empowering Athletes to <span className="italic text-primary">Monetize</span> Their Performance Data
         </h1>
         <p>
@@ -31,19 +31,18 @@ export default function AthletesHeroSection() {
             </li>
           </ul>
         </div>
-        <div className="pt-2.5">
+        <div className="flex flex-col gap-3 pt-2.5 sm:flex-row">
           <Link href="#" className={cn(buttonVariants({ size: "xl" }), "bg-white hover:bg-[#dadada]")}>
             Join BTE Analytics for Free
           </Link>
-          <Link
-            href="#"
-            className={cn(buttonVariants({ size: "xl", variant: "outline" }), "ml-3 hover:bg-transparent ")}
-          >
+          <Link href="#" className={cn(buttonVariants({ size: "xl", variant: "outline" }), "hover:bg-transparent ")}>
             Learn More
           </Link>
         </div>
       </div>
-      <Image src="/auth-image.png" alt="Athletes" width={400} height={400} />
+      <div className="relative h-[400px] w-full lg:w-[400px]">
+        <Image src="/auth-image.png" alt="Athletes" fill className="absolute object-contain" />
+      </div>
     </div>
   )
 }

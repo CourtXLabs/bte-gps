@@ -25,7 +25,7 @@ export default function AthletesHowItWorksSection() {
   return (
     <div className="mt-24">
       <h2 className="text-center text-5xl font-bold tracking-tighter">How It Works</h2>
-      <div className="flex w-full gap-4 pt-6">
+      <div className="flex w-full flex-col gap-4 pt-6 lg:flex-row">
         {cardsData.map((card) => (
           <AthletesHowItWorksCard
             key={card.title}

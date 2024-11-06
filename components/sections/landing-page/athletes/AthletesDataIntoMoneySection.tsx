@@ -6,8 +6,10 @@ export default function AthletesDataIntoMoneySection() {
       <div className="relative col-span-1 row-span-3">
         <Image className="absolute object-fill" fill src="/landing-page/james-left.png" alt="James Left" />
         <div className="relative z-10 flex h-full flex-col justify-between p-8">
-          <p className="text-3xl font-bold">DATA=MONEY</p>
-          <h2 className="text-6xl font-bold tracking-tight">Transforming Performance Data into Revenue</h2>
+          <p className="text-2xl font-bold lg:text-3xl">DATA=MONEY</p>
+          <h2 className="text-4xl font-bold tracking-tight lg:text-5xl xl:text-6xl">
+            Transforming Performance Data into Revenue
+          </h2>
         </div>
       </div>
 

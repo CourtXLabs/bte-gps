@@ -24,18 +24,18 @@ const dataEquityItems = [
 
 export default function AthletesDataEquitySection() {
   return (
-    <div className="mt-24 w-full rounded-3xl bg-primary p-16 text-primary-foreground">
-      <div className="flex items-center justify-between">
+    <div className="mt-24 w-full rounded-3xl bg-primary p-8 text-primary-foreground lg:p-16">
+      <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
         <div className="space-y-4">
           <h2 className="text-4xl font-medium">True Data Equity for Athletes</h2>
           <p className="text-lg">Empowering Athletes with Game-Changing Data & Revenue Opportunities</p>
         </div>
-        <Button className="h-16 rounded-full bg-primary-foreground px-8 text-sm font-medium text-white hover:bg-gray-900">
+        <Button className="h-16 w-full rounded-full bg-primary-foreground px-8 text-sm font-medium text-white hover:bg-gray-900 md:w-auto">
           Join the Data Revolution
         </Button>
       </div>
-      <ol className="mt-8 flex items-center gap-12">
-        {dataEquityItems.map((item, index) => (
+      <ol className="mt-8 flex flex-col items-start gap-12 md:flex-row">
+        {dataEquityItems.map((item) => (
           <AthletesDataEquityListItem
             key={item.number}
             number={item.number}
