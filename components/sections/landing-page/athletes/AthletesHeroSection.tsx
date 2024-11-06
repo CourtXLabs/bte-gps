@@ -5,7 +5,7 @@ import Link from "next/link"
 
 export default function AthletesHeroSection() {
   return (
-    <div className="flex items-start justify-between gap-14">
+    <div className="flex items-start justify-between gap-14 pb-20">
       <div className="w-1/2 space-y-8">
         <h1 className="text-5xl font-semibold">
           Empowering Athletes to <span className="italic text-primary">Monetize</span> Their Performance Data
