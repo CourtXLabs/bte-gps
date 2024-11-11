@@ -22,7 +22,7 @@ export default async function PlayerDetailsPage({ params, searchParams }: Props)
   const suspenseKey = new URLSearchParams(searchParams).toString()
   return (
     <AuthGuard>
-      <Suspense fallback={<div>Loading...</div>} key={suspenseKey}>
+      <Suspense fallback={<div className="min-h-screen">Loading...</div>} key={suspenseKey}>
         <PlayerDetailsView id={params.id} searchParams={searchParams as Required<Props["searchParams"]>} />
       </Suspense>
     </AuthGuard>
