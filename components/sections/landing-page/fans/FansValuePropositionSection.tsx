@@ -26,12 +26,12 @@ const cardsData = [
 
 export default function FansValuePropositionSection() {
   return (
-    <div className="mt-20">
-      <h2 className="text-center text-5xl font-bold tracking-tighter">What BTE Analytics Does</h2>
-      <h3 className="mx-auto max-w-[33.375rem] pt-8 text-center text-lg opacity-70">
+    <div className="mt-10 lg:mt-20">
+      <h2 className="text-center text-4xl font-bold tracking-tighter lg:text-5xl">What BTE Analytics Does</h2>
+      <h3 className="mx-auto max-w-[33.375rem] pt-6 text-center text-lg opacity-70 lg:pt-8">
         We provide a platform where data drives opportunities for athletes and brands to connect and grow.
       </h3>
-      <div className="flex w-full flex-col gap-4 pt-8 lg:flex-row">
+      <div className="flex w-full flex-col gap-4 pt-6 lg:flex-row lg:pt-8">
         {cardsData.map((card) => (
           <FansValuePropositionCard
             key={card.title}

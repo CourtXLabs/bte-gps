@@ -1,4 +1,6 @@
-import TimelineItem from "./TimelineItem"
+import { TimelineItem as TimelineItemType } from "@/types"
+import HorizontalTimeline from "./HorizontalTimeline"
+import VerticalTimeline from "./VerticalTimeline"
 
 const timelineItems = [
   {
@@ -21,16 +23,13 @@ const timelineItems = [
     description: "Both athletes and brands grow their exposure and revenue.",
     type: "secondary",
   },
-] as { title: string; description: string; type: "primary" | "secondary" }[]
+] as TimelineItemType[]
 
 export default function HowBteWorksTimeline() {
   return (
-    <div className="w-full pt-20">
-      <div className="flex max-w-full items-start justify-center space-x-14">
-        {timelineItems.map((item) => (
-          <TimelineItem key={item.title} {...item} />
-        ))}
-      </div>
-    </div>
+    <>
+      <HorizontalTimeline timelineItems={timelineItems} className="hidden lg:block" />
+      <VerticalTimeline timelineItems={timelineItems} className="lg:hidden" />
+    </>
   )
 }

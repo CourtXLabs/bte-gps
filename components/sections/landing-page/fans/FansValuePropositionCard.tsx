@@ -15,7 +15,7 @@ interface Props {
 export default function FansValuePropositionCard({ title, description, image, link, linkText }: Props) {
   return (
     <GradientBorderCard className="items-center text-center">
-      <h3 className="text-4xl tracking-tight">{title}</h3>
+      <h3 className="text-3xl tracking-tight lg:text-4xl">{title}</h3>
       <p className="pb-4 pt-2.5 opacity-70">{description}</p>
       <Link href={link} className={cn(buttonVariants({ variant: "link" }), "h-auto p-0 text-base")}>
         {linkText}

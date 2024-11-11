@@ -28,12 +28,12 @@ const items = [
 
 export default function FansKeyFeaturesSection() {
   return (
-    <div className="mt-24">
-      <h2 className="text-center text-5xl font-bold tracking-tighter">Our Key Features</h2>
-      <h3 className="mx-auto pt-8 text-center text-lg opacity-70">
+    <div className="mt-10 lg:mt-24">
+      <h2 className="text-center text-4xl font-bold tracking-tighter lg:text-5xl">Our Key Features</h2>
+      <h3 className="mx-auto pt-6 text-center text-lg opacity-70 lg:pt-8">
         From performance analysis to brand engagement, our platform is built for growth.
       </h3>
-      <div className="flex flex-col gap-6 pt-11 lg:flex-row">
+      <div className="flex flex-col gap-6 pt-8 lg:flex-row lg:pt-11">
         {items.map((item) => (
           <div className="flex flex-col items-center gap-3.5 text-center" key={item.title}>
             {item.icon}

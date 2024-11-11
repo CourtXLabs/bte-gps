@@ -6,7 +6,7 @@ interface Props {
   type: "primary" | "secondary"
 }
 
-const TimelineItem = ({ title, description, type }: Props) => (
+const HorizontalTimelineItem = ({ title, description, type }: Props) => (
   <div className="relative flex w-1/4 flex-col items-start">
     {/* Connector Line */}
     <div className="absolute top-1.5 h-[1px] w-[calc(100%+3.5rem)] bg-[#1e293b]" />
@@ -26,4 +26,4 @@ const TimelineItem = ({ title, description, type }: Props) => (
   </div>
 )
 
-export default TimelineItem
+export default HorizontalTimelineItem

@@ -393,3 +393,9 @@ export interface Margin {
   bottom: number
   left: number
 }
+
+export interface TimelineItem {
+  title: string
+  description: string
+  type: "primary" | "secondary"
+}
