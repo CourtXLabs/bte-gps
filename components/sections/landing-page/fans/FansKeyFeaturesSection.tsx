@@ -35,7 +35,7 @@ export default function FansKeyFeaturesSection() {
       </h3>
       <div className="flex flex-col gap-6 pt-11 lg:flex-row">
         {items.map((item) => (
-          <div className="flex flex-col items-center gap-3.5 text-center">
+          <div className="flex flex-col items-center gap-3.5 text-center" key={item.title}>
             {item.icon}
             <h3 className="pt-2 text-2xl font-semibold">{item.title}</h3>
             <p className="opacity-70">{item.description}</p>

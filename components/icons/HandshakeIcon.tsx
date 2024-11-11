@@ -3,7 +3,7 @@ import React from "react"
 export default function HandshakeIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
   return (
     <svg width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <g clip-path="url(#clip0_680_311)">
+      <g clipPath="url(#clip0_680_311)">
         <path
           d="M21.4267 5.59965C21.883 5.59965 22.2529 5.22977 22.2529 4.77351V1.08883C22.2529 0.632574 21.883 0.262695 21.4267 0.262695C20.9705 0.262695 20.6006 0.632574 20.6006 1.08883V4.77351C20.6007 5.22977 20.9705 5.59965 21.4267 5.59965Z"
           fill="white"
