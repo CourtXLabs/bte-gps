@@ -21,6 +21,7 @@ import { cookies } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
 import BteCardsSection from "./BteCardsSection"
+import DribbleComboTable from "./DribbleComboTable"
 import MediaSection from "./MediaSection"
 import PlayerDashboardToolbar from "./PlayerDashboardToolbar"
 import PlayerGamesFilter from "./PlayerGamesFilter"
@@ -398,6 +399,8 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
           <InsightsButton id={id} canEdit={isAdmin} disabled={!isPremium} />
         </SequencesGraphs>
       </div>
+
+      <DribbleComboTable />
 
       {reportsResponse.data?.length ? (
         <ReportsList data={reportsResponse.data as ReportApiData[]} isPremium={isPremium} />
