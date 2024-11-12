@@ -1,5 +1,4 @@
 import { MoveIds, idToUid, moveUids } from "@/constants/misc"
-import { reportListSampleData } from "@/constants/sample-data"
 import { DEFAULT_GAMES_COUNT, DEFAULT_SEASON } from "@/global-constants"
 import { getIsAdmin, getIsPremium } from "@/lib/auth"
 import { createClient } from "@/lib/supabase/server"
@@ -7,7 +6,6 @@ import {
   ComboToPointData,
   DribbleChartApiData,
   MoveApiData,
-  ReportApiData,
   SequenceCombosData,
   SeuqenceGraphData,
   SimlePlayerData,
@@ -25,7 +23,6 @@ import DribbleComboTable from "./DribbleComboTable"
 import MediaSection from "./MediaSection"
 import PlayerDashboardToolbar from "./PlayerDashboardToolbar"
 import PlayerGamesFilter from "./PlayerGamesFilter"
-import ReportsList from "./ReportsList"
 import SequencesGraphs from "./charts/SequencesGraphs"
 import InsightsButton from "./insights/InsightsButton"
 
@@ -198,48 +195,6 @@ const getAllPlayers = async () => {
   }
 }
 
-const getReports = async (id: string, games: gameLimitOptions, season: string, isPremium: boolean) => {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
-
-  if (!isPremium) {
-    return { data: reportListSampleData }
-  }
-
-  try {
-    let minDate: string | null = null
-    let maxDate: string | null = null
-
-    if (season) {
-      const [startYear] = season.split("-").map(Number)
-      if (!isNaN(startYear)) {
-        minDate = `${startYear}-08-29`
-        maxDate = `${startYear + 1}-08-28`
-      }
-    }
-
-    const { data, error } = await supabase
-      .rpc("get_player_reports", {
-        player_id_param: id,
-        ...(["away", "home"].includes(games) ? { games_limiter: games } : {}),
-        ...(minDate && maxDate ? { min_date: minDate, max_date: maxDate } : {}),
-      })
-      .limit(gamesCountOptionsLimit[games])
-
-    const sortedData = data?.sort(
-      // @ts-ignore
-      (a, b) => new Date(b.game_id.date).getTime() - new Date(a.game_id.date).getTime(),
-    ) as unknown as ReportApiData[]
-
-    return {
-      data: sortedData,
-      error,
-    }
-  } catch (error: any) {
-    return { error: typeof error === "string" ? error : error.message || "An error occurred" }
-  }
-}
-
 const getComboPointsRatio = async (id: string, games: gameLimitOptions, season: string) => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
@@ -354,15 +309,13 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
   const season = seasonParam || DEFAULT_SEASON
   const isPremium = await getIsPremium()
 
-  const [playerInfoResponse, playersResponse, reportsResponse, comboPointsResponse, dribbleCounts, seasons] =
-    await Promise.all([
-      getPlayerInfo(id),
-      getAllPlayers(),
-      getReports(id, games, season, isPremium),
-      getComboPointsRatio(id, games, season),
-      getDribblesCounts(id, games, season, isPremium),
-      getSeasons(id),
-    ])
+  const [playerInfoResponse, playersResponse, comboPointsResponse, dribbleCounts, seasons] = await Promise.all([
+    getPlayerInfo(id),
+    getAllPlayers(),
+    getComboPointsRatio(id, games, season),
+    getDribblesCounts(id, games, season, isPremium),
+    getSeasons(id),
+  ])
 
   const isAdmin = await getIsAdmin()
 
@@ -401,14 +354,6 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
       </div>
 
       <DribbleComboTable />
-
-      {reportsResponse.data?.length ? (
-        <ReportsList data={reportsResponse.data as ReportApiData[]} isPremium={isPremium} />
-      ) : (
-        <div>
-          <p>No reports found for this player</p>
-        </div>
-      )}
     </div>
   )
 }
