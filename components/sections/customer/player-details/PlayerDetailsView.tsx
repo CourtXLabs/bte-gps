@@ -200,10 +200,26 @@ const getDribbleStats = async (id: string, games: gameLimitOptions, season: stri
     return dribbleStatsmockData
   }
 
+  let minDate: string | null = null
+  let maxDate: string | null = null
+
+  if (season) {
+    const [startYear] = season.split("-").map(Number)
+    if (!isNaN(startYear)) {
+      minDate = `${startYear}-08-29`
+      maxDate = `${startYear + 1}-08-28`
+    }
+  }
+
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
-  const { data } = await supabase.rpc("get_dribble_stats", { player_id_param: id })
+  const { data } = await supabase.rpc("get_dribble_stats", {
+    player_id_param: id,
+    ...(games !== "all" ? { games_limiter: games } : {}),
+    ...(minDate ? { min_date: minDate } : {}),
+    ...(maxDate ? { max_date: maxDate } : {}),
+  })
   return data
 }
 
