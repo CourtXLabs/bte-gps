@@ -195,6 +195,14 @@ const getAllPlayers = async () => {
   }
 }
 
+const getDribbleStats = async (id: string, games: gameLimitOptions, season: string) => {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+
+  const { data } = await supabase.rpc("get_dribble_stats", { player_id_param: id })
+  return data
+}
+
 const getComboPointsRatio = async (id: string, games: gameLimitOptions, season: string) => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
@@ -309,13 +317,15 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
   const season = seasonParam || DEFAULT_SEASON
   const isPremium = await getIsPremium()
 
-  const [playerInfoResponse, playersResponse, comboPointsResponse, dribbleCounts, seasons] = await Promise.all([
-    getPlayerInfo(id),
-    getAllPlayers(),
-    getComboPointsRatio(id, games, season),
-    getDribblesCounts(id, games, season, isPremium),
-    getSeasons(id),
-  ])
+  const [playerInfoResponse, playersResponse, comboPointsResponse, dribbleCounts, seasons, dribbleStats] =
+    await Promise.all([
+      getPlayerInfo(id),
+      getAllPlayers(),
+      getComboPointsRatio(id, games, season),
+      getDribblesCounts(id, games, season, isPremium),
+      getSeasons(id),
+      getDribbleStats(id, games, season),
+    ])
 
   const isAdmin = await getIsAdmin()
 
@@ -353,7 +363,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
         </SequencesGraphs>
       </div>
 
-      <DribbleComboTable />
+      <DribbleComboTable dribbleStats={dribbleStats} />
     </div>
   )
 }

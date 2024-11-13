@@ -2,49 +2,101 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Image from "next/image"
 
-const DribbleComboTable = () => {
-  const comboData = [
-    {
-      id: 1,
-      type: "1 Dribble Combo",
-      moves: [
-        { id: 1, image: "/DribbleTree1.png" },
-        { id: 2, image: "/DribbleTree2.png" },
-        { id: 3, image: "/DribbleTree3.png" },
-        { id: 4, image: "/DribbleTree4.png" },
-        { id: 5, image: "/DribbleTree5.png" },
-        { id: 6, image: "/DribbleTree6.png" },
-        { id: 7, image: "/DribbleTree7.png" },
-      ],
-    },
-    {
-      id: 2,
-      type: "2 Dribble Combo",
-      moves: [
-        { id: 1, image: "/DribbleTree1.png", efficient: "11", common: "11" },
-        { id: 2, image: "/DribbleTree2.png", efficient: "21", common: "11" },
-        { id: 3, image: "/DribbleTree3.png", efficient: "31", common: "11" },
-        { id: 4, image: "/DribbleTree4.png", efficient: "41", common: "11" },
-        { id: 5, image: "/DribbleTree5.png", efficient: "51", common: "11" },
-        { id: 6, image: "/DribbleTree6.png", efficient: "61", common: "11" },
-        { id: 7, image: "/DribbleTree7.png", efficient: "71", common: "11" },
-      ],
-    },
-    {
-      id: 3,
-      type: "3 Dribble Combo",
-      moves: [
-        { id: 1, image: "/DribbleTree1.png", efficient: "112", common: "211" },
-        { id: 2, image: "/DribbleTree2.png", efficient: "112", common: "211" },
-        { id: 3, image: "/DribbleTree3.png", efficient: "112", common: "211" },
-        { id: 4, image: "/DribbleTree4.png", efficient: "112", common: "211" },
-        { id: 5, image: "/DribbleTree5.png", efficient: "112", common: "211" },
-        { id: 6, image: "/DribbleTree6.png", efficient: "112", common: "211" },
-        { id: 7, image: "/DribbleTree7.png", efficient: "112", common: "211" },
-      ],
-    },
-  ]
+interface DribbleStats {
+  oneDribbleMCCombo: string[]
+  oneDribbleMCInitialDirection: string[]
+  oneDribbleMCCounterDirection: string[]
+  oneDribbleMCLastType: string[]
+  oneDribbleMECombo: string[]
+  twoDribbleMCCombo: string[]
+  twoDribbleMCInitialDirection: string[]
+  twoDribbleMCCounterDirection: string[]
+  twoDribbleMCLastType: string[]
+  twoDribbleMECombo: string[]
+  threeDribbleMCCombo: string[]
+  threeDribbleMCInitialDirection: string[]
+  threeDribbleMCCounterDirection: string[]
+  threeDribbleMCLastType: string[]
+  threeDribbleMECombo: string[]
+}
 
+interface Move {
+  id: number
+  image: string
+}
+
+interface Section {
+  id: number
+  type: string
+  moves: Move[]
+}
+
+interface Props {
+  dribbleStats: DribbleStats
+}
+
+interface MoveData {
+  meCombo: string
+  mcCombo: string
+  mcInitialDirection: string
+  mcCounterDirection: string
+  mcLastType: string
+}
+
+const sections: Section[] = [
+  {
+    id: 1,
+    type: "1 Dribble",
+    moves: [
+      { id: 1, image: "/DribbleTree1.png" },
+      { id: 2, image: "/DribbleTree2.png" },
+      { id: 3, image: "/DribbleTree3.png" },
+      { id: 4, image: "/DribbleTree4.png" },
+      { id: 5, image: "/DribbleTree5.png" },
+      { id: 6, image: "/DribbleTree6.png" },
+      { id: 7, image: "/DribbleTree7.png" },
+    ],
+  },
+  {
+    id: 2,
+    type: "2 Dribbles",
+    moves: [
+      { id: 1, image: "/DribbleTree1.png" },
+      { id: 2, image: "/DribbleTree2.png" },
+      { id: 3, image: "/DribbleTree3.png" },
+      { id: 4, image: "/DribbleTree4.png" },
+      { id: 5, image: "/DribbleTree5.png" },
+      { id: 6, image: "/DribbleTree6.png" },
+      { id: 7, image: "/DribbleTree7.png" },
+    ],
+  },
+  {
+    id: 3,
+    type: "3 Dribbles",
+    moves: [
+      { id: 1, image: "/DribbleTree1.png" },
+      { id: 2, image: "/DribbleTree2.png" },
+      { id: 3, image: "/DribbleTree3.png" },
+      { id: 4, image: "/DribbleTree4.png" },
+      { id: 5, image: "/DribbleTree5.png" },
+      { id: 6, image: "/DribbleTree6.png" },
+      { id: 7, image: "/DribbleTree7.png" },
+    ],
+  },
+]
+
+const DribbleComboTable = ({ dribbleStats }: Props) => {
+  // Helper function to get the correct data for each section and move
+  const getData = (sectionId: number, moveIndex: number): MoveData => {
+    const prefix = sectionId === 1 ? "oneDribble" : sectionId === 2 ? "twoDribble" : "threeDribble"
+    return {
+      meCombo: dribbleStats[`${prefix}MECombo` as keyof DribbleStats][moveIndex],
+      mcCombo: dribbleStats[`${prefix}MCCombo` as keyof DribbleStats][moveIndex],
+      mcInitialDirection: dribbleStats[`${prefix}MCInitialDirection` as keyof DribbleStats][moveIndex],
+      mcCounterDirection: dribbleStats[`${prefix}MCCounterDirection` as keyof DribbleStats][moveIndex],
+      mcLastType: dribbleStats[`${prefix}MCLastType` as keyof DribbleStats][moveIndex],
+    }
+  }
   return (
     <Card className="mx-auto w-full max-w-screen-2xl overflow-x-auto">
       <CardHeader className="flex-row items-end justify-between">
@@ -56,7 +108,7 @@ const DribbleComboTable = () => {
       </CardHeader>
       <CardContent>
         <div className="mb-4 w-full text-white">
-          {comboData.map((section) => (
+          {sections.map((section) => (
             <div key={section.id}>
               <div className="flex">
                 {/* First column with images */}
@@ -96,18 +148,21 @@ const DribbleComboTable = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {section.moves.map((move) => (
-                        <TableRow key={move.id}>
-                          <TableCell className="h-14 px-1 py-1">
-                            <Image src={move.image} width={48} height={48} alt={move.image} className="mx-auto" />
-                          </TableCell>
-                          <TableCell className="px-4">{""}</TableCell>
-                          <TableCell className="px-4">{""}</TableCell>
-                          <TableCell className="px-4"></TableCell>
-                          <TableCell className="px-4"></TableCell>
-                          <TableCell className="px-4"></TableCell>
-                        </TableRow>
-                      ))}
+                      {section.moves.map((move, index) => {
+                        const data = getData(section.id, index)
+                        return (
+                          <TableRow key={move.id}>
+                            <TableCell className="h-14 px-1 py-1">
+                              <Image src={move.image} width={48} height={48} alt={move.image} className="mx-auto" />
+                            </TableCell>
+                            <TableCell className="px-4">{data.meCombo}</TableCell>
+                            <TableCell className="px-4">{data.mcCombo}</TableCell>
+                            <TableCell className="px-4">{data.mcInitialDirection}</TableCell>
+                            <TableCell className="px-4">{data.mcCounterDirection}</TableCell>
+                            <TableCell className="px-4">{data.mcLastType}</TableCell>
+                          </TableRow>
+                        )
+                      })}
                     </TableBody>
                   </Table>
                 </div>
