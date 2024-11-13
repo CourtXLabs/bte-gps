@@ -1,5 +1,7 @@
+import GoPremiumCard from "@/components/cards/GoPremiumCard"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { cn } from "@/lib/utils"
 import Image from "next/image"
 
 interface DribbleStats {
@@ -33,6 +35,7 @@ interface Section {
 
 interface Props {
   dribbleStats: DribbleStats
+  isPremium: boolean
 }
 
 interface MoveData {
@@ -85,7 +88,7 @@ const sections: Section[] = [
   },
 ]
 
-const DribbleComboTable = ({ dribbleStats }: Props) => {
+const DribbleComboTable = ({ dribbleStats, isPremium }: Props) => {
   // Helper function to get the correct data for each section and move
   const getData = (sectionId: number, moveIndex: number): MoveData => {
     const prefix = sectionId === 1 ? "oneDribble" : sectionId === 2 ? "twoDribble" : "threeDribble"
@@ -97,6 +100,7 @@ const DribbleComboTable = ({ dribbleStats }: Props) => {
       mcLastType: dribbleStats[`${prefix}MCLastType` as keyof DribbleStats][moveIndex],
     }
   }
+
   return (
     <Card className="mx-auto w-full max-w-screen-2xl overflow-x-auto">
       <CardHeader className="flex-row items-end justify-between">
@@ -106,8 +110,9 @@ const DribbleComboTable = ({ dribbleStats }: Props) => {
         </div>
         <p className="font-semibold">MC = Most common</p>
       </CardHeader>
-      <CardContent>
-        <div className="mb-4 w-full text-white">
+      <CardContent className="relative">
+        {!isPremium && <GoPremiumCard className="bg-background" />}
+        <div className={cn("mb-4 w-full text-white", { "pointer-events-none blur": !isPremium })}>
           {sections.map((section) => (
             <div key={section.id}>
               <div className="flex">

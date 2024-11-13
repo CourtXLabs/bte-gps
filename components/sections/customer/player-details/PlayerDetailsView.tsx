@@ -1,5 +1,5 @@
 import { MoveIds, idToUid, moveUids } from "@/constants/misc"
-import { DEFAULT_GAMES_COUNT, DEFAULT_SEASON } from "@/global-constants"
+import { DEFAULT_GAMES_COUNT, DEFAULT_SEASON, dribbleStatsmockData } from "@/global-constants"
 import { getIsAdmin, getIsPremium } from "@/lib/auth"
 import { createClient } from "@/lib/supabase/server"
 import {
@@ -195,7 +195,11 @@ const getAllPlayers = async () => {
   }
 }
 
-const getDribbleStats = async (id: string, games: gameLimitOptions, season: string) => {
+const getDribbleStats = async (id: string, games: gameLimitOptions, season: string, isPremium: boolean) => {
+  if (!isPremium) {
+    return dribbleStatsmockData
+  }
+
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
@@ -324,7 +328,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
       getComboPointsRatio(id, games, season),
       getDribblesCounts(id, games, season, isPremium),
       getSeasons(id),
-      getDribbleStats(id, games, season),
+      getDribbleStats(id, games, season, isPremium),
     ])
 
   const isAdmin = await getIsAdmin()
@@ -363,7 +367,7 @@ export default async function PlayerDetailsView({ id, searchParams }: Props) {
         </SequencesGraphs>
       </div>
 
-      <DribbleComboTable dribbleStats={dribbleStats} />
+      <DribbleComboTable dribbleStats={dribbleStats} isPremium={isPremium} />
     </div>
   )
 }
