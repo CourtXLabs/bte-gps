@@ -28,7 +28,7 @@ const items = [
 
 export default function FansKeyFeaturesSection() {
   return (
-    <div className="mt-10 lg:mt-24">
+    <div className="mx-auto my-10 max-w-screen-xl px-6 lg:my-24">
       <h2 className="text-center text-4xl font-bold tracking-tighter lg:text-5xl">Our Key Features</h2>
       <h3 className="mx-auto pt-6 text-center text-lg opacity-70 lg:pt-8">
         From performance analysis to brand engagement, our platform is built for growth.

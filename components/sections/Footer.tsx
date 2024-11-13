@@ -5,7 +5,7 @@ import { buttonVariants } from "../ui/button"
 
 export default function Footer() {
   return (
-    <div className="w-full bg-background">
+    <div className="w-full bg-[#141010]">
       <div className="mx-auto max-w-screen-2xl">
         <div className="flex">
           <div className="hidden lg:block">
@@ -60,9 +60,6 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <p className="py-10 text-center text-6xl font-extrabold uppercase sm:text-7xl lg:py-12 lg:text-8xl">
-          BTE Analytics
-        </p>
       </div>
     </div>
   )

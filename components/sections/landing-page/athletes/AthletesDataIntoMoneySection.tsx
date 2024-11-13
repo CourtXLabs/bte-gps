@@ -2,7 +2,7 @@ import Image from "next/image"
 
 export default function AthletesDataIntoMoneySection() {
   return (
-    <div className="mt-12 grid h-[760px] grid-cols-3 grid-rows-3 gap-2">
+    <div className="mx-auto mt-12 grid h-[760px] max-w-screen-xl grid-cols-3 grid-rows-3 gap-2 px-6 2xl:px-0">
       <div className="relative col-span-1 row-span-3">
         <Image className="absolute object-fill" fill src="/landing-page/james-left.png" alt="James Left" />
         <div className="relative z-10 flex h-full flex-col justify-between p-8">
