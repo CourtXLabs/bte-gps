@@ -42,7 +42,7 @@ export default function LoginPage() {
 
   if (!code) {
     return (
-      <div className="mx-auto flex w-full max-w-md flex-col items-center space-y-5 lg:w-[30%] lg:max-w-none lg:p-14 lg:pl-0 lg:pr-0 xl:pl-14">
+      <div className="mx-auto w-full max-w-md space-y-5 lg:max-w-md lg:p-14 lg:pl-0 lg:pr-0">
         <div className="mx-auto w-max">
           <Logo />
         </div>

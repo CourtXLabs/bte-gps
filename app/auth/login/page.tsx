@@ -40,7 +40,7 @@ export default function LoginPage() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mx-auto w-full max-w-md space-y-5 lg:w-[30%] lg:max-w-none lg:p-14 lg:pl-0 lg:pr-0 xl:pl-14"
+        className="mx-auto w-full max-w-md space-y-5 lg:max-w-md lg:p-14 lg:pl-0 lg:pr-0"
       >
         <div className="mx-auto w-max">
           <Logo />
