@@ -8,9 +8,9 @@ export default function SignupLayout({ children }: Props) {
   return (
     <>
       {children}
-      <div className="relative hidden w-[735px] lg:block">
+      <div className="relative hidden w-[820px] lg:block">
         <Image
-          src="/auth/signup.png"
+          src="/auth/auth-image.png"
           alt="Auth Image"
           layout="fill"
           objectFit="cover"

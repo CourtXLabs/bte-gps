@@ -9,9 +9,9 @@ export default function ResetPasswordLayout({ children }: Props) {
   return (
     <>
       <Suspense>{children}</Suspense>
-      <div className="relative hidden w-[735px] lg:block">
+      <div className="relative hidden w-[820px] lg:block">
         <Image
-          src="/auth/reset-password.png"
+          src="/auth/auth-image.png"
           alt="Auth Image"
           layout="fill"
           objectFit="cover"

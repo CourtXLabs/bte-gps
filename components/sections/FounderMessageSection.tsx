@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-export default function FansFounderMessageSection() {
+export default function FounderMessageSection() {
   return (
     <div className="relative pb-8 pt-10 lg:pb-20 lg:pt-24">
       <Image fill className="absolute object-cover" src="/founder-message-bg.png" alt="Founder Message" />
