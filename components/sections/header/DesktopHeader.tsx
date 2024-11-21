@@ -20,7 +20,19 @@ export default function DesktopHeader({ isAdmin, isLoggedIn, userEmail, userFull
           Beta
         </span>
       </div>
-      <div className="flex items-center gap-2 xl:gap-9">
+      <div className="flex items-center pl-10 xl:gap-4 2xl:gap-9">
+        <Link href="/fans" className={cn(buttonVariants({ variant: "link" }), "text-xl font-normal text-foreground")}>
+          Fans
+        </Link>
+        <Link
+          href="/athletes"
+          className={cn(buttonVariants({ variant: "link" }), "text-xl font-normal text-foreground")}
+        >
+          Athletes
+        </Link>
+        <Link href="/brands" className={cn(buttonVariants({ variant: "link" }), "text-xl font-normal text-foreground")}>
+          Brands
+        </Link>
         <Link
           href="/players"
           className={cn(buttonVariants({ variant: "link" }), "text-xl font-normal text-foreground")}

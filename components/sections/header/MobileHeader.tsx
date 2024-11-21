@@ -57,6 +57,33 @@ export default function MobileHeader({ isAdmin, isLoggedIn, userEmail, userFullN
         <ul className="flex flex-col items-start gap-8 pt-12">
           <li className="list-inside list-disc">
             <Link
+              href="/fans"
+              className={cn(buttonVariants({ variant: "link" }), "px-0 text-xl font-normal text-foreground")}
+              onClick={handleMenuToggle}
+            >
+              Fans
+            </Link>
+          </li>
+          <li className="list-inside list-disc">
+            <Link
+              href="/athletes"
+              className={cn(buttonVariants({ variant: "link" }), "px-0 text-xl font-normal text-foreground")}
+              onClick={handleMenuToggle}
+            >
+              Athletes
+            </Link>
+          </li>
+          <li className="list-inside list-disc">
+            <Link
+              href="/brands"
+              className={cn(buttonVariants({ variant: "link" }), "px-0 text-xl font-normal text-foreground")}
+              onClick={handleMenuToggle}
+            >
+              Brands
+            </Link>
+          </li>
+          <li className="list-inside list-disc">
+            <Link
               href="/players"
               className={cn(buttonVariants({ variant: "link" }), "px-0 text-xl font-normal text-foreground")}
               onClick={handleMenuToggle}
