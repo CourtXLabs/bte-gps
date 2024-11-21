@@ -1,4 +1,3 @@
-import FounderMessageSection from "@/components/sections/FounderMessageSection"
 import FansHeroSection from "@/components/sections/landing-page/fans/FansHeroSection"
 import FansHowItWorksSection from "@/components/sections/landing-page/fans/FansHowItWorksSection"
 import FansKeyFeaturesSection from "@/components/sections/landing-page/fans/FansKeyFeaturesSection"
@@ -11,7 +10,7 @@ export default function FansPage() {
       <FansValuePropositionSection />
       <FansHowItWorksSection />
       <FansKeyFeaturesSection />
-      <FounderMessageSection />
+      {/* <FounderMessageSection /> */}
     </main>
   )
 }

@@ -3,28 +3,30 @@ import { TimelineItem as TimelineItemType } from "@/types"
 
 const timelineItems = [
   {
-    title: "Collect & Analyze",
-    description: "We gather in-depth performance data from athletes.",
+    title: "Create Your Brand Profile",
+    description: "Join BTE Analytics to access a network of athletes ready for partnerships.",
     type: "secondary",
   },
   {
-    title: "Monetize",
-    description: "Athletes can monetize their performance data through brand deals and fan subscriptions.",
+    title: "Connect with Top Athletes",
+    description: "Find the perfect athletes whose audience aligns with your brand values.",
     type: "primary",
   },
   {
-    title: "Engage ",
-    description: "Brands access performance data to create targeted sponsorships.",
+    title: "Leverage Data-Driven Campaigns",
+    description:
+      "Use nuanced, proprietary, and exclusive data to craft sponsorships that resonate with fans and maximize brand exposure.",
     type: "secondary",
   },
   {
-    title: "Grow",
-    description: "Both athletes and brands grow their exposure and revenue.",
+    title: "Analyze and Optimize",
+    description:
+      "Join us in empowering athletes to bring advanced sports statistics to life for communities, fostering engagement and education.",
     type: "secondary",
   },
 ] as TimelineItemType[]
 
-export default function FansHowItWorksSection() {
+export default function BrandsHowItWorksSection() {
   return (
     <div className="mt-10 bg-black py-20 lg:mt-24 ">
       <div className="mx-auto max-w-screen-xl px-6">
