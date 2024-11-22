@@ -14,8 +14,8 @@ export default function PremiumHeroSection() {
         Choose Your <span className="text-primary">Game</span>-Changer
       </h1>
       <p className="text-lg opacity-70">
-        Whether you're a casual fan, a dedicated enthusiast, or a professional looking to unlock the full potential of
-        athlete data, our plans are tailored to elevate your experience and connection to the game.
+        Whether you&apos;re a casual fan, a dedicated enthusiast, or a professional looking to unlock the full potential
+        of athlete data, our plans are tailored to elevate your experience and connection to the game.
       </p>
       <div className="mx-auto flex items-start justify-center gap-4 md:gap-6">
         <span>Pay Monthly</span>

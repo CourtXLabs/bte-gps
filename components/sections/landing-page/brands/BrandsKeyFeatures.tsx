@@ -15,8 +15,8 @@ export default function BrandsKeyFeatures() {
           <GradientBorderCard wrapperClassname="col-span-12 lg:col-span-5" className="space-y-6">
             <h3 className="text-3xl">Advanced performance metrics</h3>
             <p className="opacity-70">
-              Be directly connected to an athlete's advanced performance metrics and dynamic highlights, presented in an
-              innovative way that resonates with the new social media generation.
+              Be directly connected to an athlete&apos;s advanced performance metrics and dynamic highlights, presented
+              in an innovative way that resonates with the new social media generation.
             </p>
           </GradientBorderCard>
           <GradientBorderCard wrapperClassname="col-span-12 lg:col-span-7" className="space-y-6">
