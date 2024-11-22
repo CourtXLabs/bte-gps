@@ -30,8 +30,8 @@ export default function PricingCard({
         "pointer-events-none opacity-30": isDisabled,
       })}
     >
-      <h3 className="pb-2 text-2xl font-bold">{title}</h3>
-      <p className="pb-5">{subtitle}</p>
+      <h3 className="pb-2 text-2xl font-bold  2xl:h-[4.5rem]">{title}</h3>
+      <p className="pb-5 lg:h-[4.25rem] 2xl:h-[5.75rem]">{subtitle}</p>
       <p className="pb-14 font-light">
         <span className="text-4xl font-semibold">${isYearly ? yearlyPrice : monthlyPrice}</span> /{" "}
         {isYearly ? "Year" : "Month"}
