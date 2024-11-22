@@ -1,8 +1,8 @@
-import { getIsPremium, getUserEmail } from "@/lib/auth"
-import Link from "next/link"
+import PremiumHeroSection from "@/components/sections/premium/PremiumHeroSection"
+import PricingSection from "@/components/sections/premium/PricingSection"
+import { getIsPremium } from "@/lib/auth"
 
 export default async function PremiumPage() {
-  const email = await getUserEmail()
   const isPremium = await getIsPremium()
 
   if (isPremium) {
@@ -10,9 +10,9 @@ export default async function PremiumPage() {
   }
 
   return (
-    <div>
-      Enjoy premium benefits!
-      <Link href={`https://buy.stripe.com/test_eVa3f9cf41iiciQaEE?prefilled_email=${email}`}>Upgrade to premium</Link>
-    </div>
+    <main className="mx-auto max-w-screen-2xl px-6 pb-20 2xl:px-0">
+      <PremiumHeroSection />
+      <PricingSection />
+    </main>
   )
 }
