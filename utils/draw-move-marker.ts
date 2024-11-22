@@ -27,7 +27,7 @@ const drawCircle = ({
     .attr("r", radius)
     .attr("fill", fill)
     .attr("stroke", stroke)
-    .attr("stroke-width", strokeWidth)
+    .attr("strokeWidth", strokeWidth)
     .attr("id", `marker-${uid}`)
     .attr("class", PERMANENT_MARKER_CLASS)
 }
@@ -59,7 +59,7 @@ const drawSquare = ({
     .attr("height", size)
     .attr("fill", fill)
     .attr("stroke", stroke)
-    .attr("stroke-width", strokeWidth)
+    .attr("strokeWidth", strokeWidth)
     .attr("id", `marker-${uid}`)
     .attr("class", PERMANENT_MARKER_CLASS)
 }
@@ -121,7 +121,7 @@ export const drawLineBetweenMarkers = ({
       .attr("x2", toCoords.x)
       .attr("y2", toCoords.y)
       .attr("stroke", "black")
-      .attr("stroke-width", 2)
+      .attr("strokeWidth", 2)
       .attr("class", PERMANENT_MARKER_CLASS)
   }
 }
@@ -140,7 +140,7 @@ export const drawTempMarker = ({ x, y, svgElement }: { x: number; y: number; svg
     .attr("x2", x + lineLength)
     .attr("y2", y + lineLength)
     .attr("stroke", "black")
-    .attr("stroke-width", 2)
+    .attr("strokeWidth", 2)
 
   markerGroup
     .append("line")
@@ -149,7 +149,7 @@ export const drawTempMarker = ({ x, y, svgElement }: { x: number; y: number; svg
     .attr("x2", x - lineLength)
     .attr("y2", y + lineLength)
     .attr("stroke", "black")
-    .attr("stroke-width", 2)
+    .attr("strokeWidth", 2)
 }
 
 export const removeMarker = ({ svgElement, selector }: { svgElement: SVGSVGElement; selector: string }) => {

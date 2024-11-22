@@ -73,7 +73,7 @@ export default function PointsComboBarChart({ data }: Props) {
       .attr("fill", "none")
       .attr("stroke", "red")
       .attr("stroke-miterlimit", 1)
-      .attr("stroke-width", 3)
+      .attr("strokeWidth", 3)
       .attr("d", line)
 
     // Animation

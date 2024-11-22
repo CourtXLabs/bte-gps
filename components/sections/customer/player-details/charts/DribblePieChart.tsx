@@ -67,7 +67,7 @@ export default function DribblePieChart({ data }: Props) {
       .attr("d", arc as any)
       .attr("fill", (d, i) => color(i as any))
       .attr("stroke", "#1f1e1e")
-      .attr("stroke-width", 2)
+      .attr("strokeWidth", 2)
 
     // Define the label arc for positioning labels inside the pie slices
     const labelArc = d3

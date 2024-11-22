@@ -28,7 +28,7 @@ export default function EnterprisePricingCard({ title, subtitle, pricing, ctaTex
         <Link
           className={cn(
             buttonVariants({ variant: "outline", size: "lg" }),
-            "mt-auto rounded-sm border-primary text-base text-primary hover:bg-primary hover:text-primary-foreground",
+            "mt-auto hidden rounded-sm border-primary text-base font-normal text-primary hover:bg-primary hover:text-primary-foreground lg:flex",
           )}
           href={link}
         >
@@ -37,7 +37,7 @@ export default function EnterprisePricingCard({ title, subtitle, pricing, ctaTex
       </div>
       <ul className="space-y-3 pb-10 pl-0">
         {features.map((feature) => (
-          <li className="flex items-center gap-4 py-1.5">
+          <li className="flex items-center gap-4 py-1.5" key={feature}>
             <div className="flex h-8 w-8 min-w-8 items-center justify-center rounded-full bg-primary text-black">
               <CheckIcon className="w-3 min-w-3" />
             </div>
@@ -45,6 +45,15 @@ export default function EnterprisePricingCard({ title, subtitle, pricing, ctaTex
           </li>
         ))}
       </ul>
+      <Link
+        className={cn(
+          buttonVariants({ variant: "outline", size: "lg" }),
+          "mt-auto flex rounded-sm border-primary text-base font-normal text-primary hover:bg-primary hover:text-primary-foreground lg:hidden",
+        )}
+        href={link}
+      >
+        {ctaText}
+      </Link>
     </div>
   )
 }
