@@ -2,18 +2,19 @@ import PremiumHeroSection from "@/components/sections/premium/PremiumHeroSection
 import PricingSection from "@/components/sections/premium/PricingSection"
 import { getIsPremium, getUserEmail } from "@/lib/auth"
 
-export default async function PremiumPage() {
+const getCurrentPlan = async () => {
   const isPremium = await getIsPremium()
-  const email = await getUserEmail()
+  return isPremium ? 2 : 1
+}
 
-  if (isPremium) {
-    return <div>Thank you for being a premium user!</div>
-  }
+export default async function PremiumPage() {
+  const currentPlanId = await getCurrentPlan()
+  const email = await getUserEmail()
 
   return (
     <main className="mx-auto max-w-screen-2xl px-6 pb-20 2xl:px-0">
       <PremiumHeroSection />
-      <PricingSection email={email!} />
+      <PricingSection email={email!} currentPlanId={currentPlanId} />
     </main>
   )
 }

@@ -12,6 +12,7 @@ interface Props {
   link: string
   isDisabled?: boolean
   isYearly?: boolean
+  isActive?: boolean
 }
 
 export default function PricingCard({
@@ -23,6 +24,7 @@ export default function PricingCard({
   features,
   link,
   isDisabled,
+  isActive,
 }: Props) {
   return (
     <div
@@ -48,11 +50,15 @@ export default function PricingCard({
       </ul>
       <div className="mt-auto w-full">
         {isDisabled && <p className="pb-3 text-center">Coming soon...</p>}
+        {isActive && <p className="pb-3 text-center text-lg font-medium text-primary">Currently active</p>}
         <Link
           className={cn(
             buttonVariants({ variant: "outline", size: "lg" }),
             "w-full rounded-sm border-primary text-base font-normal text-primary hover:bg-primary hover:text-primary-foreground",
+            { "pointer-events-none opacity-30": isActive },
           )}
+          rel="noreferer"
+          target="_blank"
           href={link}
         >
           Get Started Now

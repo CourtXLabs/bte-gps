@@ -41,7 +41,7 @@ export default function MobileHeader({ isAdmin, isLoggedIn, userEmail, userFullN
 
   return (
     <>
-      <div className="mx-auto flex h-[3.375rem] max-w-screen-2xl items-center justify-between gap-2 lg:hidden xl:gap-9">
+      <div className="mx-auto flex h-[3.375rem] max-w-screen-2xl items-center justify-between gap-2 xl:hidden">
         <div className="relative">
           <Logo width={150} />
           <span className="absolute -right-12 bottom-0 rounded-2xl bg-primary px-2 py-1 text-sm leading-none text-black">
@@ -89,6 +89,15 @@ export default function MobileHeader({ isAdmin, isLoggedIn, userEmail, userFullN
               onClick={handleMenuToggle}
             >
               Players
+            </Link>
+          </li>
+          <li className="list-inside list-disc">
+            <Link
+              href="/premium"
+              className={cn(buttonVariants({ variant: "link" }), "px-0 text-xl font-normal text-foreground")}
+              onClick={handleMenuToggle}
+            >
+              Pricing
             </Link>
           </li>
           <li className="list-inside list-disc">

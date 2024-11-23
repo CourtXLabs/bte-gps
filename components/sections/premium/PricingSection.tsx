@@ -1,5 +1,6 @@
 "use client"
 
+import { STRIPE_START_PLAN_MONTHLY_LINK, STRIPE_START_PLAN_YEARLY_LINK } from "@/constants/pricing"
 import usePricingPageStore from "@/stores/pricingPageStore"
 import EnterprisePricingCard from "./EnterprisePricingCard"
 import PricingCard from "./PricingCard"
@@ -16,8 +17,8 @@ const pricingCardsData = [
       "Limited number of game highlights and basic game statistics.",
       "Viewing access to athlete fan engagement scores.",
     ],
-    monthlyPaymentLink: "https://buy.stripe.com/test_eVa3f9cf41iiciQaEE",
-    yearlyPaymentLink: "https://buy.stripe.com/test_eVa3f9cf41iiciQaEE",
+    monthlyPaymentLink: "http://localhost:3000/auth/signup",
+    yearlyPaymentLink: "http://localhost:3000/auth/signup",
     isDisabled: false,
   },
   {
@@ -32,8 +33,8 @@ const pricingCardsData = [
       "In-depth highlight breakdowns for up to 5 games per month",
       "Basic level fan rewards and exclusive updates from selected athletes",
     ],
-    monthlyPaymentLink: "https://buy.stripe.com/test_eVa3f9cf41iiciQaEE",
-    yearlyPaymentLink: "https://buy.stripe.com/test_eVa3f9cf41iiciQaEE",
+    monthlyPaymentLink: STRIPE_START_PLAN_MONTHLY_LINK,
+    yearlyPaymentLink: STRIPE_START_PLAN_YEARLY_LINK,
     isDisabled: false,
   },
   {
@@ -50,8 +51,8 @@ const pricingCardsData = [
       "Access to fan voting on certain aspects of athlete performance",
       "Moderate level fan rewards and brand offers",
     ],
-    monthlyPaymentLink: "https://buy.stripe.com/test_eVa3f9cf41iiciQaEE",
-    yearlyPaymentLink: "https://buy.stripe.com/test_eVa3f9cf41iiciQaEE",
+    monthlyPaymentLink: "#",
+    yearlyPaymentLink: "#",
     isDisabled: true,
   },
   {
@@ -68,8 +69,8 @@ const pricingCardsData = [
       "Enhanced rewards and brand-exclusive offers for fans",
       "Dedicated customer support",
     ],
-    monthlyPaymentLink: "https://buy.stripe.com/test_eVa3f9cf41iiciQaEE",
-    yearlyPaymentLink: "https://buy.stripe.com/test_eVa3f9cf41iiciQaEE",
+    monthlyPaymentLink: "#",
+    yearlyPaymentLink: "#",
     isDisabled: true,
   },
 ]
@@ -92,9 +93,10 @@ const enterprisePricingData = {
 
 interface Props {
   email: string
+  currentPlanId: number
 }
 
-export default function PricingSection({ email }: Props) {
+export default function PricingSection({ email, currentPlanId }: Props) {
   const { isYearly } = usePricingPageStore()
 
   return (
@@ -104,7 +106,8 @@ export default function PricingSection({ email }: Props) {
           <PricingCard
             key={pricingCardData.id}
             {...pricingCardData}
-            link={`${isYearly ? pricingCardData.yearlyPaymentLink : pricingCardData.monthlyPaymentLink}?prefilled_email=${email}`}
+            link={`${isYearly ? pricingCardData.yearlyPaymentLink : pricingCardData.monthlyPaymentLink}?${email && `prefilled_email=${email}`}`}
+            isActive={currentPlanId === pricingCardData.id}
             isYearly={isYearly}
           />
         ))}

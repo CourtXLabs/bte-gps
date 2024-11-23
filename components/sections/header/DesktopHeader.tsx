@@ -13,14 +13,14 @@ interface Props {
 
 export default function DesktopHeader({ isAdmin, isLoggedIn, userEmail, userFullName }: Props) {
   return (
-    <div className="mx-auto hidden max-w-screen-2xl items-center justify-between gap-2 lg:flex xl:gap-9">
+    <div className="mx-auto hidden max-w-screen-2xl items-center justify-between gap-2 xl:flex">
       <div className="relative">
         <Logo />
         <span className="absolute -right-12 bottom-0 rounded-2xl bg-primary px-2 py-1 text-sm leading-none text-black">
           Beta
         </span>
       </div>
-      <div className="flex items-center pl-10 xl:gap-4 2xl:gap-9">
+      <div className="flex items-center pl-10 xl:gap-2 2xl:gap-9">
         <Link href="/fans" className={cn(buttonVariants({ variant: "link" }), "text-xl font-normal text-foreground")}>
           Fans
         </Link>
@@ -38,6 +38,12 @@ export default function DesktopHeader({ isAdmin, isLoggedIn, userEmail, userFull
           className={cn(buttonVariants({ variant: "link" }), "text-xl font-normal text-foreground")}
         >
           Players
+        </Link>
+        <Link
+          href="/premium"
+          className={cn(buttonVariants({ variant: "link" }), "text-xl font-normal text-foreground")}
+        >
+          Pricing
         </Link>
         <Link
           href="/about-us"
