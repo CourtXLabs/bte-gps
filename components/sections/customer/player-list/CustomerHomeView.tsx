@@ -24,7 +24,11 @@ const getData = async ({ page, pageSize, team, player, player_level }: Props) =>
   const from = (parseInt(page) - 1) * parseInt(pageSize)
   const to = from + parseInt(pageSize) - 1
 
-  let query = supabase.from("player").select("id, name, jersey, player_level, team_id (name)", { count: "exact" })
+  let query = supabase
+    .from("player")
+    .select("id, name, jersey, player_level, team_id (name)", { count: "exact" })
+    .order("player_level")
+    .order("name")
 
   if (typeof team === "string" && team.trim() !== "") {
     query = query.eq("team_id", team)
