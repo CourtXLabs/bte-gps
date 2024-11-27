@@ -13,5 +13,3 @@ export default function AthletesPage() {
     </main>
   )
 }
-
-// mx-auto max-w-screen-xl px-6 2xl:px-0 py-12 lg:py-20
