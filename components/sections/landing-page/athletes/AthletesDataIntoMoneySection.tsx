@@ -32,8 +32,8 @@ export default function AthletesDataIntoMoneySection() {
         <div className="relative z-10 flex h-full flex-col justify-between px-5 py-8">
           <h3 className="text-3xl font-semibold tracking-tight">BTE Integration</h3>
           <p className="text-[15px]">
-            We enhance access for brands and fans, offering a rich data experience that's interactive and profitable for
-            all.
+            We enhance access for brands and fans, offering a rich data experience that&apos;s interactive and
+            profitable for all.
           </p>
         </div>
       </div>
@@ -48,8 +48,8 @@ export default function AthletesDataIntoMoneySection() {
         <div className="relative z-10 flex h-full flex-col justify-between px-5 py-8">
           <h3 className="text-3xl font-semibold tracking-tight">Market Reach</h3>
           <p className="text-[15px]">
-            We enhance access for brands and fans, offering a rich data experience that's interactive and profitable for
-            all.
+            We enhance access for brands and fans, offering a rich data experience that&apos;s interactive and
+            profitable for all.
           </p>
         </div>
       </div>
