@@ -115,6 +115,15 @@ export default function MobileHeader({ isAdmin, isLoggedIn, userEmail, userFullN
           </li>
           <li className="list-inside list-disc">
             <Link
+              href="/contact-us"
+              className={cn(buttonVariants({ variant: "link" }), "px-0 text-xl font-normal text-foreground")}
+              onClick={handleMenuToggle}
+            >
+              Contact Us
+            </Link>
+          </li>
+          <li className="list-inside list-disc">
+            <Link
               href="/glossary"
               className={cn(buttonVariants({ variant: "link" }), "px-0 text-xl font-normal text-foreground")}
               onClick={handleMenuToggle}
