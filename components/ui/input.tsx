@@ -2,6 +2,9 @@ import { cn } from "@/lib/utils"
 import * as React from "react"
 
 const sizes = {
+  lg: {
+    input: "h-14 p-4 text-base",
+  },
   default: {
     input: "h-11 p-4 text-sm",
   },

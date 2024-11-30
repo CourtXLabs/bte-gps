@@ -7,6 +7,11 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 const sizes = {
+  lg: {
+    trigger: "h-14 p-4 text-base",
+    icon: "h-5 w-5",
+    iconContainer: "min-w-5",
+  },
   default: {
     trigger: "h-11 p-4",
     icon: "h-5 w-5",

@@ -1,5 +1,6 @@
 import { JWTPayload } from "jose"
 import { z } from "zod"
+import { userTypes } from "./constants/contact-us"
 import { MoveIds } from "./constants/misc"
 
 export interface Coordinates {
@@ -168,6 +169,13 @@ export const personalInfoFormSchema = z.object({
 
 export const changeEmailAddressFormSchema = z.object({
   email: z.string().email(),
+})
+
+export const contactUsFormSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  type: z.enum(userTypes),
+  message: z.string().min(2),
 })
 
 const errorMessage = "This field is required"

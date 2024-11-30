@@ -97,6 +97,11 @@ export const getUserData = async () => {
   return data?.session?.user
 }
 
+export const getUserFullName = async () => {
+  const userData = await getUserData()
+  return userData?.user_metadata?.full_name || userData?.user_metadata?.name
+}
+
 export async function getUserEmail() {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)

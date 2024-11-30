@@ -1,8 +1,14 @@
 "use server"
 
+import { userTypes } from "@/constants/contact-us"
 import { getUserId } from "@/lib/auth"
 import { createClient } from "@/lib/supabase/actionts"
-import { changeEmailAddressFormSchema, personalInfoFormSchema, updatePasswordFormSchema } from "@/types"
+import {
+  changeEmailAddressFormSchema,
+  contactUsFormSchema,
+  personalInfoFormSchema,
+  updatePasswordFormSchema,
+} from "@/types"
 import { createClient as createAdminClient } from "@supabase/supabase-js"
 import { cookies } from "next/headers"
 import { z } from "zod"
@@ -103,6 +109,31 @@ export async function deleteAccount() {
 
   const { error } = await supabaseAdmin.auth.admin.deleteUser(currentUserId)
   await supabase.auth.signOut()
+
+  if (error) {
+    return { data: null, error: error.message }
+  }
+
+  return { data: null, error: null }
+}
+
+export async function submitContactUsForm(values: z.infer<typeof contactUsFormSchema>) {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+  const userId = await getUserId()
+
+  const { email, type, message, name } = values
+
+  if (
+    typeof email !== "string" ||
+    typeof message !== "string" ||
+    typeof name !== "string" ||
+    !userTypes.includes(type)
+  ) {
+    return { data: null, error: "Invalid input" }
+  }
+
+  const { error } = await supabase.from("contact_us").insert({ ...values, user_id: userId })
 
   if (error) {
     return { data: null, error: error.message }
