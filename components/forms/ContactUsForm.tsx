@@ -4,6 +4,7 @@ import { submitContactUsForm } from "@/app/(main)/account/settings/actions"
 import { userTypes } from "@/constants/contact-us"
 import useBoolean from "@/hooks/useBoolean"
 import { contactUsFormSchema } from "@/types"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "../ui/button"
@@ -22,6 +23,7 @@ export default function ContactUsForm({ email, name }: Props) {
   const isLoading = useBoolean()
   const { toast } = useToast()
   const form = useForm<z.infer<typeof contactUsFormSchema>>({
+    resolver: zodResolver(contactUsFormSchema),
     defaultValues: {
       email: email || "",
       name: name || "",
