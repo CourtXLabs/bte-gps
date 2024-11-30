@@ -1,3 +1,6 @@
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import Link from "next/link"
 import AthletesHowItWorksCard from "./AthletesHowItWorksCard"
 
 const cardsData = [
@@ -23,9 +26,9 @@ const cardsData = [
 
 export default function AthletesHowItWorksSection() {
   return (
-    <div className="mx-auto mt-10 max-w-screen-xl px-6 lg:mt-24 2xl:px-0">
+    <div className="mx-auto mt-10 flex max-w-screen-xl flex-col items-center px-6 lg:mt-24 2xl:px-0">
       <h2 className="text-center text-5xl font-bold tracking-tighter">How It Works</h2>
-      <div className="flex w-full flex-col gap-4 pt-6 lg:flex-row">
+      <div className="flex w-full max-w-lg flex-col items-center gap-4 pt-10 lg:max-w-none lg:flex-row lg:pt-20">
         {cardsData.map((card) => (
           <AthletesHowItWorksCard
             key={card.title}
@@ -35,6 +38,9 @@ export default function AthletesHowItWorksSection() {
           />
         ))}
       </div>
+      <Link href="#" className={cn(buttonVariants({ size: "xl" }), "w-auto bg-white text-center hover:bg-[#dadada]")}>
+        Apply to be an athlete
+      </Link>
     </div>
   )
 }

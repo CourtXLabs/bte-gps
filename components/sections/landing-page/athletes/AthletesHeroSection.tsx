@@ -9,11 +9,11 @@ export default function AthletesHeroSection() {
       <div className="mx-auto flex max-w-screen-xl flex-col items-start justify-between gap-14  px-6 pb-20 pt-12 lg:flex-row lg:pt-20 2xl:px-0">
         <div className="order-2 w-full space-y-8 lg:order-none lg:w-1/2">
           <h1 className="text-4xl font-semibold lg:text-5xl">
-            Empowering Athletes to <span className="italic text-primary">Monetize</span> Their Performance Data
+            Empowering Athletes to <span className="italic text-primary">Turn Game Data</span> into Real Rewards
           </h1>
           <p>
-            Revolutionizing how athletes interact with brands, fans, and their data, turning stats into valuable
-            opportunities and revenue.
+            At BTE Analytics, we believe athletes should reap the rewards of their hard work. Discover how you can
+            transform your game data into a source of income and opportunities.
           </p>
           <div>
             <p className="font-bold">Join the wait list to:</p>
@@ -37,7 +37,7 @@ export default function AthletesHeroSection() {
               Apply to be an athlete
             </Link>
             <Link href="#" className={cn(buttonVariants({ size: "xl", variant: "outline" }), "hover:bg-transparent ")}>
-              Learn More
+              Learn More about Data Monetization
             </Link>
           </div>
         </div>
