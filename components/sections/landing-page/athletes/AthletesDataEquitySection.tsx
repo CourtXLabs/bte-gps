@@ -5,8 +5,7 @@ const dataEquityItems = [
   {
     number: "01",
     title: "Innovative Analytics Platform",
-    description:
-      "Designed by athletes, for athletes. BTE Analytics empowers you to control and monetize your data effectively.",
+    description: "1st of its kind player performance monetization platform designed by athletes for athletes",
   },
   {
     number: "02",
@@ -24,8 +23,8 @@ const dataEquityItems = [
 
 export default function AthletesDataEquitySection() {
   return (
-    <div className="mx-auto mb-10 mt-10 w-full max-w-screen-xl rounded-3xl  bg-primary px-6 text-primary-foreground lg:mb-24 lg:mt-24 2xl:px-0">
-      <div className="p-8 lg:p-16">
+    <div className="mx-auto mb-20 mt-20 w-full max-w-screen-xl px-6 text-primary-foreground lg:mb-24 lg:mt-24 2xl:px-0">
+      <div className="rounded-3xl bg-primary p-8 lg:p-16">
         <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
           <div className="space-y-4">
             <h2 className="text-4xl font-medium">True Data Equity for Athletes</h2>

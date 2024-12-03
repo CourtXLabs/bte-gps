@@ -1,6 +1,4 @@
-import { buttonVariants } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import Link from "next/link"
+import LandingPageWhiteButton from "@/components/buttons/LandingPageWhiteButton"
 import AthletesHowItWorksCard from "./AthletesHowItWorksCard"
 
 const cardsData = [
@@ -26,21 +24,21 @@ const cardsData = [
 
 export default function AthletesHowItWorksSection() {
   return (
-    <div className="mx-auto mt-10 flex max-w-screen-xl flex-col items-center px-6 lg:mt-24 2xl:px-0">
-      <h2 className="text-center text-5xl font-bold tracking-tighter">How It Works</h2>
-      <div className="flex w-full max-w-lg flex-col items-center gap-4 pt-10 lg:max-w-none lg:flex-row lg:pt-20">
-        {cardsData.map((card) => (
-          <AthletesHowItWorksCard
-            key={card.title}
-            title={card.title}
-            description={card.description}
-            image={card.image}
-          />
-        ))}
+    <div className="bg-black py-20 lg:py-24">
+      <div className="mx-auto flex max-w-screen-xl flex-col items-center px-6 2xl:px-0">
+        <h2 className="text-center text-5xl font-bold tracking-tighter">How It Works</h2>
+        <div className="flex w-full max-w-lg flex-col items-center gap-4 pt-10 lg:max-w-none lg:flex-row lg:pt-20">
+          {cardsData.map((card) => (
+            <AthletesHowItWorksCard
+              key={card.title}
+              title={card.title}
+              description={card.description}
+              image={card.image}
+            />
+          ))}
+        </div>
+        <LandingPageWhiteButton href="#">Join as an athlete</LandingPageWhiteButton>
       </div>
-      <Link href="#" className={cn(buttonVariants({ size: "xl" }), "w-auto bg-white text-center hover:bg-[#dadada]")}>
-        Apply to be an athlete
-      </Link>
     </div>
   )
 }
