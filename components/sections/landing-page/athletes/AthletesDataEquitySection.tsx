@@ -30,7 +30,7 @@ export default function AthletesDataEquitySection() {
             <h2 className="text-4xl font-medium">True Data Equity for Athletes</h2>
             <p className="text-lg">Empowering Athletes with Game-Changing Data & Revenue Opportunities</p>
           </div>
-          <Button className="h-16 w-full rounded-full bg-primary-foreground px-8 text-sm font-medium text-white hover:bg-gray-900 md:w-auto">
+          <Button className="h-16 w-full bg-primary-foreground px-8 text-sm font-medium text-white hover:bg-gray-900 md:w-auto">
             Join the Data Revolution
           </Button>
         </div>

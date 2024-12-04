@@ -8,9 +8,9 @@ export default function AthletesHeroSection() {
   return (
     <div className="bg-black">
       <div className="mx-auto flex max-w-screen-xl flex-col items-start justify-between gap-14  px-6 pb-20 pt-12 lg:flex-row lg:pt-20 2xl:px-0">
-        <div className="order-2 w-full space-y-8 lg:order-none lg:w-1/2">
-          <h1 className="text-4xl font-semibold lg:text-5xl">
-            Empowering Athletes to <span className="text-primary">Turn Game Data</span> into Real Rewards
+        <div className="order-2 w-full space-y-7 lg:order-none lg:w-1/2">
+          <h1 className="text-4xl font-medium lg:text-5xl">
+            Empowering Athletes to <span className="font-bold text-primary">Turn Game Data</span> into Real Rewards
           </h1>
           <p>
             At BTE Analytics, we believe athletes should reap the rewards of their hard work. Discover how you can

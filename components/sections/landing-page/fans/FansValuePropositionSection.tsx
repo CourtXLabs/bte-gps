@@ -1,46 +1,40 @@
-import FansValuePropositionCard from "./FansValuePropositionCard"
+import Image from "next/image"
 
 const cardsData = [
   {
-    title: "Exclusive Insights",
-    description: "Get access to player stats, highlights, and performance data.",
-    image: "/landing-page/athlete-take-ownership.png",
-    link: "/about-us",
-    linkText: "Discover More",
+    title: "Unlock Insider Knowledge",
+    description:
+      "Get exclusive access to advanced stats and highlights. Dive into the details behind the game and connect with your favorite athletes like never before.",
+    image: "/landing-page/fans-insider-knowledge.png",
   },
   {
-    title: "Monetize Your Data",
-    description: "Take control of your performance data to build your brand and generate revenue.",
-    image: "/landing-page/athlete-highlight-your-value.png",
-    link: "/about-us",
-    linkText: "Learn More",
+    title: "Enjoy Exclusive Perks",
+    description:
+      "From merchandise discounts to early access to special offers, your subscription comes with unique benefits.",
+    image: "/landing-page/fans-exclusive-perks.png",
   },
   {
-    title: "Engage with Talent",
-    description: "Leverage athlete performance data to create targeted brand partnerships.",
-    image: "/landing-page/athlete-monetize-earn.png",
-    link: "/about-us",
-    linkText: "Partner with Us",
+    title: "Empower the Athletes You Love",
+    description:
+      "Your subscription directly helps athletes earn income from their performance data and achieve greatness.",
+    image: "/landing-page/fans-empower-athletes.png",
   },
 ]
 
 export default function FansValuePropositionSection() {
   return (
-    <div className="mx-auto mt-10 max-w-screen-xl px-6 lg:mt-20">
-      <h2 className="text-center text-4xl font-bold tracking-tighter lg:text-5xl">What BTE Analytics Does</h2>
-      <h3 className="mx-auto max-w-[33.375rem] pt-6 text-center text-lg opacity-70 lg:pt-8">
-        We provide a platform where data drives opportunities for athletes and brands to connect and grow.
+    <div className="mx-auto max-w-screen-xl px-6 py-20 lg:py-24">
+      <h2 className="text-center text-4xl font-bold tracking-tighter lg:text-5xl">What You Get as a Fan</h2>
+      <h3 className="mx-auto max-w-[33.375rem] pt-4 text-center text-lg opacity-70 ">
+        More than a spectator—be a part of their success story
       </h3>
-      <div className="flex w-full flex-col gap-4 pt-6 lg:flex-row lg:pt-8">
+      <div className="flex w-full flex-col gap-4 pt-10 lg:flex-row lg:gap-10">
         {cardsData.map((card) => (
-          <FansValuePropositionCard
-            key={card.title}
-            title={card.title}
-            description={card.description}
-            image={card.image}
-            link={card.link}
-            linkText={card.linkText}
-          />
+          <div key={card.title} className="flex flex-1 flex-col items-center gap-2 text-center">
+            <Image src={card.image} alt={card.title} width={112} height={112} />
+            <h3 className="text-2xl font-semibold">{card.title}</h3>
+            <p className="text-[#94a3b8]">{card.description}</p>
+          </div>
         ))}
       </div>
     </div>

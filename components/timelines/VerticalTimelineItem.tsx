@@ -9,14 +9,18 @@ const VerticalTimelineItem = ({
   description: string
   type: "primary" | "secondary"
 }) => (
-  <div className="relative flex gap-6 pb-16 last:pb-0">
-    {/* Left side vertical line */}
-    <div className="absolute left-[5px] top-3 h-full w-[2px] bg-[#1e293b]" />
-
-    {/* Circle indicator */}
+  <div
+    className="
+      relative flex gap-6 pb-16 before:absolute
+      before:left-[5px] before:top-3 before:h-full before:w-[2px] before:bg-[#1e293b] last:pb-0
+      last:before:hidden
+    "
+  >
+    {/* Circle Indicator */}
     <div
-      className={cn("relative z-10 mt-2.5 h-3 w-3 shrink-0 rounded-full bg-[#1e293b]", {
+      className={cn("relative z-10 mt-2.5 h-3 w-3 shrink-0 rounded-full", {
         "bg-primary": type === "primary",
+        "bg-[#1e293b]": type !== "primary",
       })}
     />
 

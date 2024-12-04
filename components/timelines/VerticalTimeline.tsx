@@ -10,8 +10,8 @@ export default function VerticalTimeline({
   timelineItems: TimelineItemType[]
 }) {
   return (
-    <div className={cn("w-full max-w-2xl pt-6", className)}>
-      <div className="relative pl-4">
+    <div className={cn("w-full max-w-2xl pl-4 pt-6", className)}>
+      <div className="relative">
         {timelineItems.map((item) => (
           <VerticalTimelineItem key={item.title} {...item} />
         ))}
