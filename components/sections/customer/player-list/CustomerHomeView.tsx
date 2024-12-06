@@ -38,7 +38,7 @@ const getData = async ({ page, pageSize, team, player, player_level }: Props) =>
     query = query.eq("id", player)
   }
 
-  if (typeof player_level === "string" && player_level.trim() !== "") {
+  if (typeof player_level === "string" && player_level.trim() !== "" && player_level !== "all") {
     query = query.eq("player_level", player_level)
   }
 

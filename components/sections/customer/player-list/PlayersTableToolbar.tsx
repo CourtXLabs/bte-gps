@@ -55,7 +55,7 @@ export default function PlayersTableToolbar({ isAdmin }: Props) {
   const form = useForm<z.infer<typeof playerListToolbarFormSchema>>({
     resolver: zodResolver(playerListToolbarFormSchema),
     defaultValues: {
-      player_level: activePlayerLevel ?? "",
+      player_level: activePlayerLevel ?? "all",
       team: activeTeamId ?? "",
       player: activeTeamId ?? "",
     },
@@ -115,7 +115,7 @@ export default function PlayersTableToolbar({ isAdmin }: Props) {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value={EMPTY_SELECT_VALUE}>No filter</SelectItem>
+                  <SelectItem value="all">No filter</SelectItem>
                   {Object.entries(LevelTypes).map(([key, value]) => (
                     <SelectItem value={key} key={key}>
                       {value}

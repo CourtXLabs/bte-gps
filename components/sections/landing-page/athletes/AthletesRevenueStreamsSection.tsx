@@ -2,8 +2,8 @@ import LandingPageWhiteButton from "@/components/buttons/LandingPageWhiteButton"
 
 export default function AthletesRevenueStreamsSection() {
   return (
-    <div className="mx-auto mt-20 max-w-screen-xl px-6 lg:mt-24">
-      <div>
+    <div className="mx-auto mt-20 flex max-w-screen-xl flex-col gap-10 px-6 lg:mt-24 lg:flex-row lg:gap-7">
+      <div className="flex-1">
         <h2 className="text-4xl font-bold lg:text-5xl">Key Revenue Streams</h2>
         <ul className="mt-12 space-y-9 pl-0">
           <li>
@@ -42,6 +42,14 @@ export default function AthletesRevenueStreamsSection() {
         <LandingPageWhiteButton href="#" className="mt-9">
           Apply to be an athlete
         </LandingPageWhiteButton>
+      </div>
+      <div className="relative h-[555px] w-[635px]">
+        {/* <Image
+          fill
+          src="/landing-page/athletes-revenue-stream-girl.png"
+          className="absolute rounded-2xl object-cover"
+          alt="Basketball girl"
+        /> */}
       </div>
     </div>
   )
