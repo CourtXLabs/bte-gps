@@ -2,7 +2,7 @@ import Image from "next/image"
 import InvertedCommaIcon from "../icons/InvertedCommaIcon"
 
 interface Props {
-  title?: string
+  title?: React.ReactNode
   subtitle?: string
   text?: string
   image: string
@@ -13,9 +13,9 @@ interface Props {
 export default function TestimonialSection({ title, subtitle, text, image, personName, personDescription }: Props) {
   return (
     <div className="px-6 py-20 lg:py-24">
-      <div className="mx-auto flex max-w-screen-xl flex-col items-center gap-12 lg:flex-row lg:gap-24">
+      <div className="mx-auto flex max-w-screen-xl flex-col items-center gap-12 lg:flex-row lg:gap-16">
         <div className="flex-1">
-          {title && <h2 className="mb-12">{title}</h2>}
+          {title && <h2 className="mb-12 text-4xl font-bold lg:text-5xl">{title}</h2>}
           <InvertedCommaIcon className="h-8 w-10 fill-[#cbd5e1]" />
           <h3 className="mt-12 text-3xl font-medium">{subtitle}</h3>
           <p className="mt-9 text-xl opacity-70">{text}</p>

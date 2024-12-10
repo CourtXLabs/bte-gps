@@ -13,8 +13,8 @@ export default function BrandsHeroSection() {
             <span className="text-primary">Performance Data</span>
           </h1>
           <p>
-            BTE Analytics connects you with top athletes, leveraging real-time data for targeted engagement and
-            measurable ROI.
+            The first-of-its-kind platform for monetizing performance data, connecting brands with empowered athletes
+            who turn their achievements into tangible value.
           </p>
           <div className="flex flex-col gap-3 pt-2.5 sm:flex-row">
             <Link href="#" className={cn(buttonVariants({ size: "xl" }), "bg-white hover:bg-[#dadada]")}>

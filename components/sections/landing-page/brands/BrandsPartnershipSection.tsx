@@ -30,14 +30,6 @@ export default function BrandsPartnershipSection() {
           width={600}
           className="mr-24 hidden object-cover lg:block"
         />
-
-        <div className="absolute -top-14 right-7 hidden w-fit lg:block">
-          <div className="absolute bottom-10 z-0 mx-[10px] h-8 w-[calc(100%-20px)] translate-y-[calc(100%+16px)] rounded-2xl bg-white"></div>
-          <div className="relative z-10 space-y-1 rounded-2xl bg-black p-6 text-white">
-            <p className="text-6xl">40+</p>
-            <p className="text-lg">Basketball Players</p>
-          </div>
-        </div>
       </div>
     </div>
   )

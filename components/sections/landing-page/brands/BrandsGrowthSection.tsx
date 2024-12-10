@@ -18,7 +18,7 @@ export default function BrandsGrowthSection() {
 
         <div className="flex flex-col gap-3 pt-2.5 sm:flex-row">
           <Link href="#" className={cn(buttonVariants({ size: "xl" }), "bg-white hover:bg-[#dadada]")}>
-            Apply as a Brand
+            Contact Now
           </Link>
         </div>
       </div>
