@@ -32,7 +32,7 @@ export default function FansHowItWorksSection() {
         <div className="mt-10 flex flex-col gap-10 lg:mt-16 lg:flex-row lg:gap-16">
           <div className="order-2">
             <HowBteWorksTimeline timelineItems={timelineItems} vertical />
-            <LandingPageWhiteButton className="ml-9 mt-9" href="#">
+            <LandingPageWhiteButton className="ml-9 mt-9" href="/premium">
               Start Exploring Now
             </LandingPageWhiteButton>
           </div>

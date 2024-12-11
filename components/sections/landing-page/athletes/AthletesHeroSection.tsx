@@ -1,8 +1,6 @@
 import LandingPageWhiteButton from "@/components/buttons/LandingPageWhiteButton"
-import { buttonVariants } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { athleteApplicationForm } from "@/constants/contact-us"
 import Image from "next/image"
-import Link from "next/link"
 
 export default function AthletesHeroSection() {
   return (
@@ -18,10 +16,9 @@ export default function AthletesHeroSection() {
           </p>
           <div></div>
           <div className="flex flex-col gap-3 pt-2.5 sm:flex-row">
-            <LandingPageWhiteButton href="#">Apply to be an athlete</LandingPageWhiteButton>
-            <Link href="#" className={cn(buttonVariants({ size: "xl", variant: "outline" }), "hover:bg-transparent ")}>
-              Learn More about Data Monetization
-            </Link>
+            <LandingPageWhiteButton href={athleteApplicationForm} target="_blank">
+              Apply to be an athlete
+            </LandingPageWhiteButton>
           </div>
         </div>
         <div className="relative h-[400px] w-full lg:w-[400px]">

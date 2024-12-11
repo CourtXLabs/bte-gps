@@ -13,7 +13,7 @@ export default function FansHeroSection() {
             Experience sports like never before. Dive into gamified stats, uncover hidden insights, and directly empower
             the athletes who inspire you.
           </p>
-          <LandingPageWhiteButton href="#">Join the Fan Community</LandingPageWhiteButton>
+          <LandingPageWhiteButton href="/premium">Join the Fan Community</LandingPageWhiteButton>
         </div>
         <div className="relative h-[400px] w-full lg:w-[400px]">
           <Image src="/auth-image.png" alt="Athletes" fill className="absolute object-contain" />

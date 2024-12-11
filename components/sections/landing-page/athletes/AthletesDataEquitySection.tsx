@@ -1,4 +1,7 @@
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
+import { athleteApplicationForm } from "@/constants/contact-us"
+import { cn } from "@/lib/utils"
+import Link from "next/link"
 import AthletesDataEquityListItem from "./AthletesDataEquityListItem"
 
 const dataEquityItems = [
@@ -30,9 +33,16 @@ export default function AthletesDataEquitySection() {
             <h2 className="text-4xl font-medium">True Data Equity for Athletes</h2>
             <p className="text-lg">Empowering Athletes with Game-Changing Data & Revenue Opportunities</p>
           </div>
-          <Button className="h-16 w-full bg-primary-foreground px-8 text-sm font-medium text-white hover:bg-gray-900 md:w-auto">
+          <Link
+            target="_blank"
+            href={athleteApplicationForm}
+            className={cn(
+              buttonVariants(),
+              "h-16 w-full bg-primary-foreground px-8 text-sm font-medium text-white hover:bg-gray-900 md:w-auto",
+            )}
+          >
             Join the Data Revolution
-          </Button>
+          </Link>
         </div>
         <ol className="mt-8 flex flex-col items-start gap-12 md:flex-row">
           {dataEquityItems.map((item) => (

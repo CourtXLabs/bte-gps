@@ -1,7 +1,6 @@
-import { buttonVariants } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import LandingPageWhiteButton from "@/components/buttons/LandingPageWhiteButton"
+import { brandApplicationForm } from "@/constants/contact-us"
 import Image from "next/image"
-import Link from "next/link"
 
 export default function BrandsHeroSection() {
   return (
@@ -17,9 +16,9 @@ export default function BrandsHeroSection() {
             who turn their achievements into tangible value.
           </p>
           <div className="flex flex-col gap-3 pt-2.5 sm:flex-row">
-            <Link href="#" className={cn(buttonVariants({ size: "xl" }), "bg-white hover:bg-[#dadada]")}>
+            <LandingPageWhiteButton href={brandApplicationForm} target="_blank">
               Apply as a Brand
-            </Link>
+            </LandingPageWhiteButton>
           </div>
         </div>
         <div className="relative h-[400px] w-full lg:w-[400px]">

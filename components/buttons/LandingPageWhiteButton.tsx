@@ -1,20 +1,26 @@
 import { cn } from "@/lib/utils"
-import Link from "next/link"
+import Link, { LinkProps } from "next/link"
+import { ComponentProps, forwardRef } from "react"
 import { buttonVariants } from "../ui/button"
 
-interface Props {
-  className?: string
-  href: string
-  children: React.ReactNode
-}
+type Props = LinkProps &
+  Omit<ComponentProps<"a">, keyof LinkProps> & {
+    className?: string
+    children: React.ReactNode
+  }
 
-export default function LandingPageWhiteButton({ className, href, children }: Props) {
+const LandingPageWhiteButton = forwardRef<HTMLAnchorElement, Props>(({ className, children, ...props }, ref) => {
   return (
     <Link
-      href={href}
-      className={cn(buttonVariants({ size: "xl" }), "bg-white font-bold hover:bg-[#dadada]", className)}
+      {...props}
+      ref={ref}
+      className={cn(buttonVariants({ size: "xl" }), "min-w-44 bg-white font-bold hover:bg-[#dadada]", className)}
     >
       {children}
     </Link>
   )
-}
+})
+
+LandingPageWhiteButton.displayName = "LandingPageWhiteButton"
+
+export default LandingPageWhiteButton

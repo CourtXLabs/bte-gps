@@ -34,9 +34,7 @@ export default function AboutUsCoreValuesSection() {
             </p>
           </div>
         </div>
-        <LandingPageWhiteButton href="/premium" className="w-44">
-          Join as a fan
-        </LandingPageWhiteButton>
+        <LandingPageWhiteButton href="/premium">Join as a fan</LandingPageWhiteButton>
       </div>
     </div>
   )

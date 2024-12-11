@@ -1,4 +1,5 @@
 import LandingPageWhiteButton from "@/components/buttons/LandingPageWhiteButton"
+import { athleteApplicationForm } from "@/constants/contact-us"
 import AthletesHowItWorksCard from "./AthletesHowItWorksCard"
 
 const cardsData = [
@@ -37,7 +38,9 @@ export default function AthletesHowItWorksSection() {
             />
           ))}
         </div>
-        <LandingPageWhiteButton href="#">Join as an athlete</LandingPageWhiteButton>
+        <LandingPageWhiteButton href={athleteApplicationForm} target="_blank">
+          Join as an athlete
+        </LandingPageWhiteButton>
       </div>
     </div>
   )

@@ -77,7 +77,7 @@ export default function BrandsKeyFeatures() {
           </GradientBorderCard>
         </div>
         <div className="relative mx-auto w-max">
-          <LandingPageWhiteButton href="contact-us" className="w-44">
+          <LandingPageWhiteButton href="/contact-us" className="w-44">
             Contact Us
           </LandingPageWhiteButton>
         </div>

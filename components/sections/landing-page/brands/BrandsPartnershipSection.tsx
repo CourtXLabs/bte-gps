@@ -1,7 +1,5 @@
-import { buttonVariants } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import LandingPageWhiteButton from "@/components/buttons/LandingPageWhiteButton"
 import Image from "next/image"
-import Link from "next/link"
 
 export default function BrandsPartnershipSection() {
   return (
@@ -16,9 +14,7 @@ export default function BrandsPartnershipSection() {
                 Build authentic relationships, gain brand loyalty, and experience an unparalleled level of engagement
                 through targeted partnerships.
               </p>
-              <Link href="#" className={cn(buttonVariants({ size: "xl" }), "bg-white hover:bg-[#dadada]")}>
-                Contact Us Now
-              </Link>
+              <LandingPageWhiteButton href="/contact-us">Contact Us Now</LandingPageWhiteButton>
             </div>
           </div>
         </div>

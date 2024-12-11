@@ -25,7 +25,7 @@ export default function AboutUsEmpowerTimelineSection() {
         We provide athletes with the tools to gamify their stats,{" "}
         <span className="font-semibold text-primary">unlock new revenue</span> streams, and engage with fans in
         unprecedented ways. Our platform offers <span className="font-semibold text-primary">advanced analytics</span>,
-        detailed performance insights, and the ability to connect with fans and brands. We're here to help athletes{" "}
+        detailed performance insights, and the ability to connect with fans and brands. We&apos;re here to help athletes{" "}
         <span className="font-semibold text-primary">reach their full potential</span> both on the field and
         financially.
       </p>

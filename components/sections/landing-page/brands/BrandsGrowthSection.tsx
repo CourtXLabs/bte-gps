@@ -1,7 +1,5 @@
-import { buttonVariants } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import LandingPageWhiteButton from "@/components/buttons/LandingPageWhiteButton"
 import Image from "next/image"
-import Link from "next/link"
 
 export default function BrandsGrowthSection() {
   return (
@@ -17,9 +15,7 @@ export default function BrandsGrowthSection() {
         </p>
 
         <div className="flex flex-col gap-3 pt-2.5 sm:flex-row">
-          <Link href="#" className={cn(buttonVariants({ size: "xl" }), "bg-white hover:bg-[#dadada]")}>
-            Contact Us Now
-          </Link>
+          <LandingPageWhiteButton href="/contact-us">Contact Us Now</LandingPageWhiteButton>
         </div>
       </div>
       <div className="relative h-[400px] w-full lg:w-[400px]">

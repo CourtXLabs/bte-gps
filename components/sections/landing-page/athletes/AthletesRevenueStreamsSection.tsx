@@ -1,4 +1,5 @@
 import LandingPageWhiteButton from "@/components/buttons/LandingPageWhiteButton"
+import { athleteApplicationForm } from "@/constants/contact-us"
 
 export default function AthletesRevenueStreamsSection() {
   return (
@@ -39,7 +40,7 @@ export default function AthletesRevenueStreamsSection() {
             </p>
           </li>
         </ul>
-        <LandingPageWhiteButton href="#" className="mt-9">
+        <LandingPageWhiteButton href={athleteApplicationForm} target="_blank" className="mt-9">
           Apply to be an athlete
         </LandingPageWhiteButton>
       </div>
