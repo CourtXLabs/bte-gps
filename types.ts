@@ -404,6 +404,6 @@ export interface Margin {
 
 export interface TimelineItem {
   title: string
-  description: string
+  description?: string
   type: "primary" | "secondary"
 }

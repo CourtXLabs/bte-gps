@@ -11,14 +11,14 @@ export default function BrandsGrowthSection() {
           Your Gateway to <span className="text-primary">Data-Driven</span> Brand Growth
         </h2>
 
-        <p>
+        <p className="text-lg opacity-80">
           With BTE Analytics, brands can seamlessly engage with athletes by leveraging real-time performance metrics,
           fan engagement insights, and exclusive access to potential sponsorship opportunities.
         </p>
 
         <div className="flex flex-col gap-3 pt-2.5 sm:flex-row">
           <Link href="#" className={cn(buttonVariants({ size: "xl" }), "bg-white hover:bg-[#dadada]")}>
-            Contact Now
+            Contact Us Now
           </Link>
         </div>
       </div>

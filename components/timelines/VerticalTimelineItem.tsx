@@ -6,7 +6,7 @@ const VerticalTimelineItem = ({
   type,
 }: {
   title: string
-  description: string
+  description?: string
   type: "primary" | "secondary"
 }) => (
   <div

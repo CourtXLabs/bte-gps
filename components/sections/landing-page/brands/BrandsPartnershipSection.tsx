@@ -17,7 +17,7 @@ export default function BrandsPartnershipSection() {
                 through targeted partnerships.
               </p>
               <Link href="#" className={cn(buttonVariants({ size: "xl" }), "bg-white hover:bg-[#dadada]")}>
-                Contact Now
+                Contact Us Now
               </Link>
             </div>
           </div>
