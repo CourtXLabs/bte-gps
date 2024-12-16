@@ -43,7 +43,7 @@ export default function LandingPage() {
       </div>
       <div className="flex flex-col gap-5 lg:flex-row">
         {cardsData.map((card) => (
-          <GradientBorderCard className="flex-1 space-y-11 bg-opacity-30 p-4">
+          <GradientBorderCard className="flex-1 space-y-11 bg-opacity-30 p-4" key={card.title}>
             <div className="space-y-2 px-5 pt-4 text-center">
               <h2 className="text-3xl">{card.title}</h2>
               <h3 className="opacity-70">{card.text}</h3>

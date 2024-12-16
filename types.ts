@@ -242,7 +242,7 @@ export interface PlayerData {
 
 export interface GameInput {
   type: string
-  date: string
+  date: string | null
   home_team_id: number | string
   away_team_id: number | string
 }
