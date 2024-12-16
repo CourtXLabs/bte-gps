@@ -1,12 +1,11 @@
 import LandingPageWhiteButton from "@/components/buttons/LandingPageWhiteButton"
 import { brandApplicationForm } from "@/constants/contact-us"
-import Image from "next/image"
 
 export default function BrandsHeroSection() {
   return (
     <div className="bg-black px-6 pb-20 pt-12 lg:pt-20 2xl:px-0">
       <div className="mx-auto flex max-w-screen-xl flex-col items-start  justify-between gap-14 lg:flex-row">
-        <div className="order-2 w-full space-y-8 lg:order-none lg:w-1/2">
+        <div className="order-2 w-full flex-1 space-y-8 lg:order-none lg:w-1/2 lg:max-w-xl">
           <h1 className="text-4xl font-semibold lg:text-5xl">
             Unlock Powerful <span className="text-primary">Partnerships</span> through Athlete{" "}
             <span className="text-primary">Performance Data</span>
@@ -21,8 +20,10 @@ export default function BrandsHeroSection() {
             </LandingPageWhiteButton>
           </div>
         </div>
-        <div className="relative h-[400px] w-full lg:w-[400px]">
-          <Image src="/auth-image.png" alt="Athletes" fill className="absolute object-contain" />
+        <div className="relative h-[400px] w-full flex-1">
+          <video autoPlay loop muted playsInline>
+            <source src="videos/hero-section-dribble.mp4" type="video/mp4" />
+          </video>
         </div>
       </div>
     </div>

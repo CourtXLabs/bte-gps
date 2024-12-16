@@ -12,11 +12,10 @@ export default function FansPage() {
       <FansHowItWorksSection />
       <FansKeyFeaturesSection />
       <TestimonialSection
-        subtitle="“People now recognise that having a good performance conversation means that something happens as a result.”"
-        text="“With Landingfolio, the design team can now build design which identifies employees' career aspirations and goals and from which we approach managers and check to see what is happening.”"
+        subtitle="I would go as far as to say this analytics program is ground breaking. For players to learn and implement this system, increasing their IQ is simply amazing. The sky's the limit and I look forward to seeing how this program changes the game I love forever."
         image="/landing-page/fans-testimonial-photo.png"
-        personName="Albert Flores"
-        personDescription="Product Manager at Jomanar"
+        personName="Devin Green"
+        personDescription="Former NBA player and NBA Scout"
       />
     </main>
   )

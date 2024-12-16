@@ -8,8 +8,8 @@ export default function Footer() {
     <div className="w-full bg-[#141010]">
       <div className="mx-auto max-w-screen-2xl">
         <div className="flex">
-          <div className="hidden lg:block">
-            <Image src="/footer-image.png" alt="logo" width={544} height={427} />
+          <div className="hidden w-[544px] justify-center bg-[#140E00] lg:flex">
+            <Image src="/footer-image.png" alt="logo" width={201} height={402} />
           </div>
           <div className="flex flex-1 flex-col gap-10 px-6 py-6 text-[#94A3B8] lg:gap-20 lg:px-11">
             <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center lg:gap-8">

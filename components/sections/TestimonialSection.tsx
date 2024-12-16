@@ -17,7 +17,7 @@ export default function TestimonialSection({ title, subtitle, text, image, perso
         <div className="flex-1">
           {title && <h2 className="mb-12 text-4xl font-bold lg:text-5xl">{title}</h2>}
           <InvertedCommaIcon className="h-8 w-10 fill-[#cbd5e1]" />
-          <h3 className="mt-12 text-3xl font-medium">{subtitle}</h3>
+          <h3 className="mt-12 text-2xl font-medium">{subtitle}</h3>
           <p className="mt-9 text-xl opacity-70">{text}</p>
         </div>
         <div className="relative h-[400px] w-full rounded-2xl md:w-[500px] lg:h-[500px] lg:w-[400px] xl:w-[600px]">
