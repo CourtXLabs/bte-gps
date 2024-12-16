@@ -189,7 +189,7 @@ export const gameFormSchema = z.object({
   awayTeamId: z.number().optional(),
   jersey: z.string().min(1, { message: errorMessage }),
   points: z.string(),
-  date: z.date(),
+  date: z.date().optional(),
 })
 
 export const sequenceFormSchema = z.object({
