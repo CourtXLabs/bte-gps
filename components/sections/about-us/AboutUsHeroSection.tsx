@@ -1,15 +1,14 @@
 import LandingPageWhiteButton from "@/components/buttons/LandingPageWhiteButton"
-import Image from "next/image"
 
 export default function AboutUsHeroSection() {
   return (
     <div className="relative bg-black">
-      <Image
+      {/* <Image
         src="/landing-page/about-us-hero-background.png"
         alt="Key Features Background"
         fill
         className="absolute object-cover"
-      />
+      /> */}
       <div className="mx-auto flex max-w-xl flex-col items-center py-20 xl:pb-36 xl:pt-24">
         <h1 className="relative text-center text-4xl font-extrabold lg:text-5xl">
           Empowering <span className="text-primary">Athletes</span>. <br />

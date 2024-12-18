@@ -16,10 +16,10 @@ export default function Footer() {
               <div className="flex flex-col gap-2 lg:gap-3">
                 <p className="text-xs">Contact us at</p>
                 <a
-                  href="mailto:info@bteanalaytics.com"
+                  href="mailto:info@beattheexpert.com"
                   className="text-2xl font-extrabold text-primary sm:text-4xl lg:text-5xl"
                 >
-                  info@bteanalaytics.com
+                  info@beattheexpert.com
                 </a>
               </div>
               <div className="flex flex-col gap-2 text-xs">
@@ -38,7 +38,7 @@ export default function Footer() {
                   <li>
                     <Link
                       className={cn(buttonVariants({ variant: "link" }), "p-0 text-4xl font-extrabold lg:text-5xl ")}
-                      href="https://twitter.com/bteanalytics"
+                      href="https://www.instagram.com/bte.analytics/"
                     >
                       Instagram
                     </Link>

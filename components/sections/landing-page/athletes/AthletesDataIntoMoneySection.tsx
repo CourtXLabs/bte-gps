@@ -7,8 +7,8 @@ export default function AthletesDataIntoMoneySection() {
         <p className="text-2xl">DATA=MONEY</p>
         <p className="mt-3 text-4xl font-bold">Transforming Performance Data into Revenue</p>
         <Image
-          height={453}
-          width={758}
+          height={400}
+          width={500}
           className="mt-4 self-center object-cover"
           src="/landing-page/athlete-player-mobile.png"
           alt="Basketball Player"

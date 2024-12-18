@@ -5,12 +5,12 @@ import Image from "next/image"
 export default function BrandsKeyFeatures() {
   return (
     <div className="relative px-6 2xl:px-0">
-      <Image
+      {/* <Image
         src="/landing-page/brands-key-features-bg.png"
         alt="Key Features Background"
         fill
         className="absolute object-cover"
-      />
+      /> */}
       <div className="mx-auto max-w-[82.5rem] space-y-8 py-20 lg:space-y-12 lg:py-24">
         <div className="relative mx-auto max-w-[36rem] space-y-8 text-center">
           <h2 className="text-4xl lg:text-5xl">Key Features</h2>

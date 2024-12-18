@@ -1,5 +1,6 @@
 import LandingPageWhiteButton from "@/components/buttons/LandingPageWhiteButton"
 import { athleteApplicationForm } from "@/constants/contact-us"
+import Image from "next/image"
 
 export default function AthletesRevenueStreamsSection() {
   return (
@@ -44,13 +45,13 @@ export default function AthletesRevenueStreamsSection() {
           Apply to be an athlete
         </LandingPageWhiteButton>
       </div>
-      <div className="relative h-[555px] w-[635px]">
-        {/* <Image
+      <div className="relative h-[400px] w-full lg:h-[555px] lg:w-[635px]">
+        <Image
           fill
           src="/landing-page/athletes-revenue-stream-girl.png"
-          className="absolute rounded-2xl object-cover"
+          className="absolute rounded-2xl object-contain"
           alt="Basketball girl"
-        /> */}
+        />
       </div>
     </div>
   )
