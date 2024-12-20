@@ -6,9 +6,9 @@ export default function PrivacyPolicyPage() {
       <section className="mb-8">
         <h2 className="mb-4 text-2xl font-semibold">Introduction</h2>
         <p className="mb-4">
-          Welcome to Courtside Xperience Labs Inc.'s Privacy Policy. This Privacy Policy describes how we collect, use,
-          process, and disclose your information, including personal information, in conjunction with your access to and
-          use of Courtside Xperience Labs Inc.'s services.
+          Welcome to Courtside Xperience Labs Inc.&apos;s Privacy Policy. This Privacy Policy describes how we collect,
+          use, process, and disclose your information, including personal information, in conjunction with your access
+          to and use of Courtside Xperience Labs Inc.&apos;s services.
         </p>
       </section>
 
@@ -55,7 +55,7 @@ export default function PrivacyPolicyPage() {
         <h2 className="mb-4 text-2xl font-semibold">Changes to Our Privacy Policy</h2>
         <p className="mb-4">
           We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new
-          Privacy Policy on this page and updating the "Last Modified" date at the top of this Privacy Policy.
+          Privacy Policy on this page and updating the &quot;Last Modified&quot; date at the top of this Privacy Policy.
         </p>
       </section>
 

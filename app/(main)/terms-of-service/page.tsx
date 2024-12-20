@@ -6,17 +6,17 @@ const TermsOfServicePage = () => {
       <section className="mb-8">
         <h2 className="mb-4 text-2xl font-semibold">1. Introduction</h2>
         <p className="mb-4">
-          Welcome to Courtside Xperience Labs Inc.'s Terms of Service. By using our services, you agree to these terms.
-          Please read them carefully.
+          Welcome to Courtside Xperience Labs Inc.&apos;s Terms of Service. By using our services, you agree to these
+          terms. Please read them carefully.
         </p>
       </section>
 
       <section className="mb-8">
         <h2 className="mb-4 text-2xl font-semibold">2. Use of Services</h2>
         <p className="mb-4">
-          You must follow any policies made available to you within the Services. Don't misuse our Services. For
-          example, don't interfere with our Services or try to access them using a method other than the interface and
-          the instructions that we provide.
+          You must follow any policies made available to you within the Services. Don&apos;t misuse our Services. For
+          example, don&apos;t interfere with our Services or try to access them using a method other than the interface
+          and the instructions that we provide.
         </p>
       </section>
 
