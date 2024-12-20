@@ -3,7 +3,7 @@ import Image from "next/image"
 
 export default function BrandsGrowthSection() {
   return (
-    <div className="mx-auto flex max-w-screen-xl flex-col items-center justify-between gap-14 px-6 pb-10 lg:flex-row lg:pb-24 2xl:px-0">
+    <div className="mx-auto flex max-w-screen-xl flex-col items-center justify-between gap-14 px-6 pb-10 pt-6 lg:flex-row lg:pb-24 2xl:px-0">
       <div className="order-2 w-full space-y-8 lg:order-none lg:w-1/2">
         <h2 className="text-4xl font-semibold lg:text-5xl">
           Your Gateway to <span className="text-primary">Data-Driven</span> Brand Growth
@@ -18,7 +18,7 @@ export default function BrandsGrowthSection() {
           <LandingPageWhiteButton href="/contact-us">Contact Us Now</LandingPageWhiteButton>
         </div>
       </div>
-      <div className="relative h-[400px] w-full lg:w-[400px]">
+      <div className="relative h-[400px] w-full lg:h-[645px] lg:w-[670px]">
         <Image src="/landing-page/brands-growth-image.png" alt="Athletes" fill className="absolute object-contain" />
       </div>
     </div>
