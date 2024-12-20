@@ -25,7 +25,7 @@ const cardsData = [
 
 export default function LandingPage() {
   return (
-    <main className="mx-auto max-w-screen-xl space-y-11 py-20">
+    <main className="mx-auto max-w-screen-xl space-y-11 px-6 py-20">
       <div className="mx-auto max-w-screen-lg space-y-8">
         <h1 className="text-center text-4xl font-extrabold lg:text-5xl">
           Empowering <span className="text-primary">Athletes, Engaging Brands</span>, Enhancing Sports Performance
@@ -45,7 +45,7 @@ export default function LandingPage() {
                 See more
               </Link>
             </div>
-            <Link href={card.link}>
+            <Link href={card.link} className="mx-auto">
               <Image height={410} width={430} src={card.image} alt={card.title} />
             </Link>
           </GradientBorderCard>
