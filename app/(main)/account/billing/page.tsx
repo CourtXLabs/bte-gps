@@ -24,7 +24,7 @@ export default async function AccountBillingPage() {
         href={`${STRIPE_CUSTOMER_PORTAL_LINK}?prefilled_email=${userEmail}`}
         className={cn(buttonVariants({ size: "xl" }), "text-base")}
       >
-        Change your plan
+        Manage your subscription
       </Link>
     </div>
   )

@@ -19,8 +19,7 @@ export default function BrandsPage() {
             Message from the <span className="text-primary">founder</span>{" "}
           </>
         }
-        subtitle="“People now recognise that having a good performance conversation means that something happens as a result.”"
-        text="“With Landingfolio, the design team can now build design which identifies employees' career aspirations and goals and from which we approach managers and check to see what is happening.”"
+        subtitle="“I believe athletes should have the same opportunities as actors and musicians. If we are all entertainers, we all deserve the ability to earn whether we're actively performing or not. Our mission is rooted in true player data equity.”"
         image="/landing-page/brands-rashad-west.png"
         personName="Rashad West"
         personDescription="CEO BTE Analytics"
