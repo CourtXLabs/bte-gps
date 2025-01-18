@@ -3,8 +3,8 @@ import { athleteApplicationForm } from "@/constants/contact-us"
 
 export default function AthletesHeroSection() {
   return (
-    <div className="bg-black">
-      <div className="mx-auto flex max-w-screen-xl flex-col items-start justify-between gap-14  px-6 pb-20 pt-12 lg:flex-row lg:pt-20 2xl:px-0">
+    <div className="bg-black bg-cover lg:bg-[url(/landing-page/hero-bg.png)]">
+      <div className="mx-auto flex max-w-screen-xl flex-col items-start justify-between gap-14  px-6 pb-20 pt-12 lg:flex-row lg:pb-28 lg:pt-28 2xl:px-0">
         <div className="order-2 w-full flex-1 space-y-7 lg:order-none lg:w-1/2 lg:max-w-xl">
           <h1 className="text-4xl font-medium lg:text-5xl">
             Empowering Athletes to <span className="font-bold text-primary">Turn Game Data</span> into Real Rewards
@@ -19,11 +19,6 @@ export default function AthletesHeroSection() {
               Apply to be an athlete
             </LandingPageWhiteButton>
           </div>
-        </div>
-        <div className="relative h-[400px] w-full flex-1">
-          <video autoPlay loop muted playsInline>
-            <source src="videos/hero-section-dribble.mp4" type="video/mp4" />
-          </video>
         </div>
       </div>
     </div>
