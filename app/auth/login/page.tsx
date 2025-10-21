@@ -3,12 +3,10 @@
 import Logo from "@/components/Logo"
 import AuthButton from "@/components/buttons/AuthButton"
 import TermsDisclaimer from "@/components/sections/TermsDisclaimer"
-import { buttonVariants } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { toast } from "@/components/ui/use-toast"
-import { cn } from "@/lib/utils"
 import { loginFormSchema } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
@@ -81,12 +79,6 @@ export default function LoginPage() {
             Log In
           </AuthButton>
         </div>
-        <p className="text-center text-sm">
-          Don&apos;t have an account?{" "}
-          <Link href="/auth/signup" className={cn(buttonVariants({ variant: "link" }), "p-0")}>
-            Register
-          </Link>
-        </p>
         <TermsDisclaimer />
       </form>
     </Form>
