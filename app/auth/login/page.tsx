@@ -83,8 +83,12 @@ export default function LoginPage() {
         </div>
         <p className="text-center text-sm">
           Don&apos;t have an account?{" "}
-          <Link href="/auth/signup" className={cn(buttonVariants({ variant: "link" }), "p-0")}>
-            Register
+          <Link
+            href="https://docs.google.com/forms/d/e/1FAIpQLSe6ZiGgjrGYXD8ZiuvyZz_BF0RJBfoyWD7y0hYqLqIVz6L1NQ/viewform?embedded=true "
+            target="_blank"
+            className={cn(buttonVariants({ variant: "link" }), "p-0")}
+          >
+            Request Access
           </Link>
         </p>
         <TermsDisclaimer />
