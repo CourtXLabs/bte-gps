@@ -60,12 +60,16 @@ export async function GET(
       .maybeSingle()
 
     // 25 second timeout (Vercel max is 30s, leave buffer)
-    const timeoutPromise = new Promise((_, reject) => {
+    const timeoutPromise = new Promise<never>((_, reject) => {
       setTimeout(() => reject(new Error('timeout')), 25000)
     })
 
     try {
-      const result = await Promise.race([queryPromise, timeoutPromise])
+      // Type assertion: Promise.race will return queryPromise result (timeout would reject)
+      const result = (await Promise.race([queryPromise, timeoutPromise])) as {
+        data: any
+        error: any
+      }
       // If we get here, query completed (timeout would have rejected)
       athlete = result.data
       error = result.error
