@@ -1,11 +1,7 @@
 import BteCard from "@/components/cards/BteCard"
 
 const cardsData = [
-  {
-    link: "/socials",
-    title: "BTE Socials",
-    description: "Explore engagement.",
-  },
+  // Removed /socials link - route does not exist
   {
     link: "/brands",
     title: "BTE Brands",
