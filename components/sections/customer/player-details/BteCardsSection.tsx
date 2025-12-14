@@ -11,11 +11,7 @@ const cardsData = [
     title: "BTE Brands",
     description: "Explore opportunities.",
   },
-  {
-    link: "/stats",
-    title: "BTE Stats",
-    description: "Explore studies.",
-  },
+  // Removed /stats link - stats are already displayed on this page
 ]
 
 export default function BteCardsSection() {
