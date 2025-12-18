@@ -31,11 +31,21 @@ export default async function BTESocialsSection({ athleteId }: BTESocialsSection
   const supabase = createClient(cookieStore)
 
   try {
-    // Fetch athlete profile from Supabase
+    // First, check if player table has athlete_id field that links to athletes table
+    const { data: player } = await supabase
+      .from('player')
+      .select('athlete_id, id')
+      .eq('id', athleteId)
+      .maybeSingle()
+
+    // Use athlete_id from player table if available, otherwise use the id directly
+    const actualAthleteId = (player as any)?.athlete_id || athleteId
+
+    // Query athletes table with the correct ID
     const { data: athlete, error } = await supabase
       .from('athletes')
-      .select('social_media')
-      .eq('athlete_id', athleteId)
+      .select('social_media, social_data_cache')
+      .eq('athlete_id', actualAthleteId)
       .maybeSingle()
 
     if (error || !athlete) {
