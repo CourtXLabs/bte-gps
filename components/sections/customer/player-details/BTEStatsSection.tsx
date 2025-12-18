@@ -27,28 +27,22 @@ export default async function BTEStatsSection({ athleteId }: BTEStatsSectionProp
   const supabase = createClient(cookieStore)
 
   try {
-    // First, try to find athlete by athlete_id (direct match)
-    let { data: athlete, error } = await supabase
-      .from('athletes')
-      .select('performance_stats_cache')
-      .eq('athlete_id', athleteId)
+    // First, check if player table has athlete_id field that links to athletes table
+    const { data: player } = await supabase
+      .from('player')
+      .select('athlete_id, id')
+      .eq('id', athleteId)
       .maybeSingle()
 
-    // If not found, try to find by matching player.id to athlete_id
-    // (The player table might use the same ID as athlete_id)
-    if (error || !athlete) {
-      // Try querying with the ID as-is (in case player.id === athlete_id)
-      const retry = await supabase
-        .from('athletes')
-        .select('performance_stats_cache')
-        .eq('athlete_id', athleteId)
-        .maybeSingle()
-      
-      if (!retry.error && retry.data) {
-        athlete = retry.data
-        error = null
-      }
-    }
+    // Use athlete_id from player table if available, otherwise use the id directly
+    const actualAthleteId = (player as any)?.athlete_id || athleteId
+
+    // Query athletes table with the correct ID
+    const { data: athlete, error } = await supabase
+      .from('athletes')
+      .select('performance_stats_cache')
+      .eq('athlete_id', actualAthleteId)
+      .maybeSingle()
 
     if (error || !athlete) {
       console.error('Error fetching BTE stats:', error)

@@ -43,7 +43,8 @@ export default async function BTESocialsSection({ athleteId }: BTESocialsSection
       return null
     }
 
-    const socialMedia: SocialMediaData | null = athlete.social_media
+    // Use social_media if available, otherwise fall back to social_data_cache
+    const socialMedia: SocialMediaData | null = athlete.social_media || athlete.social_data_cache
 
     // If no social media data, don't render section
     if (!socialMedia || Object.keys(socialMedia).length === 0) {
