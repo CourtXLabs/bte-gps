@@ -1,4 +1,4 @@
-import { createServerClient } from "@supabase/ssr"
+import { createServerClient, type CookieOptions } from "@supabase/ssr"
 import { cookies } from "next/headers"
 
 export function createClient(cookieStore: ReturnType<typeof cookies>) {
@@ -26,6 +26,21 @@ export function createClient(cookieStore: ReturnType<typeof cookies>) {
       cookies: {
         get(name: string) {
           return cookieStore.get(name)?.value
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          try {
+            cookieStore.set({ name, value, ...options })
+          } catch (error) {
+            // Handle errors silently (cookies may be read-only in some contexts)
+            // This is expected in Server Components during rendering
+          }
+        },
+        remove(name: string, options: CookieOptions) {
+          try {
+            cookieStore.set({ name, value: '', ...options })
+          } catch (error) {
+            // Handle errors silently (cookies may be read-only in some contexts)
+          }
         },
       },
     })
