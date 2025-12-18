@@ -62,7 +62,7 @@ export default function SequenceFrequencyChart({ data, title, subtitle, xAxisLab
     drawGrid({ chart, y, width, tickValues })
     drawBars({ chart, data: sortedData, x, height })
     animateBars({ chart, height, y, delay: 100 })
-  }, [data, maxPoint, title, xAxisLabel, sortedData, yAxisLabel])
+  }, [data, maxPoint, sortedData, tickValues, title, width, xAxisLabel, yAxisLabel])
 
   return (
     <ChartRoot title={title} subtitle={subtitle}>

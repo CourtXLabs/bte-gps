@@ -97,7 +97,7 @@ export default function DribblePieChart({ data }: Props) {
       .style("fill", (d, i) => foregroundColors[colorKeys[i] as keyof typeof foregroundColors])
       .style("font-size", "14px")
       .style("font-weight", "600")
-  }, [formattedData, width])
+  }, [formattedData, width, radius])
 
   return (
     <div ref={containerRef} className="flex w-full justify-center">

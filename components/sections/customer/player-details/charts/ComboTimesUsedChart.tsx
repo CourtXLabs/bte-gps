@@ -77,7 +77,7 @@ export default function ComboTimesUsedChart({ data }: Props) {
     drawBars({ chart, data: sortedData, x, height })
 
     animateBars({ chart, height, y, delay: 30 })
-  }, [data, sortedData, maxPoint, width])
+  }, [data, maxPoint, sortedData, tickValues, width])
 
   return (
     <ChartRoot title="Dribble Combos Used" subtitle="This chart shows how many times each combo was used">

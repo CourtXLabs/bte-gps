@@ -37,7 +37,7 @@ export default function MobileHeader({ isAdmin, isLoggedIn, userEmail, userFullN
         document.body.style.overflow = "auto"
       }
     })
-  }, [])
+  }, [isMenuVisible])
 
   return (
     <>

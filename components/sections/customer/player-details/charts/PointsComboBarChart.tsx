@@ -109,7 +109,7 @@ export default function PointsComboBarChart({ data }: Props) {
       .attr("y", 0)
       .attr("dy", "0.35em")
       .text((d) => d.name)
-  }, [data, maxPoint, width])
+  }, [data, maxPoint, width, formattedBarsData, tickValues])
 
   return (
     <ChartRoot title="Points and Combos" subtitle="This Chart shows the ratio of points & combos made each game">
