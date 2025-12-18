@@ -31,21 +31,12 @@ export default async function BTESocialsSection({ athleteId }: BTESocialsSection
   const supabase = createClient(cookieStore)
 
   try {
-    // First, check if player table has athlete_id field that links to athletes table
-    const { data: player } = await supabase
-      .from('player')
-      .select('athlete_id, id')
-      .eq('id', athleteId)
-      .maybeSingle()
-
-    // Use athlete_id from player table if available, otherwise use the id directly
-    const actualAthleteId = (player as any)?.athlete_id || athleteId
-
-    // Query athletes table with the correct ID
+    // Query athletes table directly (player table uses bigint, not UUID)
+    // Note: athletes table has social_data_cache, not social_media column
     const { data: athlete, error } = await supabase
       .from('athletes')
-      .select('social_media, social_data_cache')
-      .eq('athlete_id', actualAthleteId)
+      .select('social_data_cache')
+      .eq('athlete_id', athleteId)
       .maybeSingle()
 
     if (error || !athlete) {
@@ -53,8 +44,8 @@ export default async function BTESocialsSection({ athleteId }: BTESocialsSection
       return null
     }
 
-    // Use social_media if available, otherwise fall back to social_data_cache
-    const socialMedia: SocialMediaData | null = athlete.social_media || athlete.social_data_cache
+    // Use social_data_cache (social_media column doesn't exist in schema)
+    const socialMedia: SocialMediaData | null = athlete.social_data_cache
 
     // If no social media data, don't render section
     if (!socialMedia || Object.keys(socialMedia).length === 0) {

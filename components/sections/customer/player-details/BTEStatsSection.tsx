@@ -27,21 +27,12 @@ export default async function BTEStatsSection({ athleteId }: BTEStatsSectionProp
   const supabase = createClient(cookieStore)
 
   try {
-    // First, check if player table has athlete_id field that links to athletes table
-    const { data: player } = await supabase
-      .from('player')
-      .select('athlete_id, id')
-      .eq('id', athleteId)
-      .maybeSingle()
-
-    // Use athlete_id from player table if available, otherwise use the id directly
-    const actualAthleteId = (player as any)?.athlete_id || athleteId
-
-    // Query athletes table with the correct ID
+    // Query athletes table directly (player table uses bigint, not UUID)
+    // The athleteId passed to this component should match athletes.athlete_id
     const { data: athlete, error } = await supabase
       .from('athletes')
       .select('performance_stats_cache')
-      .eq('athlete_id', actualAthleteId)
+      .eq('athlete_id', athleteId)
       .maybeSingle()
 
     if (error || !athlete) {
