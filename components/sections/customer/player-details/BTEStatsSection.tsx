@@ -83,26 +83,29 @@ export default async function BTEStatsSection({ athleteId }: BTEStatsSectionProp
           role="list"
           aria-label="BTE advanced statistics list"
         >
-          {Object.entries(bteStats).map(([key, stat]: [string, BTEStat]) => (
-            <div
-              key={key}
-              className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg border-2 border-purple-200 dark:border-purple-800 p-4 hover:shadow-lg transition-all"
-              role="listitem"
-              aria-label={`${stat.label || key}: ${stat.display_value || stat.value}`}
-            >
-              <div className="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wide mb-1">
-                {stat.label || key}
-              </div>
-              <div className="text-2xl font-bold text-purple-900 dark:text-purple-200 mb-1">
-                {stat.display_value || (typeof stat.value === 'number' ? stat.value.toFixed(2) : stat.value)}
-              </div>
-              {stat.description && (
-                <div className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
-                  {stat.description}
+          {Object.entries(bteStats).map(([key, stat]) => {
+            const bteStat = stat as BTEStat
+            return (
+              <div
+                key={key}
+                className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg border-2 border-purple-200 dark:border-purple-800 p-4 hover:shadow-lg transition-all"
+                role="listitem"
+                aria-label={`${bteStat.label || key}: ${bteStat.display_value || bteStat.value}`}
+              >
+                <div className="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wide mb-1">
+                  {bteStat.label || key}
                 </div>
-              )}
-            </div>
-          ))}
+                <div className="text-2xl font-bold text-purple-900 dark:text-purple-200 mb-1">
+                  {bteStat.display_value || (typeof bteStat.value === 'number' ? bteStat.value.toFixed(2) : String(bteStat.value))}
+                </div>
+                {bteStat.description && (
+                  <div className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
+                    {bteStat.description}
+                  </div>
+                )}
+              </div>
+            )
+          })}
         </div>
       </section>
     )
