@@ -23,10 +23,11 @@ interface BTEStat {
 }
 
 export default async function BTEStatsSection({ athleteId }: BTEStatsSectionProps) {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
-
+  // Wrap in try-catch to prevent page crash
   try {
+    const cookieStore = cookies()
+    const supabase = createClient(cookieStore)
+
     // Query athletes table directly (player table uses bigint, not UUID)
     // The athleteId passed to this component should match athletes.athlete_id
     const { data: athlete, error } = await supabase
@@ -35,8 +36,14 @@ export default async function BTEStatsSection({ athleteId }: BTEStatsSectionProp
       .eq('athlete_id', athleteId)
       .maybeSingle()
 
-    if (error || !athlete) {
+    if (error) {
       console.error('Error fetching BTE stats:', error)
+      // Return null instead of crashing
+      return null
+    }
+
+    if (!athlete) {
+      // Athlete not found - return null (graceful degradation)
       return null
     }
 
@@ -101,6 +108,7 @@ export default async function BTEStatsSection({ athleteId }: BTEStatsSectionProp
       </section>
     )
   } catch (error) {
+    // Catch any errors and return null instead of crashing the page
     console.error('Error rendering BTE Stats Section:', error)
     return null
   }

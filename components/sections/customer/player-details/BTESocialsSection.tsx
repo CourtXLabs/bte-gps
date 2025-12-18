@@ -27,10 +27,11 @@ interface SocialMediaData {
 }
 
 export default async function BTESocialsSection({ athleteId }: BTESocialsSectionProps) {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
-
+  // Wrap in try-catch to prevent page crash
   try {
+    const cookieStore = cookies()
+    const supabase = createClient(cookieStore)
+
     // Query athletes table directly (player table uses bigint, not UUID)
     // Note: athletes table has social_data_cache, not social_media column
     const { data: athlete, error } = await supabase
@@ -39,8 +40,14 @@ export default async function BTESocialsSection({ athleteId }: BTESocialsSection
       .eq('athlete_id', athleteId)
       .maybeSingle()
 
-    if (error || !athlete) {
+    if (error) {
       console.error('Error fetching BTE socials:', error)
+      // Return null instead of crashing
+      return null
+    }
+
+    if (!athlete) {
+      // Athlete not found - return null (graceful degradation)
       return null
     }
 
@@ -153,6 +160,7 @@ export default async function BTESocialsSection({ athleteId }: BTESocialsSection
       </section>
     )
   } catch (error) {
+    // Catch any errors and return null instead of crashing the page
     console.error('Error rendering BTE Socials Section:', error)
     return null
   }
