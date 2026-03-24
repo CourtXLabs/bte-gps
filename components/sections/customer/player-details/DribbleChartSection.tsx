@@ -10,7 +10,15 @@ interface Props {
 export default function DribbleChartSection({ src, isPremium }: Props) {
   return (
     <div className="relative mx-auto flex-1">
-      <Image src={src} alt="Dribble Graph" width={800} height={380} className={cn({ blur: !isPremium })} />
+      {/* Same aspect-ratio container as YouTubePlaylist (pb-[53.9%]) so heights match */}
+      <div className="relative w-full pb-[53.9%]">
+        <Image
+          src={src}
+          alt="Dribble Graph"
+          fill
+          className={cn("object-contain", { blur: !isPremium })}
+        />
+      </div>
       {!isPremium && <GoPremiumCard />}
     </div>
   )
